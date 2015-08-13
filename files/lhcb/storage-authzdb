@@ -1,7 +1,0 @@
-version 2.1
-
-authorize lhcb001 read-write 18001 5800 / / /
-
-authorize dteam001 read-write 17001 5900 / / /
-
-authorize ops001 read-write 22001 5850 / / /

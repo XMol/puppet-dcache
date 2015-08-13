@@ -1,4 +1,0 @@
-# This robot is used to write database dumps into ATLAS' namespace.
-# That's why we have to assign it the gid of ATLAS, but a unique
-# uid.
-"/C=DE/O=GermanGrid/OU=KIT/CN=Robot - grid client - Thomas Hartmann (ATLAS services)" "" atlasdump

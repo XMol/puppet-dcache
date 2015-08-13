@@ -1,9 +1,0 @@
-"*" "/ops/Role=*" ops001
-"*" "/ops/NGI/Germany" ops001
-
-"*" "/dteam/dech/fzk" dteam001
-"*" "/dteam" dteam001
-"*" "/dteam/NGI_DE" dteam001
-"*" "/dteam/NGI_DE/FZK-LCG2" dteam001
-
-"*" "/belle" belle001
