@@ -1,0 +1,41 @@
+setenv CSEC_MECH = ID
+setenv LFC_HOST = prod-lfc-atlas-ro.cern.ch
+#setenv LD_LIBRARY_PATH = /opt/xrd-lfc/n2n/
+setenv LFC_CONRETRY = 0
+
+all.sitename FZK-LCG2
+
+# $(myhostname) is the host name of frontend node. it should be whatever `hostname` command returns, not "localhost"
+set myhostname = f01-070-101-e.gridka.de
+
+# $(xrootddoor):port is the hostname and port of dCache Xrootd door
+set xrootddoor = f01-060-112-e.gridka.de:1094%f01-060-116-e.gridka.de:1094 
+
+# Upper level redirector, xrootd port and cmsd port. Check with upper level redirector's admin
+set upperrdrname = atlas-xrd-de.cern.ch
+set upperrdrxrdport = 1094
+set upperrdrcmsport = 1098
+
+all.export /atlas r/o
+all.manager $(myhostname):1213
+
+xrootd.async off
+all.adminpath /var/spool/xrootd
+all.pidpath   /var/run/xrootd
+
+# instance hidden is purely a helper, it should remain hidden from users.
+if named hidden
+  all.role server
+  xrd.port 2094
+  xrootd.redirect $(xrootddoor) /atlas
+else
+  all.role manager
+  xrootd.redirect $(upperrdrname):$(upperrdrxrdport) ? /atlas
+  all.manager meta $(upperrdrname)+:$(upperrdrcmsport)
+  cms.dfs lookup central
+  cms.delay startup 10 lookup 1 qdl 1
+  xrootd.monitor all flush 30s window 5s fstat 60 lfn ops xfr 5 dest redir files info user atlas-fax-eu-collector.cern.ch:9330
+
+  # N2N configuration. Please change for your site
+  oss.namelib /usr/lib64/XrdOucName2NameLFC.so root="/pnfs/gridka.de/" match="gridka.de"
+fi

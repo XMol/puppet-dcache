@@ -1,0 +1,125 @@
+# This file is written by hand and easy maintainable.
+# Generated on 21/01/2010 15:36
+# last edited on 09/05/2012
+version 2.1
+
+authorize dcms001 read-write 32001 5600 / / /
+authorize dcms002 read-write 32002 5600 / / /
+
+authorize datlas001 read-write 31001 5303 / / /
+authorize datlas002 read-only 31002 5303 / / /
+
+authorize dalice001 read-write 30001 5100 / / /
+
+authorize ops001 read-write 22001 5850 / / /
+
+# medigrid
+authorize dgmd0001 read-write 101001 63600 / / /
+authorize dgmdadm read-write 101000 63600 / / /
+
+# c3grid
+authorize dgc30001 read-write 102001 64000 / / /
+authorize dgc3adm read-write 102000 64000 / / /
+
+# ingrid
+authorize dgin0001 read-write 103001 64001 / / /
+authorize dginadm read-write 103000 64001 / / /
+
+# textgrid
+authorize dgtx0001 read-write 104001 64002 / / /
+authorize dgtxadm read-write 104000 64002 / / /
+
+# wisgrid
+authorize dgws0001 read-write 105001 64003 / / /
+authorize dgwsadm read-write 105000 64003 / / /
+
+# hepcg
+authorize dghp0001 read-write 106001 64004 / / /
+authorize dghpadm read-write 106000 64004 / / /
+
+# kerndgrid
+authorize dgkg0001 read-write 107001 64005 / / /
+authorize dgkgadm read-write 107000 64005 / / /
+
+# astrogrid
+authorize dgad0001 read-write 108001 63800 / / /
+authorize dgadadm read-write 108000 63800 / / /
+
+# dgtest
+authorize dgdt0001 read-write 109001 63300 / / /
+authorize dgdtadm read-write 109000 63300 / / /
+
+# gdigrid
+authorize dggd0001 read-write 110001 64006 / / /
+authorize dggdadm read-write 110000 64006 / / /
+
+# progrid
+authorize dgpr0001 read-write 111001 64007 / / /
+authorize dgpradm read-write 111000 64007 / / /
+
+# partgrid
+authorize dgpa0001 read-write 112001 64008 / / /
+authorize dgpaadm read-write 112000 64008 / / /
+
+# fingrid
+authorize dgfi0001 read-write 113001 64009 / / /
+authorize dgfiadm read-write 113000 64009 / / /
+
+# lifescience
+authorize dgls0001 read-write 114001 64010 / / /
+authorize dglsadm read-write 114000 64010 / / /
+
+# education
+authorize dged0001 read-write 115001 64011 / / /
+authorize dgedadm read-write 115000 64011 / / /
+
+# bwgrid
+authorize dgbw0001 read-write 116001 64012 / / /
+authorize dgbwadm read-write 116000 64012 / / /
+
+# dgcms
+authorize dgcm0001 read-write 117001 64013 / / /
+authorize dgcmadm read-write 117000 64013 / / /
+
+# aerogrid
+authorize dgae0001 read-write 118001 64014 / / /
+authorize dgaeadm read-write 118000 64014 / / /
+
+# bisgrid
+authorize dgbi0001 read-write 119001 64015 / / /
+authorize dgbiadm read-write 119000 64015 / / /
+
+# bauvogrid
+authorize dgba0001 read-write 120001 64016 / / /
+authorize dgbaadm read-write 120000 64016 / / /
+
+# biz2grid
+authorize dgbz0001 read-write 121001 64017 / / /
+authorize dgbzadm read-write 121000 64017 / / /
+
+# bioif
+authorize dgif0001 read-write 122001 64018 / / /
+authorize dgifadm read-write 122000 64018 / / /
+
+# dgops
+authorize dgop0001 read-write 123001 64019 / / /
+authorize dgopadm read-write 123000 64019 / / /
+
+# interloggrid
+authorize dgil0001 read-write 129001 64025 / / /
+authorize dgiladm read-write 129000 64025 / / /
+
+# mosgrid
+authorize dgms0001 read-write 130001 64026 / / /
+authorize dgmsadm read-write 130000 64026 / / /
+
+# mediagrid
+authorize dgmg0001 read-write 131001 64027 / / /
+authorize dgmgadm read-write 131000 64027 / / /
+
+# wisnet
+authorize dgwn0001 read-write 132001 64028 / / /
+authorize dgwnadm read-write 132000 64028 / / /
+
+# Local user Danah Tonne.
+authorize dtonne read-write 500 100 / / /

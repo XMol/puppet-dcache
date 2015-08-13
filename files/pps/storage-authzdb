@@ -1,0 +1,12 @@
+# storage-authzdb created by dcacheVoms2Gplasma
+version 2.1
+
+# Belle users for Belle2 data challange (12th May 2014).
+authorize belle001 read-write 28001 5590 / / /
+
+# Regional monitoring user account.
+authorize ops001 read-write 22001 5850 / / /
+
+# Local site admins.
+authorize dteam001 read-write 17001 5900 / / /
+authorize admin read-write 600 600 / / /

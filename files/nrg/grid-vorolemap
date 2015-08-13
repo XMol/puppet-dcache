@@ -1,0 +1,111 @@
+# This file is written by hand and easy maintainable.
+# Generated on 20/08/10
+
+##########################################
+# German departments of WLCG experiments #
+##########################################
+
+"*" "/cms/dcms" dcms001
+"*" "/cms/dcms/Role=cmsphedex" dcms002
+
+"*" "/atlas/de" datlas001
+"*" "/atlas/Role=production" datlas001
+"*" "/atlas" datlas002
+
+"*" "/alice" dalice001
+
+"*" "/ops/Role=*" ops001
+"*" "/ops/NGI/Germany" ops001
+
+##############
+# D-Grid VOs #
+##############
+
+"*" "/dgops" dgop0001
+"*" "/dgops/admin/Role=dataadmin" dgopadm
+
+"*" "/medigrid" dgmd0001
+"*" "/medigrid/admin/Role=dataadmin" dgmdadm
+
+"*" "/c3grid" dgc30001
+"*" "/c3grid/admin/Role=dataadmin" dgc3adm
+
+"*" "/ingrid" dgin0001
+"*" "/ingrid/admin/Role=dataadmin" dginadm
+
+"*" "/textgrid" dgtx0001
+"*" "/textgrid/admin/Role=dataadmin" dgtxadm
+
+"*" "/wisent" dgws0001
+"*" "/wisent/admin/Role=dataadmin" dgwsadm
+
+"*" "/hepcg" dghp0001
+"*" "/hepcg/admin/Role=dataadmin" dghpadm
+
+"*" "/kerndgrid" dgkg0001
+"*" "/kerndgrid/admin/Role=dataadmin" dgkgadm
+
+"*" "/astrogrid" dgad0001
+"*" "/astrogrid/admin/Role=dataadmin" dgadadm
+
+"*" "/dgtest" dgdt0001
+"*" "/dgtest/admin/Role=dataadmin" dgdtadm
+
+"*" "/gdigrid" dggd0001
+"*" "/gdigrid/admin/Role=dataadmin" dggdadm
+
+"*" "/progrid" dgpr0001
+"*" "/progrid/admin/Role=dataadmin" dgpradm
+
+"*" "/partgrid" dgpa0001
+"*" "/partgrid/admin/Role=dataadmin" dgpaadm
+
+"*" "/fingrid" dgfi0001
+"*" "/fingrid/admin/Role=dataadmin" dgfiadm
+
+"*" "/lifescience" dgls0001
+"*" "/lifescience/admin/Role=dataadmin" dglsadm
+
+"*" "/education" dged0001
+"*" "/education/admin/Role=dataadmin" dgedadm
+
+"*" "/bwgrid" dgbw0001
+"*" "/bwgrid/admin/Role=dataadmin" dgbwadm
+
+"*" "/dgcms" dgcm0001
+"*" "/dgcms/admin/Role=dataadmin" dgcmadm
+
+"*" "/aerogrid" dgae0001
+"*" "/aerogrid/admin/Role=dataadmin" dgaeadm
+
+"*" "/bisgrid" dgbi0001
+"*" "/bisgrid/admin/Role=dataadmin" dgbiadm
+
+"*" "/bauvogrid" dgba0001
+"*" "/bauvogrid/admin/Role=dataadmin" dgbaadm
+
+"*" "/biz2grid" dgbz0001
+"*" "/biz2grid/admin/Role=dataadmin" dgbzadm
+
+"*" "/bioif" dgif0001
+"*" "/bioif/admin/Role=dataadmin" dgifadm
+
+"*" "/interloggrid" dgil0001
+"*" "/interloggrid/admin/Role=dataadmin" dgiladm
+
+"*" "/mosgrid" dgms0001
+"*" "/mosgrid/admin/Role=dataadmin" dgmsadm
+
+"*" "/mediagrid" dgmg0001
+"*" "/mediagrid/admin/Role=dataadmin" dgmgadm
+
+"*" "/wisnet" dgwn0001
+"*" "/wisnet/admin/Role=dataadmin" dgwnadm
+
+####################
+# for local admins #
+####################
+
+"*" "/dteam/dech/fzk" dgop0001
+"*" "/dteam/NGI_DE/FZK-LCG2" dgop0001
+"/C=DE/O=GermanGrid/OU=FZK/CN=Xavier Mol2" dgop0001

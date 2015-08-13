@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!--+
+    |  This file is an empty tape-info file with comments
+    |  describing how to create a version of this file that
+    |  contains information about your site.
+    |
+    |  Leave this file alone!
+    |
+    |  If you have any near-line storage that needs
+    |  accounting for, write a script that (re-)generates
+    |  this file's content at a different location.  The
+    |  recommended location for this file is:
+    |
+    |    /var/opt/dcache/tape-info.xml
+    |
+    |  You must update the "tape-info" location option within
+    |
+    |    /opt/d-cache/etc/glue-1.3.xml
+    |
+    |  accordingly.
+    +-->
+
+<tape-info>
+  <collection id="unallocated">
+    <name>total tape space at gridka</name>
+      <space>
+        <reserved>8932000000000000</reserved>
+        <total>8932000000000000</total>
+        <used>3457080000000000</used>
+      </space>
+
+      <for>
+        <vo>atlas</vo>
+      </for>
+  </collection>
+
+ <collection id="atlas">
+      <name>Tapes for ATLAS</name>
+      <space>
+        <used>2100000000000</used>
+      </space>
+      <for>
+          <vo>atlas</vo>
+      </for>
+      <write-paths>
+        <vo name="atlas">/pnfs/gridka.de/atlas</vo>
+      </write-paths>
+ </collection>
+
+
+</tape-info>
+

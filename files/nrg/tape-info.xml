@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<!--+
+    |  This file is an empty tape-info file with comments
+    |  describing how to create a version of this file that
+    |  contains information about your site.
+    |
+    |  Leave this file alone!
+    |
+    |  If you have any near-line storage that needs
+    |  accounting for, write a script that (re-)generates
+    |  this file's content at a different location.  The
+    |  recommended location for this file is:
+    |
+    |    /var/opt/dcache/tape-info.xml
+    |
+    |  You must update the "tape-info" location option within
+    |
+    |    /opt/d-cache/etc/glue-1.3.xml
+    |
+    |  accordingly.
+    +-->
+
+<tape-info>
+  <collection id="unallocated">
+    <name>tape space of dgridsrm-fzk.gridka.de</name>
+
+    <space>
+      <reserved>360000000000000</reserved>
+      <total>360000000000000</total>
+      <used>0</used>
+    </space>
+
+    <for>
+      <vo>aerogrid</vo>
+      <vo>alice</vo>
+      <vo>astrogrid</vo>
+      <vo>atlas</vo>
+      <vo>bauvogrid</vo>
+      <vo>bioif</vo>
+      <vo>bisgrid</vo>
+      <vo>biz2grid</vo>
+      <vo>bwgrid</vo>
+      <vo>c3grid</vo>
+      <vo>cms</vo>
+      <vo>dgcms</vo>
+      <vo>dgops</vo>
+      <vo>dgtest</vo>
+      <vo>education</vo>
+      <vo>fingrid</vo>
+      <vo>gdigrid</vo>
+      <vo>hepcg</vo>
+      <vo>ingrid</vo>
+      <vo>kerndgrid</vo>
+      <vo>lifescience</vo>
+      <vo>medigrid</vo>
+      <vo>partgrid</vo>
+      <vo>progrid</vo>
+      <vo>textgrid</vo>
+      <vo>wisent</vo>
+      <vo>mediagrid</vo>
+      <vo>wisnet</vo>
+    </for>
+
+    <write-paths>
+      <vo name="aerogrid">/pnfs/gridka.de/aerogrid/tape-store</vo>
+      <vo name="alice">/pnfs/gridka.de/dalice/tape-store</vo>
+      <vo name="astrogrid">/pnfs/gridka.de/astrogrid/tape-store</vo>
+      <vo name="atlas">/pnfs/gridka.de/datlas/tape-store</vo>
+      <vo name="bauvogrid">/pnfs/gridka.de/bauvogrid/tape-store</vo>
+      <vo name="bioif">/pnfs/gridka.de/bioif/tape-store</vo>
+      <vo name="bisgrid">/pnfs/gridka.de/bisgrid/tape-store</vo>
+      <vo name="biz2grid">/pnfs/gridka.de/biz2grid/tape-store</vo>
+      <vo name="bwgrid">/pnfs/gridka.de/bwgrid/tape-store</vo>
+      <vo name="c3grid">/pnfs/gridka.de/c3grid/tape-store</vo>
+      <vo name="cms">/pnfs/gridka.de/dcms/tape-store</vo>
+      <vo name="dgcms">/pnfs/gridka.de/dgcms/tape-store</vo>
+      <vo name="dgops">/pnfs/gridka.de/dgops/tape-store</vo>
+      <vo name="dgtest">/pnfs/gridka.de/dgtest/tape-store</vo>
+      <vo name="education">/pnfs/gridka.de/education/tape-store</vo>
+      <vo name="fingrid">/pnfs/gridka.de/fingrid/tape-store</vo>
+      <vo name="gdigrid">/pnfs/gridka.de/gdigrid/tape-store</vo>
+      <vo name="hepcg">/pnfs/gridka.de/hepcg/tape-store</vo>
+      <vo name="ingrid">/pnfs/gridka.de/ingrid/tape-store</vo>
+      <vo name="kerndgrid">/pnfs/gridka.de/kerndgrid/tape-store</vo>
+      <vo name="lifescience">/pnfs/gridka.de/lifescience/tape-store</vo>
+      <vo name="medigrid">/pnfs/gridka.de/medigrid/tape-store</vo>
+      <vo name="partgrid">/pnfs/gridka.de/partgrid/tape-store</vo>
+      <vo name="progrid">/pnfs/gridka.de/progrid/tape-store</vo>
+      <vo name="textgrid">/pnfs/gridka.de/textgrid/tape-store</vo>
+      <vo name="wisent">/pnfs/gridka.de/wisent/tape-store</vo>
+      <vo name="mediagrid">/pnfs/gridka.de/mediagrid/tape-store</vo>
+      <vo name="wisnet">/pnfs/gridka.de/wisnet/tape-store</vo>
+    </write-paths>
+  </collection>
+</tape-info>
+

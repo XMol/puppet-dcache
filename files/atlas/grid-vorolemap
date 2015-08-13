@@ -1,0 +1,23 @@
+# ATLAS wants to restrict write access for anyone who does not
+# have the production role to the atlasscratchdisk directory.
+# Therefore we map FQANs with production role onto atlasprod
+# and everything else onto atlas001. As long as both these
+# virtual user accounts do get the same gid in storage-authzdb
+# this should work out. (XM 23/01/2013)
+"*" "/atlas/Role=production" atlasprod
+"*" "/atlas/de/Role=production" atlasprod
+
+"*" "/atlas" atlas001
+"*" "/atlas/Role=lcgadmin" atlas001
+"*" "/atlas/Role=pilot" atlas001
+"*" "/atlas/de" atlas001
+
+# Regional monitoring user account.
+"*" "/ops" ops001
+"*" "/ops/Role=lcgadmin" ops001
+"*" "/ops/NGI/Germany" ops001
+
+# Local site admins.
+"*" "/dteam" dteam001
+"*" "/dteam/NGI_DE/FZK-LCG2" dteam001
+"*" "/dteam/dech/fzk" dteam001

@@ -1,0 +1,23 @@
+# change this: the user/group that will run xrootd
+XROOTD_USER=xrootd
+XROOTD_GROUP=xrootd
+
+#Setup environment to include LFC libraries to LD_LIBRARY_PATH
+#. /path/setup.sh
+export LD_LIBRARY_PATH=/opt/xrd-lfc/n2n/
+export LFC_HOST=prod-lfc-atlas-ro.cern.ch
+
+# do not change lines below:
+
+export CSEC_MECH=ID
+export LFC_CONRETRY=0
+ulimit -c unlimited
+
+XROOTD_DEFAULT_OPTIONS="-d -l /var/log/xrootd/xrootd.log -c /etc/xrootd/xrootd-clustered.cfg -k 7"
+CMSD_DEFAULT_OPTIONS="-l /var/log/xrootd/cmsd.log -c /etc/xrootd/xrootd-clustered.cfg -k 7"
+
+XROOTD_HIDDEN_OPTIONS="-n hidden -d -l /var/log/xrootd/xrootd.log -c /etc/xrootd/xrootd-clustered.cfg -k 7"
+CMSD_HIDDEN_OPTIONS="-n hidden -l /var/log/xrootd/cmsd.log -c /etc/xrootd/xrootd-clustered.cfg -k 7"
+
+XROOTD_INSTANCES="default hidden"
+CMSD_INSTANCES="default hidden"
