@@ -104,5 +104,9 @@ class dcache::params inherits dcache::globals {
   
   $xrootd_mover_queue = 'xrootdq'
   $xrootd_plugins     = undef
-
+  
+  case "${::osfamily}:${::operatingsystemmajrelease}" {
+    'RedHat:6': { $java_package = 'java-1.8.0-openjdk-1.8.0.51' }
+    default:    { $java_package = 'jdk1.8.0_45' }
+  }
 }

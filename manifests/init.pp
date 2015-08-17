@@ -1,6 +1,6 @@
 class dcache (
   $dcache_version,
-  $java_version,
+  $java_package = $dcache::params::java_package,
   $experiment = $dcache::params::experiment,
   $manage_yum_repo = $dcache::params::manage_yum_repo,
   

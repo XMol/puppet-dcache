@@ -1,4 +1,6 @@
-class dcache::java ($package) {
+class dcache::java (
+  $package = $dcache::java_package,
+) {
   package { 'Java4dCache' :
     name   => "$package",
     ensure => installed,
