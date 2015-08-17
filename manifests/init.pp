@@ -2,6 +2,7 @@ class dcache (
   $dcache_version,
   $java_version,
   $experiment = $dcache::params::experiment,
+  $manage_yum_repo = $dcache::params::manage_yum_repo,
   
   $domains = $dcache::params::domains,
   $plugins = $dcache::params::plugins,
@@ -27,16 +28,19 @@ class dcache (
   $cleaner_enable_hsm = $dcache::params::cleaner_enable_hsm,
   
   $dcache_user                     = $dcache::params::dcache_user,
+  $dcache_group                    = $dcache::params::dcache_group,
   $dcache_layout                   = $dcache::params::dcache_layout,
   $dcache_dirs_layout              = $dcache::params::dcache_dirs_layout,
   $dcache_dirs_etc                 = $dcache::params::dcache_dirs_etc,
   $dcache_dirs_plugins             = $dcache::params::dcache_dirs_plugins,
   $dcache_env                      = $dcache::params::dcache_env,
   $dcache_setup                    = $dcache::params::dcache_setup,
+  $admin_paths_authorized_key      = $dcache::params::admin_paths_authorized_key,
   $dcache_authn_hostcert_key       = $dcache::params::dcache_authn_hostcert_key,
   $dcache_authn_hostcert_cert      = $dcache::params::dcache_authn_hostcert_cert,
   $dcache_enable_overwrite         = $dcache::params::dcache_enable_overwrite,
   $dcache_enable_space_reservation = $dcache::params::dcache_enable_space_reservation,
+  $dcache_java_memory_heap         = $dcache::params::dcache_java_memory_heap,
 
   $dcap_authz_anonymous_operations = $dcache::params::dcap_authz_anonymous_operations,
   $dcap_authz_readonly             = $dcache::params::dcap_authz_readonly,
@@ -104,6 +108,7 @@ class dcache (
   
 ) inherits dcache::params {
   
-  notify { 'Realized class "dcache"': }
-
+  contain dcache::install
+  contain dcache::config
+  
 }

@@ -27,16 +27,19 @@ class dcache::params inherits dcache::globals {
   $cleaner_enable_hsm = false
   
   $dcache_user                     = $dcache::globals::dcache_user
+  $dcache_group                    = $dcache::globals::dcache_group
   $dcache_layout                   = "$::fqdn"
   $dcache_dirs_layout              = "${dcache::globals::dcache_dirs_etc}/layouts"
   $dcache_dirs_etc                 = "${dcache::globals::dcache_dirs_etc}"
   $dcache_dirs_plugins             = '/usr/share/dcache/plguins'
   $dcache_env                      = '/etc/dcache.env'
   $dcache_setup                    = "${dcache::globals::dcache_dirs_etc}/dcache.conf"
+  $admin_paths_authorized_key      = "${dcache::globals::dcache_dirs_etc}/admin/authorized_keys2"
   $dcache_authn_hostcert_key       = "${dcache::globals::dcache_dirs_grid_security}/dcache/hostkey.pem"
   $dcache_authn_hostcert_cert      = "${dcache::globals::dcache_dirs_grid_security}/dcache/hostcert.pem"
   $dcache_enable_overwrite         = false
   $dcache_enable_space_reservation = false
+  $dcache_java_memory_heap         = undef
 
   $dcap_authz_anonymous_operations = 'NONE'
   $dcap_authz_readonly             = true
