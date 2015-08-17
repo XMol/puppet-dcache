@@ -5,10 +5,7 @@
 class dcache::config (
   $domains = $dcache::domains,
 ) {
-  
-  dcache::java { 'Install Java': }
-  
-  dcache::install { 'Install dCache': }
+  require dcache::install
   
   dcache::layout { 'Get layout': }
 
