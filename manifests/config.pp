@@ -5,7 +5,6 @@
 class dcache::config (
   $domains = $dcache::domains,
 ) {
-  require dcache::config
   
   dcache::layout { 'Get layout': }
 
