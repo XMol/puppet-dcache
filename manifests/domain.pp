@@ -1,13 +1,20 @@
 define dcache::domain (
   $options  = [],
-  $services = []
+  $services = {},
 ) {
-  # Realize every service resource, so we can carry out service specific
-  # changes.
-  dcache::service { "$services": }
+  
+  each($services) |$service, $params| {
+    # $params may be unset, but is required to be a hash, even an empty one
+    # does suffice.
+    if ! $params { $secure_params = {} }
+            else { $secure_params = $params }
+    
+    $splitted = split($service, ',')
+    if size($splitted) == 1 { $mytitle = "${name}->${service}" }
+                       else { $mytitle = "${name}->${splitted[1]}"}
+    
+    ensure_resource("dcache::services::${splitted[0]}",
+                    $mytitle, $secure_params)
+  }
 
-}
-
-define dcache::service {
-  class { "dcache::services::${name}": }
 }
