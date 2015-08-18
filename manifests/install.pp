@@ -13,7 +13,7 @@ class dcache::install (
   package { 'dcache' :
     name   => "dcache-${version}",
     ensure => installed,
-  }~>
+  }->
   exec { '/etc/init.d/dcache':
     refreshonly => true,
     command     => "ln -fs $(rpm -ql dcache-${version} | sed -n '\\+/dcache$+ p) ${title}",

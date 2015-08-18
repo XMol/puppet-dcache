@@ -5,7 +5,7 @@ define dcache::layout (
   $path = $dcache::dcache_dirs_layout,
   $source = 'dcache_config',
 ) {
-  require dcache::install
+  require dcache::config
   
   $layout = "${::hostname}.conf"
   file { "Source layout ${layout}":

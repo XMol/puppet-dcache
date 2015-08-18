@@ -4,7 +4,6 @@ define dcache::config_file (
   $path = $dcache::dcache_dirs_etc,
   $source = 'dcache_config',
 ) {
-  require dcache::install
   
   File {
     source => "puppet:///modules/${source}/${dcache::experiment}/${name}",
