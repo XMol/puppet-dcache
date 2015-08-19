@@ -11,7 +11,7 @@ define dcache::domain (
     
     $splitted = split($service, ',')
     if size($splitted) == 1 { $mytitle = "${name}->${service}" }
-                       else { $mytitle = "${name}->${splitted[1]}"}
+                       else { $mytitle = "${splitted[1]}"}
     
     ensure_resource("dcache::services::${splitted[0]}",
                     $mytitle, $secure_params)
