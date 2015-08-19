@@ -89,7 +89,7 @@ class dcache::params inherits dcache::globals {
   $pool_mover_xrootd_plugins = undef
   
   $spacemanager_enable_unreserved_uploads_to_linkgroups = false
-  $spacemanager_authz_link_group_file_name              = "${dcache::globals::dcache_dirs_etc}/LinkGroupAuthorization_conf"
+  $spacemanager_authz_link_group_file_name              = "${dcache::globals::dcache_dirs_etc}/LinkGroupAuthorization.conf"
   
   $srm_enable_pin_online_files = false
   $srm_net_host                = $dcache::globals::hosts_service_srm

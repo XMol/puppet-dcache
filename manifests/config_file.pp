@@ -2,11 +2,11 @@
 # files for dCache properly, we just source them from a Git repository.
 define dcache::config_file (
   $path = $dcache::dcache_dirs_etc,
-  $source = 'dcache_config',
+  $source = "puppet:///modules/dcache_config/${dcache::experiment}/${name}",
 ) {
   
   File {
-    source => "puppet:///modules/${source}/${dcache::experiment}/${name}",
+    source => "${source}",
     ensure => present,
     owner  => "${dcache::dcache_user}",
     group  => "${dcache::dcache_group}",
