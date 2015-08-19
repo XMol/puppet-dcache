@@ -10,7 +10,7 @@ define dcache::config_file (
     ensure => present,
     owner  => "${dcache::dcache_user}",
     group  => "${dcache::dcache_group}",
-    notify => Class['dcache::reload'],
+    notify => Class['dcache::restart'],
   }
   file { "Source ${name}":
     path => "${path}/${name}",
