@@ -10,7 +10,7 @@ define dcache::services::pool (
   file { "Symlink pool ${name}":
     ensure  => link,
     path    => "${basedir}/${name}",
-    target  => "${filesystem}/{$name}",
+    target  => "${filesystem}/${name}",
   }
   
   # Ensure GPFS mount.
