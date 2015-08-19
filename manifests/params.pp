@@ -3,6 +3,7 @@ class dcache::params inherits dcache::globals {
   $experiment      = $dcache::globals::experiment
   $service_status  = 'stopped'
   $manage_service  = true
+  $service_exec    = 'etc/init.d/dcache'
   $manage_yum_repo = $dcache::globals::manage_yum_repo
   
   $domains = []

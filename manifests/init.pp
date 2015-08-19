@@ -1,9 +1,10 @@
 class dcache (
   $dcache_version,
-  $java_package = $dcache::params::java_package,
-  $experiment = $dcache::params::experiment,
-  $service_status = $dcache::params::service_status,
-  $manage_service = $dcache::params::manage_service,
+  $java_package    = $dcache::params::java_package,
+  $experiment      = $dcache::params::experiment,
+  $service_status  = $dcache::params::service_status,
+  $manage_service  = $dcache::params::manage_service,
+  $service_exec    = $dcache::params::service_exec,
   $manage_yum_repo = $dcache::params::manage_yum_repo,
   
   $domains = $dcache::params::domains,
@@ -113,5 +114,6 @@ class dcache (
   class { dcache::install: } ->
   class { dcache::config: } ->
   class { dcache::restart: }
+  class { dcache::service: }
   
 }
