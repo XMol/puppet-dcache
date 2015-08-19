@@ -2,6 +2,8 @@ class dcache (
   $dcache_version,
   $java_package = $dcache::params::java_package,
   $experiment = $dcache::params::experiment,
+  $service_status = $dcache::params::service_status,
+  $manage_service = $dcache::params::manage_service,
   $manage_yum_repo = $dcache::params::manage_yum_repo,
   
   $domains = $dcache::params::domains,
@@ -108,7 +110,7 @@ class dcache (
   
 ) inherits dcache::params {
   
-  contain dcache::install
-  contain dcache::config
+  class { dcache::install: } ->
+  class { dcache::config: }
   
 }

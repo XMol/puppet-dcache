@@ -1,6 +1,8 @@
 # Define default parameters for a dCache installation.
 class dcache::params inherits dcache::globals {
   $experiment      = $dcache::globals::experiment
+  $service_status  = 'stopped'
+  $manage_service  = true
   $manage_yum_repo = $dcache::globals::manage_yum_repo
   
   $domains = []
