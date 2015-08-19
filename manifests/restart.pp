@@ -7,12 +7,13 @@ class dcache::restart (
   $domain = '',
 ) {
   
-  exec { 'dcache restart':
-    path        => '/usr/bin',
-    command     => "dcache restart ${domain}",
-    onlyif      => $dcache::service_status,
-    refreshonly => true,
-    require     => Class['dcache::service'],
+  if $dcache::service_status == 'running' {
+    exec { 'dcache restart':
+      path        => '/usr/bin',
+      command     => "dcache restart ${domain}",
+      onlyif      => $dcache::service_status,
+      refreshonly => true,
+      require     => Class['dcache::service'],
+    }
   }
-
 }
