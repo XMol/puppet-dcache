@@ -111,6 +111,7 @@ class dcache (
 ) inherits dcache::params {
   
   class { dcache::install: } ->
-  class { dcache::config: }
+  class { dcache::config: } ->
+  class { dcache::restart: }
   
 }
