@@ -1,4 +1,4 @@
 define dcache::services::webdav {
   # Nothing to do.
-  notify { "realized $title":  }
+  if $dcache::debug { notify { "realized $title":  } }
 }

@@ -1,4 +1,4 @@
 define dcache::services::srm {
   # Do nothing...
-  notify { "realized $title":  }
+  if $dcache::debug { notify { "realized $title":  } }
 }

@@ -4,4 +4,6 @@ define dcache::services::poolmanager (
   dcache::config_file { 'poolmanager.conf': 
     path => "${path}",
   }
+
+  if $dcache::debug { notify { "realized $title":  } }
 }

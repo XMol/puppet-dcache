@@ -10,4 +10,6 @@ define dcache::gplazma (
   dcache::config_file { [$gridmap, $authzdb, $vorolemap]:
     path => "$grid_security",
   }
+
+  if $dcache::debug { notify { "realized $title":  } }
 }

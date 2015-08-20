@@ -4,7 +4,10 @@ define dcache::services::pool (
 ) {
   
   ensure_resource ('file', 'Symlink directory',
-    { ensure => directory, path => "${basedir}", }
+    {
+      ensure => directory,
+      path   => "${basedir}",
+    }
   )
   
   file { "Symlink pool ${name}":
@@ -15,4 +18,6 @@ define dcache::services::pool (
   
   # Ensure GPFS mount.
   # Ensure pool directory (wait-for-files!) exists.
+
+  if $dcache::debug { notify { "realized $title":  } }
 }

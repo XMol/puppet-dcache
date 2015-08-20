@@ -2,5 +2,5 @@ define dcache::services::admin (
   $auth_keys = $dcache::admin_paths_authorized_key,
 ) {
   # Have to wait for proper ssh key management with Puppet.
-  notify { "realized $title":  }
+  if $dcache::debug { notify { "realized $title":  } }
 }

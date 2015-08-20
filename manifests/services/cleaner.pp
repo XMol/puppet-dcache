@@ -1,4 +1,4 @@
 define dcache::services::cleaner {
   # Do nothing...
-  notify { "realized $title":  }
+  if $dcache::debug { notify { "realized $title":  } }
 }

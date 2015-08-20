@@ -1,4 +1,5 @@
 class dcache (
+  $debug           = $dcache::params::debug,
   $dcache_version,
   $java_package    = $dcache::params::java_package,
   $experiment      = $dcache::params::experiment,

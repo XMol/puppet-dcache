@@ -1,5 +1,6 @@
 # Define default parameters for a dCache installation.
 class dcache::params inherits dcache::globals {
+  $debug           = false
   $experiment      = $dcache::globals::experiment
   $service_status  = 'stopped'
   $manage_service  = true

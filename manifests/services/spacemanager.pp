@@ -3,4 +3,6 @@ define dcache::services::spacemanager (
 ) {
   dcache::config_file { basename($lga):
   }
+
+  if $dcache::debug { notify { "realized $title":  } }
 }
