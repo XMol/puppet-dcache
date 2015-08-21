@@ -4,7 +4,7 @@ class dcache::service (
   $service_exec = $dcache::service_exec,
 ) {
   
-  if $service == 'enabled' {
+  if $service == true {
     exec { "$service_exec":
       refreshonly => true,
       command     => "ln -fs $(rpm -ql dcache-${dcache::dcache_version} | sed -n '\\+/dcache$+ p) ${service_exec}",
