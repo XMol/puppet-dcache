@@ -7,7 +7,7 @@ class dcache::params inherits dcache::globals {
   $service_exec    = '/etc/init.d/dcache-server'
   $manage_yum_repo = $dcache::globals::manage_yum_repo
   
-  $domains = []
+  $domains = {}
   $plugins = []
   
   $chimera_db_host      = $dcache::globals::hosts_database_chimera
