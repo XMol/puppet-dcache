@@ -156,7 +156,8 @@ Here we declare three independent dCache domains, the dCachedomain has
 an explicit amount of Java heap usage. Note how the two pools have been
 named: first the service name 'pool' and then, with a comma separated,
 the name to be used for this pool.
-```yaml```
+```yaml
+dcache::domains:
   dCacheDomain:
     options:
       dcache.java.memory.heap: 1g
