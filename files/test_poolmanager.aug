@@ -163,7 +163,7 @@ test PoolManager.lns get conf =
         { "readpref" = "10" }
         { "writepref" = "10" }
         { "cachepref" = "0" }
-        { "p2ppref" = "0" }
+        { "p2ppref" = "-1" }
       }
     }
   }
