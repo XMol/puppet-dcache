@@ -26,7 +26,7 @@ psu addto pgroup all-pools pool_B
 psu addto pgroup all-pools pool_C
 # The links ...
 psu create link link-one any-store
-psu set link link-one -readpref=10 -writepref=10 -cachepref=0 -p2ppref=0
+psu set link link-one -readpref=10 -writepref=10 -cachepref=0 -p2ppref=-1
 psu add link link-one all-pools
 psu create link link-two any-store any-protocol any-net
 psu set link link-two -section=random -cachepref=10 -p2ppref=10

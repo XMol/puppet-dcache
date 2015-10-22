@@ -99,7 +99,7 @@ module PoolManager =
   
   let psu_set =
     let link_prefs = /(cache|p2p|read|write)pref/ in
-    let link_pref = [ str "-" . key link_prefs . str "=" . store /[0-9]+/ ] in
+    let link_pref = [ str "-" . key link_prefs . str "=" . store /-?[0-9]+/ ] in
     let link_section = [ str "-" . key "section" . str "=" . store Rx.word ] in
     let psu_set_link = [ key "link" . sp . store link . sp .
                          Build.opt_list (link_pref|link_section) sp
