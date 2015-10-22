@@ -51,6 +51,8 @@ rc set max threads 0
 # Allow only one more cached copy than we have stage pools per default.
 pm create -type=wass default
 pm set default -max-copies=3 -stage-allowed=yes
+# Set some pools read-only.
+psu set pool pool_* rdonly
 "
 
 test PoolManager.lns get conf =
@@ -288,5 +290,13 @@ test PoolManager.lns get conf =
     { "set" = "default"
       { "max-copies" = "3" }
       { "stage-allowed" = "yes" }
+    }
+  }
+  { "#comment" = "Set some pools read-only." }
+  { "psu"
+    { "set"
+      { "pool"
+        { "pool_*" = "rdonly" }
+      }
     }
   }

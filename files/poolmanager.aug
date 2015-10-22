@@ -59,7 +59,7 @@ module PoolManager =
   let unit = Rx.no_spaces
   let utype = [ label "type" . str "-" . store /net|store|dcache|protocol/ ]
   let ugroup = Rx.word
-  let pool = Rx.word
+  let pool = /[A-Za-z0-9_.*-]+/
   let pool_spec = [ label "attribute" . counter "attr" . 
                     [ sp . seq "attr" . str "-" . store /noping|disabled/ ]
                   ]
