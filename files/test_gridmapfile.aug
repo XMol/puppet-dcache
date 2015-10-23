@@ -1,6 +1,6 @@
-(* Put this file in /usr/share/augeas/lenses/tests
-   It then may be used to verify the functionality of the lens
-   gridmapfile.aug.
+(* This test only serves as an example for how configuration files will be
+   transformed into trees by Augeas, since the actual lens doesn't pass
+   testing by augparse.
 *)
 
 module Test_gridmapfile =
@@ -15,17 +15,14 @@ let conf ="# Some comment
 test GridMapFile.lns get conf =
   { "#comment" = "Some comment" }
   { "dn" = "/C=DE/OU=KIT/CN=HAL9000 (Robot)"
-    { "fqan" = ""
-      { "login" = "robot" }
-    }
+    { "fqan" = "" }
+    { "login" = "robot" }
   }
   { "dn" = "*"
-    { "fqan" = "/ops"
-      { "login" = "ops" }
-    }
+    { "fqan" = "/ops" }
+    { "login" = "ops" }
   }
   { "dn" = "*"
-    { "fqan" = "/ops/Role=admin"
-      { "login" = "admin" }
-    }
+    { "fqan" = "/ops/Role=admin" }
+    { "login" = "admin" }
   }

@@ -18,9 +18,9 @@ module GridMapFile =
     let quoted = square quot (store /[^"\n]*/) quot in
     let dn = label "dn" . (quoted|bare) in
     (* Fully Qualified Attribute Name *)
-    let fqan = label "fqan" . (quoted|bare) in
-    let login = Rx.word in
-    [ dn . sp . [ fqan . sp . [ label "login" . store login ] ] . eol ]
+    let fqan = [ label "fqan" . (quoted|bare) ] in
+    let login = [ label "login" . store Rx.word ] in
+    [ dn . sp . fqan . sp . login . eol ]
     
   let lns = ( empty | comment | mapping )*
   
