@@ -6,3 +6,16 @@ gridka:
     - /usr/local/bin/python2.7 /usr/local/bin/sypen.py -b $CI_BUILD_REF_NAME -m $module_path -d modules
    tags:
     - puppy-gridka
+
+gitbook:
+    type: build
+    script:
+        - m_url=`git config --get remote.origin.url`
+        - m_name=`echo $m_url | awk -F/ '{print $(NF)}'`
+        - m_name=`echo ${m_name/.git/}`
+        - m_group=`echo $m_url | awk -F/ '{print $(NF-1)}'`
+        - m_path=`pwd`
+        - echo $m_name $m_group $m_path
+        - gitbook_builder.py puppet -g $m_group -p $m_name -s $m_path -t /opt/gitbook -b $CI_BUILD_REF_NAME
+    tags:
+        - gitbook
