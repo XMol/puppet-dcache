@@ -35,7 +35,7 @@ class dcache::params inherits dcache::globals {
   $dcache_layout                   = "$::fqdn"
   $dcache_dirs_layout              = "${dcache::globals::dcache_dirs_etc}/layouts"
   $dcache_dirs_etc                 = "${dcache::globals::dcache_dirs_etc}"
-  $dcache_dirs_plugins             = '/usr/share/dcache/plguins'
+  $dcache_dirs_plugins             = '/usr/share/dcache/plugins'
   $dcache_env                      = '/etc/dcache.env'
   $dcache_setup                    = "${dcache::globals::dcache_dirs_etc}/dcache.conf"
   $admin_paths_authorized_key      = "${dcache::globals::dcache_dirs_etc}/admin/authorized_keys2"
