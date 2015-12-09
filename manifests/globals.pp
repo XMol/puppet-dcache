@@ -31,7 +31,5 @@ class dcache::globals {
   
   $dcache_user               = 'dcache'
   $dcache_group              = 'dcache'
-  $dcache_dirs_etc           = '/etc/dcache'
-  $dcache_dirs_grid_security = '/etc/grid-security'
   $poolbasedir               = '/export'
 }
