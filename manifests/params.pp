@@ -1,6 +1,5 @@
 # Define default parameters for a dCache installation.
 class dcache::params {
-  $debug = false
   $experiment = $::experiment # Coming from Foreman host group.
   case $experiment {
     'urprod': {
@@ -8,8 +7,8 @@ class dcache::params {
       $hosts_service_chimera       = 'dcachepnfs'
       $hosts_service_srm           = 'dcachesrm'
       $hosts_service_httpd         = 'dcachesrm'
-      $hosts_service_billing       = 'dcacheh1'
-      $hosts_service_broker        = 'dcacheh1'
+      $hosts_service_billing       = "$headnode"
+      $hosts_service_broker        = "$headnode"
       $hosts_database_chimera      = 'dcachepnfsdb'
       $hosts_database_srm          = 'dcachesrmdb'
       $hosts_database_spacemanager = 'dcachesrmdb'
@@ -20,8 +19,8 @@ class dcache::params {
       $hosts_service_chimera       = "dc${experiment}pnfs"
       $hosts_service_srm           = "dc${experiment}srm"
       $hosts_service_httpd         = "dc${experiment}gplazma"
-      $hosts_service_billing       = "dc${experiment}h1"
-      $hosts_service_broker        = "dc${experiment}h1"
+      $hosts_service_billing       = "$headnode"
+      $hosts_service_broker        = "$headnode"
       $hosts_database_chimera      = "dc${experiment}pnfsdb"
       $hosts_database_srm          = "dc${experiment}srmdb"
       $hosts_database_spacemanager = "dc${experiment}srmdb"
