@@ -8,19 +8,17 @@ class dcache::service (
     command     => "ln -fs $(rpm -ql dcache-${dcache::dcache_version} | grep -e '/dcache$') ${service_exec}",
     path        => '/bin',
     subscribe   => Package['dcache'],
-  }
-  
-  exec { "Remove original dCache init script":
-    command => "/bin/rm $service_exec_orig",
-    onlyif => "test -L $service_exec_orig",
-    subscribe   => Package['dcache'],
-  }
-  
+  } ->  
   exec { "Add dcache to check-config":
     refreshonly => true,
     command => "chkconfig --add $(basename $service_exec)",
     path => '/bin',
-    subscribe   => Package['dcache'],
+    unless => "chkconfig --list $(basename $service_exec)",
+  }
+  
+  file { "Remove original dCache init script":
+    path => "$service_exec_orig",
+    ensure => absent,
   }
   
 }
