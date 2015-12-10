@@ -1,6 +1,6 @@
 define dcache::domain (
   $options  = [],
-  $services = {},
+  $services,
 ) {
   
   each($services) |$service, $params| {
