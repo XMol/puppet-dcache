@@ -5,14 +5,11 @@ class dcache::install (
   class { dcache::java: }
   
   if $manage_yum_repo {
-    if $version =~ /^(\d+)\.(\d+)\.(\d+)$/ {
       class { dcache::yum: }
-    }
   }
 
   package { 'dcache' :
     name   => "dcache-${version}",
-    ensure => installed,
   }
     
 }
