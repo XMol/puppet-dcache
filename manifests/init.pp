@@ -1,7 +1,7 @@
 class dcache (
   $dcache_version,
   $java_package,
-  $domains,
+  $layout,
   $plugins = [],
   
   $manage_yum_repo = $dcache::params::manage_yum_repo,

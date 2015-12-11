@@ -1,29 +1,25 @@
 # Generate the layout file for a host.
+# The layout file will be managed by Augeas. We will only ever change one
+# specific file with a custom lens (which is autoloaded).
 define dcache::layout (
-  $domains,
+  $layout,
 ) {
   require dcache::augeas
   
   # Learn the right path to the layout file.
   if has_key($dcache::setup, 'dcache.layout.dir') {
-    $layout = "$dcache::setup['dcache.layout.dir']"
+    Augeas { incl => "$dcache::setup['dcache.layout.dir']", }
   } else {
-    $layout = "$dcache::dcache_layout_dir/$::hostname.conf"
+    Augeas { incl => "$dcache::dcache_layout_dir/$::hostname.conf", }
   }
   
-  # The layout file will be managed by Augeas. We will only ever change one
-  # specific file with a custom lens (which is autoloaded).
-  Augeas {
-    incl => "$layout",
-  }
-  
-  each($domains['properties']) |$prop_key, $prop_value| {
+  each($layout['properties']) |$prop_key, $prop_value| {
     augeas { "Add bare property '$prop_key' to the layout file":
       changes => "set ./$prop_key \"$prop_value\"",
     }
   }
   
-  each($domains['domains']) |$domain, $dhash| {
+  each($layout['domains']) |$domain, $dhash| {
     augeas { "Add domain '$domain' to the layout file":
       changes => "set ./\\[domain\\][. = \"$domain\"] \"$domain\"",
     }

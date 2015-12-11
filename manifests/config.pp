@@ -1,12 +1,12 @@
 class dcache::config (
-  $domains = $dcache::domains,
+  $layout = $dcache::layout,
 ) {
   # Initiate the domains for this host.
-  create_resources('dcache::domain', $domains)
+  create_resources('dcache::domain', $layout['domains'])
   
   include dcache::augeas
   
   dcache::layout { "Generate the dCache layout file":
-    domains => $domains,
+    layout => $layout,
   }
 }

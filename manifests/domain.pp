@@ -1,20 +1,19 @@
+# This resource simply realizes all the services of the domain. As for
+# the domain resource, no more work is done.
 define dcache::domain (
-  $options  = [],
+  $properties = {},
   $services,
 ) {
   
-  each($services) |$service, $params| {
-    # $params may be unset, but is required to be a hash, even an empty one
+  each($services) |$service, $shash| {
+    # $shash may be unset, but is required to be a hash, even an empty one
     # does suffice.
-    if ! $params { $secure_params = {} }
-            else { $secure_params = $params }
+    if $shash {
+      ensure_resource("dcache::services::$service", $service, $shash)
+    } else {
+      ensure_resource("dcache::services::$service", $service, {})
+    }
     
-    $splitted = split($service, ',')
-    if size($splitted) == 1 { $mytitle = "${name}->${service}" }
-                       else { $mytitle = "${splitted[1]}"}
-    
-    ensure_resource("dcache::services::${splitted[0]}",
-                    $mytitle, $secure_params)
   }
 
 }
