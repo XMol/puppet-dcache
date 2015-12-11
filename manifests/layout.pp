@@ -2,6 +2,8 @@
 define dcache::layout (
   $domains,
 ) {
+  require dcache::augeas
+  
   # Learn the right path to the layout file.
   if has_key($dcache::setup, 'dcache.layout.dir') {
     $layout = "$dcache::setup['dcache.layout.dir']"
