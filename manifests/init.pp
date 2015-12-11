@@ -44,8 +44,11 @@ class dcache (
   $infoprovider_xml = "$dcache::params::infoprovider_xml",
   $linkgroupauthconf = "$dcache::params::linkgroupauthconf",
 
-  $setup = {},  
+  $custom_setup = {},  
 ) inherits dcache::params {
+  
+  # Merge the default setup and supplied setup.
+  $setup = merge($setup, $custom_setup)
   
   class { dcache::install: } ->
   class { dcache::config: } ->
