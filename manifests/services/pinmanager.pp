@@ -1,4 +1,3 @@
-define dcache::services::pinmanager {
-  # Do nothing...
-  if $dcache::debug { notify { "realized $title":  } }
-}
+define dcache::services::pinmanager (
+  $properties = {},
+) {}
