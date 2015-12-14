@@ -37,7 +37,7 @@ define dcache::layout (
       augeas { "Add service '$service' to domain '$domain' in the layout file":
         changes => "set ./\\[domain\\]/\\[service\\][. = \"$domain/$service\"] \"$domain/$service\"",
       }
-      each($shash) |$prop_key, $prop_value| {
+      each($shash['properties']) |$prop_key, $prop_value| {
         augeas { "Add $service property $prop_key to the layout file":
           changes => "set ./\\[domain\\]/\\[service\\]/$prop_key \"$prop_value\"",
         }
