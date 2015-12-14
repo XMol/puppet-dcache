@@ -7,8 +7,13 @@ define dcache::layout (
   require dcache::augeas
   
   # Learn the right path to the layout file.
-  if has_key($dcache::setup, 'dcache.layout.dir') {
-    Augeas { incl => "$dcache::setup['dcache.layout.dir']", }
+  # Unfortunately, we cannot use dCache's property "dcache.layout.uri",
+  # directly because Puppet won't understand an URI in this situation and it
+  # doesn't offer the right tools to modify the string.
+  if has_key($dcache::setup, 'dcache.layout.dir') and
+     has_key($dcache::setup, 'dcache.layout.uri') {
+    $layout_file = basename($dcache::setup['dcache.layout.uri'])
+    Augeas { incl => "$dcache::setup['dcache.layout.dir']/$layout_file", }
   } else {
     Augeas { incl => "$dcache::dcache_layout_dir/$::hostname.conf", }
   }
