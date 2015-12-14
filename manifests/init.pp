@@ -52,7 +52,6 @@ class dcache (
   
   class { dcache::install: } ->
   class { dcache::config: } ->
-  class { dcache::restart: }
   class { dcache::service: }
   
 }
