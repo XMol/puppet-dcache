@@ -16,17 +16,14 @@ module StorageAuthzdb =
     let uid = /[0-9]+/ in
     let gid = /[0-9]+/ in
     let comma = Util.del_str "," in
-    let gids = [ counter "gid" .
-                 label "gid" .
-                 Build.opt_list [ seq "gid" . store gid ] comma
-               ] in
     let home = Rx.no_spaces in
     let root = Rx.no_spaces in
     let extra = Rx.no_spaces in
     [ Util.del_str "authorize" . sp .
-      key user . sp. store access . sp .
+      key user . sp .
+      [ label "access" . store access ] . sp .
       [ label "uid" . store uid ] . sp .
-      gids . sp .
+      Build.opt_list [ label "gid" . store gid ] comma . sp .
       [ label "home" . store home ] . sp .
       [ label "root" . store root ] .
       [ sp . label "extra" . store extra ]? .
