@@ -38,8 +38,7 @@ class dcache::params {
   $dcache_paths_config = '/var/lib/dcache/config'
   $dcache_paths_gridsecurity = '/etc/grid-security'
   $dcache_paths_plugins = '/usr/share/dcache/plugins'
-  $service_exec_orig = '/etc/rc.d/init.d/dcache-server'
-  $service_exec = '/etc/rc.d/init.d/dcache'
+  $service_exec = '/etc/rc.d/init.d/dcache-server'
   $dcache_user = 'dcache'
   $dcache_uid = 500
   $dcache_group = 'dcache'

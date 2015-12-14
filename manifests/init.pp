@@ -24,7 +24,6 @@ class dcache (
   $dcache_paths_config = "$dcache::params::dcache_paths_config",
   $dcache_paths_gridsecurity = "$dcache::params::dcache_paths_gridsecurity",
   $dcache_paths_plugins = "$dcache::params::dcache_paths_plugins",
-  $service_exec_orig = "$dcache::params::service_exec_orig",
   $service_exec = "$dcache::params::service_exec",
   $dcache_user = "$dcache::params::dcache_user",
   $dcache_uid = "$dcache::params::dcache_uid",
