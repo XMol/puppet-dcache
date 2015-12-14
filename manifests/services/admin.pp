@@ -1,6 +1,10 @@
 define dcache::services::admin (
-  $auth_keys = $dcache::admin_paths_authorized_key,
+  $properties = {}, # ... will be ignored.
+  $auth_keys_file = "$dcache::admin_authorized_keys",
+  $user = "$dcache::dcache_user",
+  $keys = {},
 ) {
-  # Have to wait for proper ssh key management with Puppet.
-  if $dcache::debug { notify { "realized $title":  } }
+  create_resources(ssh_authorized_keys, $keys,
+                   { target => "$auth_keys_file", user => "$user", }
+  )
 }
