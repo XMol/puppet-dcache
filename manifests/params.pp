@@ -32,7 +32,7 @@ class dcache::params {
   
   $dcache_env = '/etc/dcache.env'
   $dcache_paths_etc = '/etc/dcache'
-  $dcache_layout_dir = "$dcache_paths_etc/layouts"
+  $dcache_layout_file = "$dcache_paths_etc/layouts/$::hostname.conf"
   $dcache_paths_admin = "$dcache_paths_etc/admin"
   $dcache_paths_setup = "$dcache_paths_etc/dcache.conf"
   $dcache_paths_config = '/var/lib/dcache/config'

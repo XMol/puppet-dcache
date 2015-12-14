@@ -18,7 +18,7 @@ class dcache (
   
   $dcache_env = "$dcache::params::dcache_env",
   $dcache_paths_etc = "$dcache::params::dcache_paths_etc",
-  $dcache_layout_dir = "$dcache::params::dcache_layout_dir",
+  $dcache_layout_file = "$dcache::params::dcache_layout_file",
   $dcache_paths_admin = "$dcache::params::dcache_paths_admin",
   $dcache_paths_setup = "$dcache::params::dcache_paths_setup",
   $dcache_paths_config = "$dcache::params::dcache_paths_config",
