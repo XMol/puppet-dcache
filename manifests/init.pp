@@ -46,7 +46,7 @@ class dcache (
 ) inherits dcache::params {
   
   # Merge the default setup and supplied setup.
-  $setup = merge($setup, $custom_setup)
+  $setup = merge($dcache::params::setup, $custom_setup)
   
   class { dcache::install: } ->
   class { dcache::config: } ->
