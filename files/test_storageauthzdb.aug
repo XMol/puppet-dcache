@@ -54,3 +54,18 @@ authorize adm read-write 1000 100,666 / / /
 authorize john read-write 1001 100 / /data/experiments
 authorize carl read-only 1002 100,101,200 / /
 "
+
+(* Test put with an empty file as starting point. *)
+test StorageAuthzdb.lns put "" after
+  set "version" "2.1";
+  insa "bran" "/version";
+  set "bran/access" "read-only";
+  set "bran/uid" "666";
+  set "bran/gid" "999";
+  set "bran/gid[2]" "1000";
+  set "bran/home" "/";
+  set "bran/root" "/";
+  set "bran/extra" "/" =
+"version 2.1
+authorize bran read-only 666 999,1000 / / /
+"
