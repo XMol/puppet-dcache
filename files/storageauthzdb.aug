@@ -31,7 +31,7 @@ module StorageAuthzdb =
     ]
   
   
-  let lns = ( empty | comment )* . version . ( empty | comment | rule )*
+  let lns = (( empty | comment )* . version . ( empty | comment | rule )*)?
   
   let filter = incl "/etc/grid-security/storage-authzdb"
              . Util.stdexcl
