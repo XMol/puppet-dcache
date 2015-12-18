@@ -20,7 +20,7 @@ module GridMapFile =
     (* Fully Qualified Attribute Name *)
     let fqan = [ label "fqan" . (quoted|bare) ] in
     let login = [ label "login" . store Rx.word ] in
-    [ dn . sp . fqan . sp . login . eol ]
+    [ dn . sp . (fqan . sp)? . login . eol ]
     
   let lns = ( empty | comment | mapping )*
   
