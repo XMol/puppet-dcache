@@ -18,7 +18,7 @@ define dcache::gplazma::authzdb (
   # have to make sure it exists already in a valid state before, which
   # may be changed right after.
   file { "Ensure '$authzdb_file' exists":
-    content => '#Dummy file\nversion 2.1\n',
+    content => 'version 2.1\n',
     replace => false,
   }
   
@@ -47,7 +47,7 @@ define dcache::gplazma::authzdb (
                  'but it is missing from the $augeas hash!'], ' '))
     }
     each($augeas) |$key, $value| {
-      if "$key" = "version" {
+      if "$key" == "version" {
         augeas { "Manage 'version' in $authzdb_file":
           changes => "set version ${augeas['version']}",
         }
