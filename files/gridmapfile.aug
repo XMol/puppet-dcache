@@ -13,15 +13,24 @@ module GridMapFile =
   let sp = Sep.space
   let quot = Util.del_str "\""
   
+  (* Redefine dquote_spaces, because we want to disallow '#' as first
+     character of a line (ambiguity with line comments). *)
+  let dquote_spaces (lns:lens) =
+    (* an empty pare of quotes *)
+    let null = store /""/ in
+    (* bare has no spaces, and is optionally quoted *)
+    let bare = Quote.do_dquote_opt (store /[^" #\t\n]+/) in
+    (* quoted has at least one space or is empty and must be quoted *)
+    let quoted = Quote.do_dquote (store /[^"\n]*[ \t]+[^"\n]*/) in
+    [ lns . bare ] | [ lns . quoted ] | [ lns . null ]
+  
   let mapping =
-    let bare = store /[^" \t\n]+/ in
-    let quoted = square quot (store /[^"\n]*/) quot in
-    let dn = label "dn" . (quoted|bare) in
+    let dn = dquote_spaces (label "dn") in
     (* Fully Qualified Attribute Name *)
-    let fqan = [ label "fqan" . (quoted|bare) ] in
+    let fqan = dquote_spaces (label "fqan") in
     let login = [ label "login" . store Rx.word ] in
-    [ dn . sp . (fqan . sp)? . login . eol ]
-    
+    [ label "mapping" . dn . sp . (fqan . sp)? . login . eol ]
+
   let lns = ( empty | comment | mapping )*
   
   let filter = incl "/etc/grid-security/grid-mapfile"

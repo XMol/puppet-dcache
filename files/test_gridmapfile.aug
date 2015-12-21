@@ -5,24 +5,68 @@
 
 module Test_gridmapfile =
 
-let conf ="# Some comment
-\"/C=DE/OU=KIT/CN=HAL9000 (Robot)\" \"\" robot
-* \"/ops\" ops
-* \"/ops/Role=admin\" admin
+let conf =
+"# Most common VOMS matching rule.
+* /vo vo001
+* /vo/Role:admin voadmin
+
+# Matching specific DNs.
+\"/C=DE/OU=KIT/CN=HAL9000 (Robot)\" robot
+
+# Overruling
+\"/C=DE/OU=KIT/CN=John Doe\" \"\" jonny
+\"/C=DE/OU=KIT/CN=John Doe\" /org/Role:manager john
+\"/C=DE/OU=KIT/CN=John Doe\" \"/org/Role:top tear investor\" boss
 "
 
 
 test GridMapFile.lns get conf =
-  { "#comment" = "Some comment" }
-  { "dn" = "/C=DE/OU=KIT/CN=HAL9000 (Robot)"
-    { "fqan" = "" }
-    { "login" = "robot" }
-  }
-  { "dn" = "*"
-    { "fqan" = "/ops" }
-    { "login" = "ops" }
-  }
-  { "dn" = "*"
-    { "fqan" = "/ops/Role=admin" }
-    { "login" = "admin" }
-  }
+{ "#comment" = "Most common VOMS matching rule." }
+{ "mapping"
+  { "dn" = "*" }
+  { "fqan" = "/vo" }
+  { "login" = "vo001" }
+}
+{ "mapping"
+  { "dn" = "*" }
+  { "fqan" = "/vo/Role:admin" }
+  { "login" = "voadmin" }
+}
+{ }
+{ "#comment" = "Matching specific DNs." }
+{ "mapping"
+  { "dn" = "/C=DE/OU=KIT/CN=HAL9000 (Robot)" }
+  { "login" = "robot" }
+}
+{ }
+{ "#comment" = "Overruling" }
+{ "mapping"
+  { "dn" = "/C=DE/OU=KIT/CN=John Doe" }
+  { "fqan" = "\"\"" }
+  { "login" = "jonny" }
+}
+{ "mapping"
+  { "dn" = "/C=DE/OU=KIT/CN=John Doe" }
+  { "fqan" = "/org/Role:manager" }
+  { "login" = "john" }
+}
+{ "mapping"
+  { "dn" = "/C=DE/OU=KIT/CN=John Doe" }
+  { "fqan" = "/org/Role:top tear investor" }
+  { "login" = "boss" }
+}
+
+test GridMapFile.lns put conf after
+    set "mapping[login = \"robot\"]/login" "hal" =
+"# Most common VOMS matching rule.
+* /vo vo001
+* /vo/Role:admin voadmin
+
+# Matching specific DNs.
+\"/C=DE/OU=KIT/CN=HAL9000 (Robot)\" hal
+
+# Overruling
+\"/C=DE/OU=KIT/CN=John Doe\" \"\" jonny
+\"/C=DE/OU=KIT/CN=John Doe\" /org/Role:manager john
+\"/C=DE/OU=KIT/CN=John Doe\" \"/org/Role:top tear investor\" boss
+"
