@@ -32,13 +32,12 @@ module Kpwd =
     ]
   
   let record =
-    let secureid = [ seq "rec" . del /[ \t]*/ "  " .
+    let secureid = [ label "dn" . del /[ \t]*/ "  " .
                      store /[^ \t\n][^\t\n]*[^ \t\n]/ . eol
                    ] in
-    let secureids = [ label "secureids" . counter "rec" . secureid* ] in
     [ key "login" . sp . user . sp . access . sp .
       uid . sp . gid . sp . home . sp . root . (sp . fsroot)? . eol .
-      secureids . empty
+      secureid* . empty
     ]
   
   let mapping = [ key "mapping" . sp .
