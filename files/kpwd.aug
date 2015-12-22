@@ -32,12 +32,14 @@ module Kpwd =
     ]
   
   let record =
+    (* Use break to make a trailing line break important. *)
+    let break = del "\n" "\n" in
     let secureid = [ label "dn" . del /[ \t]*/ "  " .
                      store /[^ \t\n][^\t\n]*[^ \t\n]/ . eol
                    ] in
     [ key "login" . sp . user . sp . access . sp .
       uid . sp . gid . sp . home . sp . root . (sp . fsroot)? . eol .
-      secureid* . empty
+      secureid* . break
     ]
   
   let mapping = [ key "mapping" . sp .
