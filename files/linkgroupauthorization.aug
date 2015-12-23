@@ -8,19 +8,18 @@ module LinkGroupAuthorization =
   let eol = Util.eol
   let comment = Util.comment
   let empty = Util.empty
+  let sp = Sep.space
   
-  let group_name = Rx.word
-  let title = key "LinkGroup" . Sep.space . store group_name . eol
-  
-  let role = /[^# \t\r\n]+/
-  let entry = seq "role" . store role . eol
-  
-  let link_group = counter "role"
-                 . [ title . comment* . [ entry ]+ ]
+  let link_group =
+    let group_name = Rx.word in
+    let title = key "LinkGroup" . sp . store group_name . eol in
+    let role = /[^# \t\r\n]+/ in
+    let entry = [ del /[ \t]*/ "  " . label "entry" . store role . eol ] in
+    [ title . ((entry|empty|comment)* . entry)? ]
   
   let lns = ( empty | comment | link_group )*
   
-  let filter = incl "/etc/dcache/LinkGroupAuthroization.conf"
+  let filter = incl "/etc/dcache/LinkGroupAuthorization.conf"
              . Util.stdexcl
   
   let xfm = transform lns filter

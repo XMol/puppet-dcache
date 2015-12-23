@@ -6,17 +6,17 @@
 
 module Test_linkgroupauthorization =
 
-let conf ="#SpaceManagerLinkGroupAuthorizationFile
+let conf = "
+#SpaceManagerLinkGroupAuthorizationFile
 # this is a comment and is ignored
 
-LinkGroup desy-test-LinkGroup
-/desy/Role=test
-/desy/Role=testing
+LinkGroup test-LinkGroup
+  /some/Role=test
+  /some/Role=testing
+
 tester
 
-LinkGroup desy-anyone-LinkGroup
-/desy/Role=*
-
+LinkGroup anyone-LinkGroup
 LinkGroup default-LinkGroup
 # allow anyone :-)
 */Role=*
@@ -24,17 +24,38 @@ LinkGroup default-LinkGroup
 
 
 test LinkGroupAuthorization.lns get conf =
-  { "#comment" = "SpaceManagerLinkGroupAuthorizationFile" }
-  { "#comment" = "this is a comment and is ignored" }
-  {}
-  { "LinkGroup"  = "desy-test-LinkGroup"
-    { "1"    = "/desy/Role=test" }
-    { "2"    = "/desy/Role=testing" }
-    { "3"    = "tester" } }
-  {}
-  { "LinkGroup"  = "desy-anyone-LinkGroup"
-    { "1"    = "/desy/Role=*" } }
-  {}
-  { "LinkGroup"  = "default-LinkGroup"
-    { "#comment" = "allow anyone :-)" }
-    { "1"    = "*/Role=*" } }
+{ }
+{ "#comment" = "SpaceManagerLinkGroupAuthorizationFile" }
+{ "#comment" = "this is a comment and is ignored" }
+{ }
+{ "LinkGroup"  = "test-LinkGroup"
+  { "entry"    = "/some/Role=test" }
+  { "entry"    = "/some/Role=testing" }
+  { }
+  { "entry"    = "tester" }
+}
+{ }
+{ "LinkGroup"  = "anyone-LinkGroup" }
+{ "LinkGroup"  = "default-LinkGroup"
+  { "#comment" = "allow anyone :-)" }
+  { "entry"    = "*/Role=*" }
+}
+
+
+test LinkGroupAuthorization.lns put conf after
+  set "LinkGroup[. = \"anyone-LinkGroup\"]/entry" "somebody" = "
+#SpaceManagerLinkGroupAuthorizationFile
+# this is a comment and is ignored
+
+LinkGroup test-LinkGroup
+  /some/Role=test
+  /some/Role=testing
+
+tester
+
+LinkGroup anyone-LinkGroup
+  somebody
+LinkGroup default-LinkGroup
+# allow anyone :-)
+*/Role=*
+"
