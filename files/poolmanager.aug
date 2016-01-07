@@ -60,9 +60,8 @@ module PoolManager =
   let utype = [ label "type" . str "-" . store /net|store|dcache|protocol/ ]
   let ugroup = Rx.word
   let pool = /[A-Za-z0-9_.*-]+/
-  let pool_spec = [ label "attribute" . counter "attr" . 
-                    [ sp . seq "attr" . str "-" . store /noping|disabled/ ]
-                  ]
+  let pool_ping = [ sp . label "ping" . str "-" . store "noping" ]
+  let pool_enabled = [ sp . label "enabled" . str "-" . store "disabled" ]
   let pgroup = Rx.word
   let link = Rx.word
   let lgroup = Rx.word
@@ -71,11 +70,13 @@ module PoolManager =
   let psu_create =
     let psu_create_unit = [ key "unit" . sp . utype . sp . store unit ] in
     let psu_create_ugroup = [ key "ugroup" . sp . store ugroup ] in
-    let psu_create_pool = [ key "pool" . sp . store pool . pool_spec* ] in
+    let psu_create_pool = [ key "pool" . sp . store pool . 
+                            (Build.combine_two_opt pool_ping pool_enabled)?
+                          ] in
     let psu_create_pgroup = [ key "pgroup" . sp . store pgroup ] in
     let psu_create_link = [ key "link" . sp . store link .
                             counter "ugroup" . sp .
-                            Build.opt_list [ seq "ugroup" . store ugroup ] sp
+                            Build.opt_list [ label "ugroup" . store ugroup ] sp
                           ] in
     let psu_create_lgroup = [ key "linkGroup" . sp . store lgroup ] in
     [ key "create" . sp . ( psu_create_unit | psu_create_ugroup |
