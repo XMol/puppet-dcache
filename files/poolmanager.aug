@@ -1,136 +1,175 @@
-(* Parse poolmanager.conf files for dCache.
+(* Parse poolmanager.conf files for dCache.*)
 
-   For this lens to work, poolmanager.conf has to end in an empty line!
-*)
-
-module PoolManager =
+module PoolManagerFlat =
   autoload xfm
   
   let eol = Util.eol
   let comment = Util.comment
   let empty = Util.empty
   let sp = Sep.space
-  let str (s:string) = Util.del_str s
+  let str (s:string) = del s s
   
   (* Cost Module statements *)
-  let cm = 
-    let cm_param = /active|debug|magic|update/ in
-    [ key "cm" . sp . str "set" . sp .
-      [ key cm_param . sp . store /on|off/ ] . eol
-    ]
+  let cm_set (s:string) = 
+    [ label ("cm_".s) . del (/cm[ \t]+set[ \t]+/.s) ("cm set ".s) . sp .
+      store /on|off/ . eol ]
   
+  let cm =
+    let cm_active = cm_set "active" in
+    let cm_debug = cm_set "debug" in
+    let cm_magic = cm_set "magic" in
+    let cm_update = cm_set "update" in
+    cm_active | cm_debug | cm_magic | cm_update
   
   (* Partition Manager statements *)
-  let pm =
-    let ptype = [ str "-type=" . label "type" . store Rx.word ] . sp in
-    let part = Rx.word in
-    let pm_create = [ key "create" . sp . ptype? . store part ] in
-    let n_opt = /(cpu|space)costfactor|max-copies/ |
-                /fallback|halt|idle|p2p|slope|alert/ in
-    let n_opt_val = /[0-9]+|[0-9]+\.[0-9]+/ in
-    let w_opt = /sameHost(Copy|Retry)/ in
-    let w_opt_val = /never|besteffort|notchecked/ in
-    let b_opt = /p2p(-allowed|-fortransfer|-oncost)|stage-(allowed|oncost)/ in
-    let b_opt_val = /yes|no/ in
-    let opts = ( n_opt | w_opt | b_opt ) in
-    let vals = ( n_opt_val | w_opt_val | b_opt_val ) in
-    let opt = [ str "-" . key opts . str "=" . store vals ] in
-    let pm_set = [ key "set" . sp . (store part . sp)? .
-                   Build.opt_list opt sp ] in
-    [ key "pm" . sp . ( pm_create | pm_set ) . eol ]
+  let partition = Rx.word
+  let pm_create =
+    let ptype = [ str "-type=" . label "type" . store Rx.word ] in
+    label "pm_create" . del /pm[ \t]+create/ "pm create" . sp .
+    (ptype . sp)? . store partition
+  
+  (* Since dCache supports custom partitions, not just those shipped with it,
+     we have to accept any kind of partition parameter and value. *)
+  let pm_set =
+    let param_key = Rx.word in
+    let param_val = Rx.word in
+    let param = [ str "-" . key param_key . str "=" . store param_val ] in
+    label "pm_set" . del /pm[ \t]+set/ "pm set" . sp .
+    (store partition . sp)? . Build.opt_list param sp
+  
+  let pm = [ pm_create . eol ] | [ pm_set . eol ]
   
   
   (* Request Container statements *)
-  let rc =
-    let onerror = [ key "onerror" . sp . store /suspend|fail/ ] in
-    let suspend = [ key "suspend" . sp . store /on|off/ . sp . str "-all" ] in
-    let restore_set = [ str "set" . sp . key "max restore" . sp . store /[0-9]+|unlimited/ ] in
-    let n_sets = /max (retries|threads)|poolpingtimer|retry/ in
-    let n_set_val = /[0-9]+/ in
-    let n_set = [ str "set" . sp . key n_sets . sp . store n_set_val ] in
-    let w_sets = /sameHost(Copy|Retry)/ in
-    let w_set_val = /never|besteffort|notchecked/ in
-    let w_set = [ str "set" . sp . key w_sets . sp . store w_set_val ] in
-    let rc_set = ( restore_set | n_set | w_set ) in
-    [ key "rc" . sp . ( onerror | suspend | rc_set ) . eol ]
+  let rc_set_onerror =
+    [ label "rc_set_onerror" . del /rc[ \t]+onerror/ "rc onerror" . sp .
+      store /suspend|fail/ . eol ]
+  
+  let rc_set (s:string) (v:regexp) =
+    [ label ("rc_set_".s) . del (/rc[ \t]+set[ \t]+/.s) ("rc set ".s) . sp .
+      store v . eol ]
+  
+  let rc_set_max (s:string) (r:regexp) =
+    [ label ("rc_set_max_".s) .
+      del (/rc[ \t]+set[ \t]+max[ \t]+/.s) ("rc set max ".s) . sp .
+      store r . eol ]
+  
+  let rc = (
+    rc_set_onerror |
+    rc_set_max "restore" /[0-9]+|unlimited/ |
+    rc_set_max "retries" /[0-9]+/ | rc_set_max "threads" /[0-9]+/ |
+    rc_set "poolpingtimer" /[0-9]+/ | rc_set "retry" /[0-9]+/ |
+    rc_set "sameHostCopy" /never|besteffort|notchecked/ |
+    rc_set "sameHostRetry" /never|besteffort|notchecked/
+  )
   
   
   (* Pool Selection Unit statements *)
   let unit = Rx.no_spaces
-  let utype = [ label "type" . str "-" . store /net|store|dcache|protocol/ ]
   let ugroup = Rx.word
-  let pool = /[A-Za-z0-9_.*-]+/
-  let pool_ping = [ sp . label "ping" . str "-" . store "noping" ]
-  let pool_enabled = [ sp . label "enabled" . str "-" . store "disabled" ]
+  let pool = Rx.word
   let pgroup = Rx.word
   let link = Rx.word
   let lgroup = Rx.word
   
+  let psu_do (t:string) (r:regexp) (s:string) (l:lens) =
+    [ label t . del (/psu[ \t]+/.r) ("psu ".s) . l ]
   
-  let psu_create =
-    let psu_create_unit = [ key "unit" . sp . utype . sp . store unit ] in
-    let psu_create_ugroup = [ key "ugroup" . sp . store ugroup ] in
-    let psu_create_pool = [ key "pool" . sp . store pool . 
-                            (Build.combine_two_opt pool_ping pool_enabled)?
-                          ] in
-    let psu_create_pgroup = [ key "pgroup" . sp . store pgroup ] in
-    let psu_create_link = [ key "link" . sp . store link . sp .
-                            Build.opt_list [ label "ugroup" . store ugroup ] sp
-                          ] in
-    let psu_create_lgroup = [ key "linkGroup" . sp . store lgroup ] in
-    [ key "create" . sp . ( psu_create_unit | psu_create_ugroup |
-                            psu_create_pool | psu_create_pgroup |
-                            psu_create_link | psu_create_lgroup )
-    ]
+  let psu_create (s:string) (l:lens) =
+    psu_do ("psu_create_".s) (/create[ \t]+/.s./[ \t]+/) ("create ".s." ") l
+
+  let psu_create_unit =
+    let utype = [ label "type" . str "-" . store /net|store|dcache|protocol/ ] in
+    psu_create "unit" ( utype . sp . store unit )
   
+  let psu_create_ugroup =
+    psu_create "ugroup" ( store ugroup )
   
-  let psu_add =
-    let add_m2g (s:string) (g:regexp) (m:regexp) = 
-      [ key s . sp . [ key g . sp . store m ] ] in
-    let psu_add_to_ugroup = add_m2g "ugroup" ugroup unit in
-    let psu_add_to_pgroup = add_m2g "pgroup" pgroup pool in
-    let psu_add_to_link = add_m2g "link" link (pool|pgroup) in
-    let psu_add_to_lgroup = add_m2g "linkGroup" lgroup link in
-    [
-      key "addto" . sp . ( psu_add_to_ugroup | psu_add_to_pgroup | psu_add_to_lgroup ) |
-      str "add" . label "addto" . sp . psu_add_to_link
-    ]
+  let psu_create_pool =
+    let ping = [ sp . label "ping" . str "-" . store "noping" ] in
+    let enabled = [ sp . label "enabled" . str "-" . store "disabled" ] in
+    psu_create "pool" ( store pool . (Build.combine_two_opt ping enabled)? )
+
+  let psu_create_pgroup =
+    psu_create "pgroup" ( store pgroup )
+  
+  let psu_create_link =
+    psu_create "link" ( store link . sp . Build.opt_list [ label "ugroup" . store ugroup ] sp )
+
+  let psu_create_lgroup =
+    psu_create "linkGroup" ( store lgroup )
   
   
-  let psu_set =
+  let psu_addto (s:string) (g:regexp) (m:regexp) =
+    psu_do ("psu_addto_".s) (/addto[ \t]+/.s./[ \t]+/) ("addto ".s." ") ( store g . sp . [ label "1" . store m ] )
+
+  let psu_addto_ugroup =
+    psu_addto "ugroup" ugroup unit
+
+  let psu_addto_pgroup =
+    psu_addto "pgroup" pgroup pool
+
+  let psu_addto_link =
+    psu_do ("psu_addto_link") (/add[ \t]+link[ \t]+/) ("add link ") ( store link . sp . [ label "1" . store pgroup ] )
+
+  let psu_addto_lgroup =
+    psu_addto "linkGroup" lgroup link
+
+    
+  let psu_set (s:string) (l:lens) =
+    psu_do ("psu_set_".s) (/set[ \t]+/.s./[ \t]+/) ("set ".s." ") l
+
+  let psu_set_link =
     let link_prefs = /(cache|p2p|read|write)pref/ in
     let link_pref = [ str "-" . key link_prefs . str "=" . store /-?[0-9]+/ ] in
     let link_section = [ str "-" . key "section" . str "=" . store Rx.word ] in
-    let psu_set_link = [ key "link" . sp . store link . sp .
-                         Build.opt_list (link_pref|link_section) sp
-                       ] in
-    let access_latency = /(on|near)line/ in
-    let retention_policy = /custodial|output|replica/ in
-    let lg_allow = (access_latency|retention_policy)./Allowed/ in
-    let psu_set_lgroup = [ key "linkGroup" . sp .
-                           [ key lg_allow . sp .
-                             [ key lgroup . sp . store /true|false/ ]
-                           ]
-                         ] in
-    let pool_state = /(en|dis)abled|(no)?ping|(not)?rdonly/ in
-    let psu_set_pool = [ key "pool" . sp .
-                         [ key pool . sp . store pool_state ]
-                       ] in
-    let psu_set_pool_active =
-        [ key "allpoolsactive" . sp . store /on|off/ ] |
-        [ key "active" . sp . store (pool|"*") .
-          [ sp . label "opt" . str "-" . store "no" ]?
-        ] in
-    let psu_set_pool_enabled = [ key /(en|dis)abled/ . sp . store pool ] in
-    let psu_set_regex = [ key "regex" . sp . store /on|off/ ] in
-    let psu_set_other = ( psu_set_pool_active | psu_set_pool_enabled |
-                          psu_set_regex ) in
-    [ key "set" . sp .
-      ( psu_set_link | psu_set_lgroup | psu_set_pool | psu_set_other )
-    ]
+    psu_set "link" ( store link . sp . Build.opt_list (link_pref|link_section) sp )
   
-  let psu = [ key "psu" . sp . ( psu_add | psu_create | psu_set ) . eol ]
+  let psu_set_lgroup (s:string) =
+    psu_do ("psu_set_linkGroup_".s) (/set[ \t]+linkGroup[ \t]+/.s./Allowed[ \t]+/) ("set linkGroup ".s."Allowed ") ( store lgroup . sp . [ label "1" . store /true|false/ ] )
+
+  let psu_set_lgroup_custodial = psu_set_lgroup "custodial"
+  let psu_set_lgroup_replica = psu_set_lgroup "replica"
+  let psu_set_lgroup_output = psu_set_lgroup "output"
+  let psu_set_lgroup_online = psu_set_lgroup "online"
+  let psu_set_lgroup_nearline = psu_set_lgroup "nearline"
   
+  let psu_set_pool = psu_set "pool" (
+    store (pool."*") . sp .
+    [ label "1" . store /(en|dis)abled|(no)?ping|(not)?rdonly/ ]
+  )
+
+  let psu_set_pool_allpoolsactive =
+    psu_set "allpoolsactive" ( store /on|off/ )
+  
+  let psu_set_pool_active =
+    psu_set "active" ( store (pool|"*") . [ sp . label "1" . str "-" . store "no" ]? )
+
+  (* Allow globbing for pool names *)
+  let psu_set_pool_enabled =
+    psu_set "enabled" ( store (pool."*") )
+  let psu_set_pool_disabled =
+    psu_set "disabled" ( store (pool."*") )
+
+  let psu_set_regex =
+    psu_set "regex" ( store /on|off/ )
+
+  let psu_add_any =
+    ( psu_addto_ugroup | psu_addto_pgroup | psu_addto_link | psu_addto_lgroup )
+
+  let psu_create_any =
+    ( psu_create_unit | psu_create_ugroup |
+      psu_create_pool | psu_create_pgroup |
+      psu_create_link | psu_create_lgroup )
+  
+  let psu_set_any =
+    ( psu_set_link | psu_set_regex |
+      psu_set_lgroup_custodial | psu_set_lgroup_replica |
+      psu_set_lgroup_nearline | psu_set_lgroup_online | psu_set_lgroup_output |
+      psu_set_pool_active | psu_set_pool_allpoolsactive |
+      psu_set_pool | psu_set_pool_enabled |  psu_set_pool_disabled )
+
+  let psu = ( psu_add_any | psu_create_any | psu_set_any ) . eol  
   
   let lns = ( empty | comment | psu | rc | cm | pm )*
   
