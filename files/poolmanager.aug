@@ -74,8 +74,7 @@ module PoolManager =
                             (Build.combine_two_opt pool_ping pool_enabled)?
                           ] in
     let psu_create_pgroup = [ key "pgroup" . sp . store pgroup ] in
-    let psu_create_link = [ key "link" . sp . store link .
-                            counter "ugroup" . sp .
+    let psu_create_link = [ key "link" . sp . store link . sp .
                             Build.opt_list [ label "ugroup" . store ugroup ] sp
                           ] in
     let psu_create_lgroup = [ key "linkGroup" . sp . store lgroup ] in
@@ -120,7 +119,7 @@ module PoolManager =
     let psu_set_pool_active =
         [ key "allpoolsactive" . sp . store /on|off/ ] |
         [ key "active" . sp . store (pool|"*") .
-          [ sp . str "-" . store "no" ]?
+          [ sp . label "opt" . str "-" . store "no" ]?
         ] in
     let psu_set_pool_enabled = [ key /(en|dis)abled/ . sp . store pool ] in
     let psu_set_regex = [ key "regex" . sp . store /on|off/ ] in
