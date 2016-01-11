@@ -1,6 +1,6 @@
 (* Parse poolmanager.conf files for dCache.*)
 
-module PoolManagerFlat =
+module PoolManager =
   autoload xfm
   
   let eol = Util.eol

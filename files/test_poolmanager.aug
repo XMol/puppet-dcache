@@ -3,7 +3,7 @@
    poolmanagerflat.aug.
 *)
 
-module Test_poolmanagerflat =
+module Test_poolmanager =
 
 let conf = "
 # Setup of PoolManager
