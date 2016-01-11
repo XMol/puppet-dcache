@@ -17,7 +17,4 @@ define dcache::services::pool (
   }
   
   # Ensure GPFS mount.
-  # Ensure pool directory (wait-for-files!) exists.
-
-  if $dcache::debug { notify { "realized $title":  } }
 }
