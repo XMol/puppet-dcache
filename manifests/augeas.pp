@@ -4,8 +4,8 @@ class dcache::augeas (
   $augeas_include_dir = '/usr/share/augeas/lenses',
 ) {
   $dcache_aug_lenses = [
-    'dcachelayout.aug', 'gplazma.aug', 'gridmapfile.aug', 'kpwd.aug',
-    'linkgroupauthorization.aug', 'poolmanager.aug', 'storageauthzdb.aug',
+    'dcachelayout.aug', 'gridmapfile.aug', 'poolmanager.aug',
+    'kpwd.aug', 'linkgroupauthorization.aug', 'storageauthzdb.aug',
   ]
   file { $dcache_aug_lenses:
     path => "$augeas_include_dir/$title",
