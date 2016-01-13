@@ -8,11 +8,6 @@ class dcache::uninstall (
     command => "chkconfig --del $(basename $dcache::service_exec)",
     path => '/bin',
   } ->  
-  tidy { 'Remove dCache yum repository files':
-    require => Package['Uninstall dCache packages'],
-    path => '/etc/yum.repos.d',
-    matches => 'dcache-*',
-  } ->
   file { ["$dcache::dcache_env",
           "$dcache::dcache_paths_etc",
           '/usr/share/dcache',

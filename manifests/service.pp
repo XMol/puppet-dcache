@@ -4,6 +4,7 @@ class dcache::service (
   
   exec { "Add dcache to check-config":
     refreshonly => true,
+    subscribe => Package['dcache'],
     command => "chkconfig --add $(basename $service_exec)",
     path => '/bin',
     unless => "chkconfig --list $(basename $service_exec)",
