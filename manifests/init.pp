@@ -1,6 +1,5 @@
 class dcache (
   $dcache_version,
-  $java_package,
   $layout,
   
   $dcache_env = "$dcache::params::dcache_env",
