@@ -3,25 +3,23 @@
 # settings for end users. In other words, set a couple of parameters
 # with dCache's default values, so Puppet knows them.
 class dcache::params {
-  $dcache_env = '/etc/dcache.env'
-  $dcache_paths_etc = '/etc/dcache'
-  $dcache_layout_file = "$dcache_paths_etc/layouts/$::hostname.conf"
-  $dcache_paths_admin = "$dcache_paths_etc/admin"
-  $dcache_paths_setup = "$dcache_paths_etc/dcache.conf"
-  $dcache_paths_config = '/var/lib/dcache/config'
-  $dcache_paths_gridsecurity = '/etc/grid-security'
-  $dcache_paths_plugins = '/usr/share/dcache/plugins'
-  $service_exec = '/etc/rc.d/init.d/dcache-server'
-  $dcache_user = 'dcache'
-  $dcache_group = 'dcache'
-  $poolmanager_conf = "$dcache_paths_config/poolmanager.conf"
-  $admin_authorized_keys = "$dcache_paths_admin/authorized_keys2"
-  $gplazma_conf = "$dcache_paths_etc/gplazma.conf"
-  $authzdb_file = "$dcache_paths_gridsecurity/storage-authzdb"
-  $gridmap_file = "$dcache_paths_gridsecurity/grid-mapfile"
-  $kpwd_file = "$dcache_paths_etc/dcache.kpwd"
-  $vorolemap_file = "$dcache_paths_gridsecurity/grid-vorolemap"
-  $infoprovider_tapeinfo = "$dcache_paths_etc/tape-info.xml"
-  $infoprovider_xml = "$dcache_paths_etc/info-provider.xml"
-  $linkgroupauthconf = "$dcache_paths_etc/LinkGroupAuthorization.conf"
+  $paths_etc = '/etc/dcache'
+  $paths_admin = "$paths_etc/admin"
+  $paths_config = '/var/lib/dcache/config'
+  $paths_gridsecurity = '/etc/grid-security'
+  $env = '/etc/dcache.env'
+  $setup = "$paths_etc/dcache.conf"
+  $layout = "$paths_etc/layouts/$::hostname.conf"
+  $user = 'dcache'
+  $group = 'dcache'
+  $poolmanager = "$paths_config/poolmanager.conf"
+  $authorized_keys = "$paths_admin/authorized_keys2"
+  $gplazma = "$paths_etc/gplazma.conf"
+  $authzdb = "$paths_gridsecurity/storage-authzdb"
+  $gridmap = "$paths_gridsecurity/grid-mapfile"
+  $kpwd = "$paths_etc/dcache.kpwd"
+  $vorolemap = "$paths_gridsecurity/grid-vorolemap"
+  $tapeinfo = "$paths_etc/tape-info.xml"
+  $infoprovider = "$paths_etc/info-provider.xml"
+  $linkgroupauth = "$paths_etc/LinkGroupAuthorization.conf"
 }
