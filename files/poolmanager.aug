@@ -86,9 +86,8 @@ module PoolManager =
     psu_create "ugroup" ( store ugroup )
   
   let psu_create_pool =
-    let ping = [ sp . label "ping" . str "-" . store "noping" ] in
-    let enabled = [ sp . label "enabled" . str "-" . store "disabled" ] in
-    psu_create "pool" ( store pool . (Build.combine_two_opt ping enabled)? )
+    let attr = [ seq "attr" . sp . str "-" . store /noping|disabled/ ] in
+    psu_create "pool" ( store pool . counter "attr" . ( attr . attr? )? )
 
   let psu_create_pgroup =
     psu_create "pgroup" ( store pgroup )

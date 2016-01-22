@@ -61,7 +61,7 @@ pm set -max-copies=3 -stage-allowed=yes
 psu set pool pool_* rdonly
 "
 
-test PoolManagerFlat.lns get conf = { }
+test PoolManager.lns get conf = { }
 { "#comment" = "Setup of PoolManager" }
 { "#comment" = "The units ..." }
 { "psu_create_unit" = "0.0.0.0/0.0.0.0"
@@ -86,11 +86,11 @@ test PoolManagerFlat.lns get conf = { }
 }
 { "#comment" = "The pools ..." }
 { "psu_create_pool" = "pool_A"
-  { "ping" = "noping" }
+  { "1" = "noping" }
 }
 { "psu_create_pool" = "pool_B" }
 { "psu_create_pool" = "pool_C"
-  { "enabled" = "disabled" }
+  { "1" = "disabled" }
 }
 { "#comment" = "The pool groups ..." }
 { "psu_create_pgroup" = "all-pools" }
