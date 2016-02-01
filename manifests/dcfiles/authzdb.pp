@@ -1,4 +1,4 @@
-define dcache::dcfiles::authzb (
+define dcache::dcfiles::authzdb (
   $file,
   $augeas,
 ) {
@@ -19,7 +19,7 @@ define dcache::dcfiles::authzb (
                    delete($augeas, 'version'))
 }
 
-# To be used only by dcache::dcfiles:authzdb.
+# To be used only by dcache::dcfiles::authzdb.
 define dcache::dcfiles::authzb::rule (
   $access, $uid, $gids, $home, $root, $extra='/',
 ) {
