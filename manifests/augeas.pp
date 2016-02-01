@@ -3,13 +3,11 @@
 class dcache::augeas (
   $augeas_include_dir = '/usr/share/augeas/lenses',
 ) {
-  $dcache_aug_lenses = [
-    'dcachelayout.aug', 'gridmapfile.aug', 'poolmanager.aug',
-    'kpwd.aug', 'linkgroupauthorization.aug', 'storageauthzdb.aug',
-  ]
-  file { $dcache_aug_lenses:
-    path => "$augeas_include_dir/$title",
-    source => "puppet:///modules/$module_name/$title",
-    require => Package['augeas'],
+  each(['dcachelayout.aug', 'gridmapfile.aug', 'poolmanager.aug',
+        'kpwd.aug', 'linkgroupauthorization.aug', 'storageauthzdb.aug']) |$f| {
+    file { "$augeas_include_dir/$f":
+      source => "puppet:///modules/$module_name/$f",
+      require => Package['augeas'],
+    }
   }
 }
