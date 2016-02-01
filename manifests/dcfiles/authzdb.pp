@@ -8,7 +8,7 @@ define dcache::dcfiles::authzdb (
     incl => $file,
   }
   
-  if !has_key($augeas['version']) {
+  if !has_key($augeas, 'version') {
     fail('Authzdb requires a version setting!')
   }
   
