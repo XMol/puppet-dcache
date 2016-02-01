@@ -1,10 +1,10 @@
-define dcache::services::poolmanager::pm_units (
+define dcache::dcfiles::poolmanager::pm_units (
   $net = [],
   $store = [],
   $protocol = [],
   $dcache = [],
 ) {
-  $setup = $dcache::poolmanager_conf
+  $setup = $dcache::poolmanager
   
   validate_array($net)
   each($net) |$unit| {

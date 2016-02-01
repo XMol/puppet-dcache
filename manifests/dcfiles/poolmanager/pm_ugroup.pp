@@ -1,13 +1,15 @@
-define dcache::services::poolmanager::pm_ugroup (
-  $type,
+define dcache::dcfiles::poolmanager::pm_ugroup (
   $units,
 ) {
-  $setup = $dcache::poolmanager_conf
+  $setup = $dcache::poolmanager
   
   validate_array($units)
   
+  ensure_resource('dcache::dcfiles::poolmanager::pm_units',
+                  "The PoolManager units of ugroup '$title'",
+                  $units)
   augeas { "Manage ugroup '$title' in '$setup'":
-    require => Dcache::Services::Poolmanager::Pm_units <| |>,
+    require => Dcache::Dcfiles::Poolmanager::Pm_units <| |>,
     changes => flatten([
       "defnode this psu_create_ugroup[. = \"$title\"]",
       "set \$this \"$title\"",
@@ -19,4 +21,5 @@ define dcache::services::poolmanager::pm_ugroup (
       ]},
     ]),
   }
+  
 }

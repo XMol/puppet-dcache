@@ -1,5 +1,5 @@
 class dcache::install (
-  $version = $dcache::dcache_version,
+  $version = $dcache::version,
 ) {
   package { 'dcache' :
     name   => "dcache-${version}",
