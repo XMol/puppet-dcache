@@ -36,9 +36,7 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
     create_resources('dcache::dcfiles::poolmanager::pm_link',
                      $members)
     augeas { "Add members to link group '$title' in '$setup'":
-      require => [ Augeas["augeas_create_$title"],
-                   Dcache::Dcfiles::Poolmanager::Pm_link <| |>,
-                 ],
+      require => Augeas["augeas_create_$title"],
       changes => flatten([
         map($members) |$link| {[
           "defnode psu_addto_linkGroup[. = \"$title\" and ./1 = \"$link\"]",

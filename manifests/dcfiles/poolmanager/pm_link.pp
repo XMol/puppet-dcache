@@ -9,7 +9,6 @@ define dcache::dcfiles::poolmanager::pm_link (
   create_resources('dcache::dcfiles::poolmanager::pm_ugroup', $units)
   augeas { "Create link '$title' in '$setup'":
     name => "augeas_create_$title",
-    require => Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |>,
     changes => flatten([
       "defnode this psu_create_link[. = \"$title\"]",
       "set \$this \"$title\"",

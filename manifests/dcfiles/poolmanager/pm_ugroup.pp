@@ -9,7 +9,6 @@ define dcache::dcfiles::poolmanager::pm_ugroup (
                   "The PoolManager units of ugroup '$title'",
                   $units)
   augeas { "Manage ugroup '$title' in '$setup'":
-    require => Dcache::Dcfiles::Poolmanager::Pm_units <| |>,
     changes => flatten([
       "defnode this psu_create_ugroup[. = \"$title\"]",
       "set \$this \"$title\"",
