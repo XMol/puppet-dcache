@@ -1,4 +1,4 @@
-define dcache::services::poolmanager::pm_lgroup (
+define dcache::dcfiles::poolmanager::pm_lgroup (
   $online = 'false',
   $nearline = 'false',
   $replica = 'false',

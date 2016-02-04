@@ -6,7 +6,9 @@ define dcache::dcfile (
   $resource,
 ) {
   validate_hash($augeas)
-  if bool2num($content) + bool2num($source) + bool2num(!empty($augeas)) > 1 {
+  if bool2num(empty($content)) +
+     bool2num(empty($source)) +
+     bool2num(empty($augeas)) < 2 {
     fail('Only one out of $content, $source or $augeas ought to be set!')
   }
   
@@ -16,11 +18,11 @@ define dcache::dcfile (
     group => "$dcache::group",
   }
   
-  if $content {
+  if !empty($content) {
     file { "Set content of '$file'":
       content => "$content",
     }
-  } elsif $source {
+  } elsif !empty($source) {
     file { "Source content of '$file'":
       source => "$source",
     }

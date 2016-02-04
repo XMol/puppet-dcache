@@ -8,8 +8,22 @@ define dcache::dcfiles::poolmanager (
     incl => "$file",
   }
   
+  # Ensure that all compartments are created in the right order.
+  Dcache::Dcfiles::Poolmanager::Pm_units <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |>
+  
+  Dcache::Dcfiles::Poolmanager::Pm_pool <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |>
+  
+  Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
+  Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
+  
+  Dcache::Dcfiles::Poolmanager::Pm_link <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_lgroup <| |>
+
   each($augeas) |$class, $collection| {
-    validate_hash($collection)
     case "$class" {
       'units': {
         validate_hash($collection)
@@ -28,12 +42,12 @@ define dcache::dcfiles::poolmanager (
         # hash (with that string as its only key), so we can iterate over
         # $collection with create_resources.
         validate_array($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_pool',
-                         hash(flatten(map($collection) |$c| {
-                           if is_hash($c) { any2array($c) }
-                           elsif is_string($c) { [ $c, [] ] }
-                           else { fail("Illegal pool object ('$c')!") }
-                         })))
+        $a = flatten(map($collection) |$c| {
+               if is_hash($c) { any2array($c) }
+               elsif is_string($c) { [ $c, [] ] }
+               else { fail("Illegal pool object ('$c')!") }
+             })
+        create_resources('dcache::dcfiles::poolmanager::pm_pool', hash($a))
       }
       'pgroups': {
         validate_hash($collection)
@@ -58,6 +72,7 @@ define dcache::dcfiles::poolmanager (
                          $collection)
       }
       'rc': {
+        validate_hash($collection)
         augeas { "Manage recalls module settings in '$file'":
           changes => map($collection) |$key, $value| {
             "set rc_set_$key $value"
@@ -87,6 +102,7 @@ define dcache::dcfiles::poolmanager (
         }
       }
       'cm': {
+        validate_hash($collection)
         augeas { "Manage cost module settings in '$file'":
           changes => map($collection) |$key, $value| {
             "set cm_$key $value"

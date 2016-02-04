@@ -43,9 +43,7 @@ define dcache::dcfiles::poolmanager::pm_link (
                      })))
     map($members) |$member| {
       augeas { "Add member '$member' to link '$title' in '$setup'":
-        require => [ Augeas["augeas_create_$title"],
-                     Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |>,
-                   ],
+        require => Augeas["augeas_create_$title"],
         changes => [
           "defnode this psu_addto_link[. = \"$title\" and ./1 = \"$member\"]",
           "set \$this \"$title\"",
