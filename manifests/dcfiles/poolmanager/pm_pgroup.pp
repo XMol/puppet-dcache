@@ -4,12 +4,13 @@ define dcache::dcfiles::poolmanager::pm_pgroup (
   $setup = $dcache::poolmanager
   validate_array($pools)
   
-  create_resources('dcache::dcfiles::poolmanager::pm_pool',
-                   hash(flatten(map($pools) |$p| {
-                     if is_hash($p) { any2array($p) }
-                     elsif is_string($p) { [ $p, [] ] }
-                     else { fail("Illegal pool object ('$p')!") }
-                   })))
+  $h = hash(flatten(map($pools) |$p| {
+               if is_hash($p) { 
+                 [ keys($p)[0], { 'attr' => values($p)[0] } ]
+               } elsif is_string($p) { [ $p, { 'attr' => [] } ] }
+               else { fail("Illegal pool object ('$p')!") }
+             }))
+  create_resources('dcache::dcfiles::poolmanager::pm_pool', $h)
   
   augeas { "Create pgroup '$title' in '$setup'":
     name => "augeas_create_$title",

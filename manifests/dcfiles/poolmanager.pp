@@ -9,19 +9,19 @@ define dcache::dcfiles::poolmanager (
   }
   
   # Ensure that all compartments are created in the right order.
-  Dcache::Dcfiles::Poolmanager::Pm_units <| |> ->
-    Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |>
-  
-  Dcache::Dcfiles::Poolmanager::Pm_pool <| |> ->
-    Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |>
-  
-  Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |> ->
-    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
-  Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |> ->
-    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
-  
-  Dcache::Dcfiles::Poolmanager::Pm_link <| |> ->
-    Dcache::Dcfiles::Poolmanager::Pm_lgroup <| |>
+#  Dcache::Dcfiles::Poolmanager::Pm_units <| |> ->
+#    Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |>
+#  
+#  Dcache::Dcfiles::Poolmanager::Pm_pool <| |> ->
+#    Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |>
+#  
+#  Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |> ->
+#    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
+#  Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |> ->
+#    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
+#  
+#  Dcache::Dcfiles::Poolmanager::Pm_link <| |> ->
+#    Dcache::Dcfiles::Poolmanager::Pm_lgroup <| |>
 
   each($augeas) |$class, $collection| {
     case "$class" {
@@ -32,34 +32,36 @@ define dcache::dcfiles::poolmanager (
       }
       'ugroups': {
         validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_ugroup',
-                         $collection)
+        $h = hash(flatten(map($collection) |$ugroup, $units| {
+               [ $ugroup, { 'units' => $units } ]
+             }))
+        create_resources('dcache::dcfiles::poolmanager::pm_ugroup', $h)
       }
       'pools': {
         # $collection here should be a list of strings and hashes.
         # A string represents the pool's name, whereas a hash contains
         # some further data for the pool. Replace all strings with a
-        # hash (with that string as its only key), so we can iterate over
-        # $collection with create_resources.
+        # hash (with that string as its only key), so we can iterate
+        # with create_resources.
         validate_array($collection)
-        $a = flatten(map($collection) |$c| {
-               if is_hash($c) { any2array($c) }
-               elsif is_string($c) { [ $c, [] ] }
+        $h = hash(flatten(map($collection) |$c| {
+               if is_hash($c) { 
+                 [ keys($c)[0], { 'attr' => values($c)[0] } ]
+               } elsif is_string($c) { [ $c, { 'attr' => [] } ] }
                else { fail("Illegal pool object ('$c')!") }
-             })
-        create_resources('dcache::dcfiles::poolmanager::pm_pool', hash($a))
+             }))
+        create_resources('dcache::dcfiles::poolmanager::pm_pool', $h)
       }
       'pgroups': {
         validate_hash($collection)
         # $collection is already a hash with all pgroups as keys and the
         # list of member pools as an array. Though for iteration with
         # create_resources we need a slightly different format.
-        create_resources('dcache::dcfiles::poolmanager::pm_pgroup',
-                         hash(flatten(map($collection) |$pgroup, $pools| {
-                           if validate_array($pools) {
-                             [ $pgroup, { 'pools' => $pools } ]
-                           }
-                         })))
+        $h = hash(flatten(map($collection) |$pgroup, $pools| {
+               if is_array($pools) { [ $pgroup, { 'pools' => $pools } ] }
+               else { fail("Pool group '$pgroup' does not map to an array!") }
+             }))
+        create_resources('dcache::dcfiles::poolmanager::pm_pgroup', $h)
       }
       'links': {
         validate_hash($collection)

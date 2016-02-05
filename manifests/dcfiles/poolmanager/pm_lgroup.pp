@@ -24,8 +24,7 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
     require => Augeas["augeas_create_$title"],
     changes => flatten([
       map($allowances) |$key, $value| {[
-        "defnode this psu_set_linkGroup_$key[. = \"$title\"]",
-        "set \$this \"$title\"",
+        "defnode this psu_set_linkGroup_$key[. = \"$title\"] \"$title\"",
         "set \$this/1 \"$value\"",
       ]},
     ]),
@@ -39,8 +38,7 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
       require => Augeas["augeas_create_$title"],
       changes => flatten([
         map($members) |$link| {[
-          "defnode psu_addto_linkGroup[. = \"$title\" and ./1 = \"$link\"]",
-          "set \$this \"$title\"",
+          "defnode psu_addto_linkGroup[. = \"$title\" and ./1 = \"$link\"] \"$title\"",
           "set \$this/1 \"$link\"",
         ]},
       ]),
