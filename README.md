@@ -1,4 +1,4 @@
-# Class dcache
+# Puppet Module `dcache`
 Install dCache using this class.
 
 ## Requisites and dependencies
