@@ -9,6 +9,7 @@ define dcache::dcfiles::poolmanager::pm_ugroup (
                   "The PoolManager units of ugroup '$title'",
                   $units)
   augeas { "Manage ugroup '$title' in '$setup'":
+    name => "augeas_create_$title",
     changes => flatten([
       "set psu_create_ugroup[. = \"$title\"] \"$title\"",
       map(keys($units)) |$unit| {[
