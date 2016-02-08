@@ -12,7 +12,8 @@ define dcache::dcfiles::poolmanager::pm_pool (
   each($attr) |$i, $a| {
     augeas { "Add attribute '$a' for pool '$title' in '$setup'":
       require => Augeas["augeas_create_$title"],
-      changes => "set psu_create_pool[. = \"$title\"]/$i \"$a\"",
+      changes => "set psu_create_pool[. = \"$title\"]/0$i \"$a\"",
+      onlyif => "match psu_create_pool[. = \"$title\"]/*[. = \"$a\"] size == 0",
     }
   }
 }

@@ -20,8 +20,7 @@ define dcache::dcfiles::poolmanager::pm_pgroup (
   augeas { "Add pools to pgroup '$title' in '$setup'":
     require => Augeas["augeas_create_$title"],
     changes => flatten(map($pools) |$pool| {[
-      "defnode this psu_addto_pgroup[. = \"$title\" and ./1 = \"$pool\"]",
-      "set \$this \"$title\"",
+      "defnode this psu_addto_pgroup[. = \"$title\" and ./1 = \"$pool\"] \"$title\"",
       "set \$this/1 \"$pool\"",
     ]}),
   }

@@ -8,21 +8,6 @@ define dcache::dcfiles::poolmanager (
     incl => "$file",
   }
   
-  # Ensure that all compartments are created in the right order.
-#  Dcache::Dcfiles::Poolmanager::Pm_units <| |> ->
-#    Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |>
-#  
-#  Dcache::Dcfiles::Poolmanager::Pm_pool <| |> ->
-#    Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |>
-#  
-#  Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |> ->
-#    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
-#  Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |> ->
-#    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
-#  
-#  Dcache::Dcfiles::Poolmanager::Pm_link <| |> ->
-#    Dcache::Dcfiles::Poolmanager::Pm_lgroup <| |>
-
   each($augeas) |$class, $collection| {
     case "$class" {
       'units': {
@@ -88,8 +73,7 @@ define dcache::dcfiles::poolmanager (
             name => "augeas_create_$pm",
             changes => flatten([
               "set pm_create[. = \"$pm\"] \"$pm\"",
-              "defnode this pm_set[. = \"$pm\"]",
-              "set \$this \"$pm\"",
+              "defnode this pm_set[. = \"$pm\"] \"$pm\"",
               map(filter($settings) |$k, $v| { $k != 'type' }) |$key, $value| {
                 "set \$this/$key \"$value\""
               }

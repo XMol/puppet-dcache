@@ -12,7 +12,11 @@ define dcache::dcfiles::layout (
     validate_hash($augeas['properties'])
     augeas { "Add bare properties to '$file'":
       changes => flatten([
-        "defnode this properties",
+        "defnode this properties \"\"",
+        # Puppet applying Augeas is broken in that defnode requires a third
+        # parameter, but our lens doesn't expect one. Thus we have to
+        # remove it again.
+        "clear \$this",
         map($augeas['properties']) |$k, $v| { "set \$this/$k \"$v\"" },
       ]),
     }

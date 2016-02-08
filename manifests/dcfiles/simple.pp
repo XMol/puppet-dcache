@@ -5,7 +5,7 @@ define dcache::dcfiles::simple (
 
   augeas { "Manage '$file' with Augeas":
     incl => "$file",
-    lens => 'Simplevars',
+    lens => 'Simplevars.lns',
     changes => map($augeas) |$k, $v| { "set \"$k\" \"$v\"" },
   }
 
