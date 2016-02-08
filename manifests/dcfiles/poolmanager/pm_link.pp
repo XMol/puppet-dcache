@@ -13,7 +13,9 @@ define dcache::dcfiles::poolmanager::pm_link (
 
   augeas { "Create link '$title' in '$setup'":
     name => "augeas_create_$title",
-    require => map($ugroups) |$ugroup, $units| { "augeas_create_$ugroup" },
+    require => map($ugroups) |$ugroup, $units| { 
+                 Augeas["augeas_create_$ugroup"]
+               },
     changes => flatten([
       "defnode this psu_create_link[. = \"$title\"] \"$title\"",
       map($ugroups) |$ugroup, $units| {
