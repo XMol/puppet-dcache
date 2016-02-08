@@ -13,10 +13,11 @@ define dcache::dcfiles::poolmanager::pm_link (
 
   augeas { "Create link '$title' in '$setup'":
     name => "augeas_create_$title",
+    require => map($ugroups) |$ugroup, $units| { "augeas_create_$ugroup" },
     changes => flatten([
       "defnode this psu_create_link[. = \"$title\"] \"$title\"",
-      map($ugroups) |$ug| {
-      "set \$this/ugroup[. = \"$ug\"] \"$ug\""
+      map($ugroups) |$ugroup, $units| {
+        "set \$this/ugroup[. = \"$ugroup\"] \"$ugroup\""
       },
     ]),
   }
@@ -41,12 +42,12 @@ define dcache::dcfiles::poolmanager::pm_link (
            else { fail("Pool group '$pgroup' does not map to an array!") }
          }))
     create_resources('dcache::dcfiles::poolmanager::pm_pgroup', $h)
-    map($members) |$member| {
+    map($members) |$pgroup, $pools| {
       augeas { "Add member '$member' to link '$title' in '$setup'":
         require => Augeas["augeas_create_$title"],
         changes => [
-          "defnode this psu_addto_link[. = \"$title\" and ./1 = \"$member\"] \"$title\"",
-          "set \$this/1 \"$member\"",
+          "defnode this psu_addto_link[. = \"$title\" and ./1 = \"$pgroup\"] \"$title\"",
+          "set \$this/1 \"$pgroup\"",
         ]
       }
     }
