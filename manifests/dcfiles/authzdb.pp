@@ -4,7 +4,7 @@ define dcache::dcfiles::authzdb (
 ) {
   
   Augeas {
-    lens => 'StorageAuthzdb', # Coming with this module.
+    lens => 'StorageAuthzdb.lns', # Coming with this module.
     incl => $file,
   }
   
