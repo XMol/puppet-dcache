@@ -1,8 +1,4 @@
-(* Parse kpwd files for dCache.
-
-   For this lens to work, the configuration files have to end in
-   an empty line!
-*)
+(* Parse kpwd files for dCache. *)
 
 module Kpwd =
   autoload xfm
@@ -49,7 +45,7 @@ module Kpwd =
   
   let token = ( mapping | record | pwdrecord )
     
-  let lns = ( empty | comment )* . version . ( empty | comment | token )*
+  let lns = ( empty | comment )* . ( version . ( empty | comment | token )* )?
   
   let filter = incl "/etc/dcache/dcache.kpwd"
              . Util.stdexcl
