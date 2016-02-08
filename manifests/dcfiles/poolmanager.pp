@@ -82,7 +82,7 @@ define dcache::dcfiles::poolmanager (
           if has_key($settings, 'type') {
             augeas { "Set type of partition '$pm' in '$file'":
               require => Augeas["augeas_create_$pm"],
-              changes => "set pm/create[. = \"$pm\"]/type ${settings['type']}",
+              changes => "set pm_create[. = \"$pm\"]/type ${settings['type']}",
             }
           }
         }
