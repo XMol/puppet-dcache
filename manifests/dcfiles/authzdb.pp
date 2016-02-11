@@ -30,8 +30,8 @@ define dcache::dcfiles::authzb::rule (
       "set \$this/access \"$access\"",
       "set \$this/uid \"$uid\"",
       map($gids) |$i, $gid| { "set \$this/gid[$i] $gid" },
-      "set \$this/root \"$root\"",
       "set \$this/home \"$home\"",
+      "set \$this/root \"$root\"",
       "set \$this/extra \"$extra\"",
     ]),
   }
