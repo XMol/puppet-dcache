@@ -11,6 +11,7 @@ define dcache::dcfiles::layout (
   if has_key($augeas, 'properties') {
     validate_hash($augeas['properties'])
     augeas { "Add bare properties to '$file'":
+      name => "augeas_layout_properties",
       changes => flatten([
         "defnode this properties \"\"",
         # Puppet applying Augeas is broken in that defnode requires a third
@@ -26,6 +27,7 @@ define dcache::dcfiles::layout (
     validate_hash($dhash)
     augeas { "Add domain '$domain' to '$file'":
       name => "augeas_create_$domain",
+      require => "augeas_layout_properties",
       changes => "set domain[. = \"$domain\"] \"$domain\"",
     }
     
