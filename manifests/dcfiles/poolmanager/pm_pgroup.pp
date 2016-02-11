@@ -14,7 +14,7 @@ define dcache::dcfiles::poolmanager::pm_pgroup (
   
   augeas { "Create pgroup '$title' in '$setup'":
     name => "augeas_create_$title",
-    changes => "set psu_create_pgroup[. = \"$title\"] \"$title\"",
+    changes => "set psu_create_pgroup[. = '$title'] '$title'",
   }
 
   augeas { "Add pools to pgroup '$title' in '$setup'":

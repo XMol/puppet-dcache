@@ -72,17 +72,17 @@ define dcache::dcfiles::poolmanager (
           augeas { "Manage partition '$pm' in '$file'":
             name => "augeas_create_$pm",
             changes => flatten([
-              "set pm_create[. = \"$pm\"] \"$pm\"",
-              "defnode this pm_set[. = \"$pm\"] \"$pm\"",
+              "set pm_create[. = '$pm'] '$pm'",
+              "defnode this pm_set[. = '$pm'] '$pm'",
               map(filter($settings) |$k, $v| { $k != 'type' }) |$key, $value| {
-                "set \$this/$key \"$value\""
+                "set \$this/$key '$value'"
               }
             ]),
           }
           if has_key($settings, 'type') {
             augeas { "Set type of partition '$pm' in '$file'":
               require => Augeas["augeas_create_$pm"],
-              changes => "set pm_create[. = \"$pm\"]/type ${settings['type']}",
+              changes => "set pm_create[. = '$pm']/type ${settings['type']}",
             }
           }
         }

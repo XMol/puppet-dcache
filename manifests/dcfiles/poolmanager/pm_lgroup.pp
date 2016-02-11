@@ -10,7 +10,7 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
   
   augeas { "Create link group '$title' in '$setup'":
     name => "augeas_create_$title",
-    changes => "set psu_create_linkGroup[. = \"$title\"] \"$title\"",
+    changes => "set psu_create_linkGroup[. = '$title'] '$title'",
   }
   
   $allowances = {
@@ -24,8 +24,8 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
     require => Augeas["augeas_create_$title"],
     changes => flatten([
       map($allowances) |$key, $value| {[
-        "defnode this psu_set_linkGroup_$key[. = \"$title\"] \"$title\"",
-        "set \$this/1 \"$value\"",
+        "defnode this psu_set_linkGroup_$key[. = '$title'] '$title'",
+        "set \$this/1 '$value'",
       ]},
     ]),
   }
@@ -38,8 +38,8 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
       require => Augeas["augeas_create_$title"],
       changes => flatten([
         map($members) |$link| {[
-          "defnode psu_addto_linkGroup[. = \"$title\" and ./1 = \"$link\"] \"$title\"",
-          "set \$this/1 \"$link\"",
+          "defnode psu_addto_linkGroup[. = '$title' and ./1 = '$link'] '$title'",
+          "set \$this/1 '$link'",
         ]},
       ]),
     }

@@ -13,12 +13,12 @@ define dcache::dcfiles::layout (
     augeas { "Add bare properties to '$file'":
       name => "augeas_layout_properties",
       changes => flatten([
-        "defnode this properties \"\"",
+        "defnode this properties ''",
         # Puppet applying Augeas is broken in that defnode requires a third
         # parameter, but our lens doesn't expect one. Thus we have to
         # remove it again.
         "clear \$this",
-        map($augeas['properties']) |$k, $v| { "set \$this/$k \"$v\"" },
+        map($augeas['properties']) |$k, $v| { "set \$this/$k '$v'" },
       ]),
     }
   }
@@ -28,15 +28,15 @@ define dcache::dcfiles::layout (
     augeas { "Add domain '$domain' to '$file'":
       name => "augeas_create_$domain",
       require => "augeas_layout_properties",
-      changes => "set domain[. = \"$domain\"] \"$domain\"",
+      changes => "set domain[. = '$domain'] '$domain'",
     }
     
     if has_key($dhash, 'properties') {
       augeas { "Add properties to domain '$domain' in '$file'":
         require => Augeas["augeas_create_$domain"],
         changes => flatten([
-          "defnode this domain[. = \"$domain\"]/properties",
-          map($dhash['properties']) |$k, $v| { "set \$this/$k \"$v\"" }
+          "defnode this domain[. = '$domain']/properties",
+          map($dhash['properties']) |$k, $v| { "set \$this/$k '$v'" }
         ]),
       }
     }
@@ -57,10 +57,10 @@ define dcache::dcfiles::layout (
             augeas { "Add '$domain/$sk($index)' to '$file'":
               require => Augeas["augeas_create_$domain"],
               changes => flatten([
-                "defnode this domain[. = \"$domain\" and service = \"$domain/$sk\"]/service",
-                "set \$this \"$domain/$sk\"",
+                "defnode this domain[. = '$domain' and service = '$domain/$sk']/service",
+                "set \$this '$domain/$sk'",
                 "defnode this \$this/properties",
-                map($sk) |$k, $v| { "set \$this/$k \"$v\"" },
+                map($sk) |$k, $v| { "set \$this/$k '$v'" },
               ]),
             }
           }
@@ -70,7 +70,7 @@ define dcache::dcfiles::layout (
           augeas { "Add '$domain/$service' to '$file'":
             require => Augeas["augeas_create_$domain"],
             changes =>
-              "set domain[. = \"$domain\" and service = \"$domain/$service\"]/service \"$domain/$service\"",
+              "set domain[. = '$domain' and service = '$domain/$service']/service '$domain/$service'",
           }
         }
       }

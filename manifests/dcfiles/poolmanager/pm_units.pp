@@ -10,8 +10,8 @@ define dcache::dcfiles::poolmanager::pm_units (
   each($net) |$unit| {
     augeas { "Create net-unit '$unit' in '$setup'":
       changes => [
-        "defnode this psu_create_unit[. = \"$unit\" and type = \"net\"] \"$unit\"",
-        "set \$this/type \"net\"",
+        "defnode this psu_create_unit[. = '$unit' and type = 'net'] '$unit'",
+        "set \$this/type 'net'",
       ]
     }
   }
@@ -20,8 +20,8 @@ define dcache::dcfiles::poolmanager::pm_units (
   each($store) |$unit| {
     augeas { "Create store-unit '$unit' in '$setup'":
       changes => [
-        "defnode this psu_create_unit[. = \"$unit\" and type = \"store\"] \"$unit\"",
-        "set \$this/type \"store\"",
+        "defnode this psu_create_unit[. = '$unit' and type = 'store'] '$unit'",
+        "set \$this/type 'store'",
       ]
     }
   }
@@ -30,8 +30,8 @@ define dcache::dcfiles::poolmanager::pm_units (
   each($protocol) |$unit| {
     augeas { "Create protocol-unit '$unit' in '$setup'":
       changes => [
-        "defnode this psu_create_unit[. = \"$unit\" and type = \"protocol\"] \"$unit\"",
-        "set \$this/type \"protocol\"",
+        "defnode this psu_create_unit[. = '$unit' and type = 'protocol'] '$unit'",
+        "set \$this/type 'protocol'",
       ]
     }
   }
@@ -40,8 +40,8 @@ define dcache::dcfiles::poolmanager::pm_units (
   each($dcache) |$unit| {
     augeas { "Create dcache-unit '$unit' in '$setup'":
       changes => [
-        "defnode this psu_create_unit[. = \"$unit\" and type = \"dcache\"] \"$unit\"",
-        "set \$this/type \"dcache\"",
+        "defnode this psu_create_unit[. = '$unit' and type = 'dcache'] '$unit'",
+        "set \$this/type 'dcache'",
       ]
     }
   }

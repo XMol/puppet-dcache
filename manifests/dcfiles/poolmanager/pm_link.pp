@@ -17,9 +17,9 @@ define dcache::dcfiles::poolmanager::pm_link (
                  Augeas["augeas_create_$ugroup"]
                },
     changes => flatten([
-      "defnode this psu_create_link[. = \"$title\"] \"$title\"",
+      "defnode this psu_create_link[. = '$title'] '$title'",
       map($ugroups) |$ugroup, $units| {
-        "set \$this/ugroup[. = \"$ugroup\"] \"$ugroup\""
+        "set \$this/ugroup[. = '$ugroup'] '$ugroup'"
       },
     ]),
   }
@@ -29,9 +29,9 @@ define dcache::dcfiles::poolmanager::pm_link (
     augeas { "Manage preferences on '$title' in '$setup'":
       require => Augeas["augeas_create_$title"],
       changes => flatten([
-        "defnode this psu_set_link[. = \"$title\"] \"$title\"",
+        "defnode this psu_set_link[. = '$title'] '$title'",
         map($prefs) |$key, $value| {
-          "set \$this/$key \"$value\""
+          "set \$this/$key '$value'"
         }
       ]),
     }
@@ -48,8 +48,8 @@ define dcache::dcfiles::poolmanager::pm_link (
       augeas { "Add member '$member' to link '$title' in '$setup'":
         require => Augeas["augeas_create_$title"],
         changes => [
-          "defnode this psu_addto_link[. = \"$title\" and ./1 = \"$pgroup\"] \"$title\"",
-          "set \$this/1 \"$pgroup\"",
+          "defnode this psu_addto_link[. = '$title' and ./1 = '$pgroup'] '$title'",
+          "set \$this/1 '$pgroup'",
         ]
       }
     }
