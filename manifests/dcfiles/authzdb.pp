@@ -29,7 +29,7 @@ define dcache::dcfiles::authzb::rule (
       "clear \$this",
       "set \$this/access \"$access\"",
       "set \$this/uid \"$uid\"",
-      map($gids) |$i, $gid| { "set \$this/gid[$i] $gid" },
+      map($gids) |$i, $gid| { "set \$this/gid[${$i+1}] $gid" },
       "set \$this/home \"$home\"",
       "set \$this/root \"$root\"",
       "set \$this/extra \"$extra\"",
