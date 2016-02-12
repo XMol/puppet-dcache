@@ -1,6 +1,5 @@
 class dcache::config (
 ) {
-  #include dcache::augeas
   
   $all_files = {
     'dcache.conf' => {
