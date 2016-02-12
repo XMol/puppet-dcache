@@ -26,7 +26,7 @@ module DCacheLayout =
       (( service | filler )* . service)
     ]
   
-  let lns = properties? . ( filler | domain )*
+  let lns = ( properties? . ( filler | domain )* )?
   
   let filter = incl "/etc/dcache/layouts/*.conf"
              . Util.stdexcl
