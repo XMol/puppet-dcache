@@ -1,6 +1,6 @@
 class dcache::config (
 ) {
-  include dcache::augeas
+  #include dcache::augeas
   
   $all_files = {
     'dcache.conf' => {
