@@ -7,10 +7,14 @@ module DCacheLayout =
   let filler = Util.comment | Util.empty
   let str (s:string) = Util.del_str s
   
+  let property =
+    Build.key_value_line Rx.word Sep.space_equal (store Rx.space_in)
+  let bare_properties =
+    let opt_ws_prop = del /[ \t]*/ "" . property in
+    [ label "properties" . (filler | opt_ws_prop)* . opt_ws_prop ]
   let properties =
-    let property =
-      Util.indent . Build.key_value_line Rx.word Sep.space_equal (store Rx.space_in) in
-    [ label "properties" . (filler | property)* . property ]
+    let indent_prop = del /[ \t]*/ "  " . property in
+    [ label "properties" . (filler | indent_prop)* . indent_prop ]
   
   let service =
     let service_name = /[A-Za-z0-9_.${}-]+\// . Rx.word in
@@ -26,7 +30,7 @@ module DCacheLayout =
       (( service | filler )* . service)
     ]
   
-  let lns = ( properties? . ( filler | domain )* )?
+  let lns = ( bare_properties? . ( filler | domain )* )?
   
   let filter = incl "/etc/dcache/layouts/*.conf"
              . Util.stdexcl

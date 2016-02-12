@@ -34,7 +34,8 @@ define dcache::dcfiles::layout (
       $dprops = [
         "defnode props \$this/properties ''",
         "clear \$props",
-        map($dhash['properties']) |$k, $v| { "set \$props/$k '$v'" }
+        map($dhash['properties']) |$k, $v| { "set \$props/$k '$v'" },
+        "ins '' after \$props[last()]",
       ]
     } else {
       $dprops = []
@@ -81,6 +82,7 @@ define dcache::dcfiles::layout (
         "defnode this domain[. = '$domain'] '$domain'",
         $dprops,
         $dservices,
+        "ins '' after \$this[last()]",
       ]),
     }
   }
