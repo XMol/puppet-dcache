@@ -11,7 +11,7 @@ module DCacheLayout =
     Build.key_value_line Rx.word Sep.space_equal (store Rx.space_in)
   let bare_properties =
     let opt_ws_prop = del /[ \t]*/ "" . property in
-    [ label "properties" . (filler | opt_ws_prop)* . opt_ws_prop ] . str "\n"
+    [ label "properties" . (filler | opt_ws_prop)* . opt_ws_prop ] . del /\n*/ "\n"
   let properties =
     let indent_prop = del /[ \t]*/ "  " . property in
     [ label "properties" . (filler | indent_prop)* . indent_prop ]
@@ -28,7 +28,7 @@ module DCacheLayout =
         str "[" . label "domain" . store domain_name . str "]" . eol in
     [ Util.indent . domain_start . properties? .
       (( service | filler )* . service)
-    ] . str "\n"
+    ] . del /\n*/ "\n"
   
   let lns = ( bare_properties? . ( filler | domain )* )?
   
