@@ -10,16 +10,24 @@ define dcache::dcfiles::layout (
   
   if has_key($augeas, 'properties') {
     validate_hash($augeas['properties'])
-    augeas { "Add bare properties to '$file'":
-      name => "bare_properties",
+    # Attempt to update the bare properties first.
+    augeas { "Update bare properties to '$file'":
+      name => "update_bare_properties",
+      before => Augeas["add_bare_properties"],
       changes => flatten([
-        "defnode this properties ''",
-        # Puppet applying Augeas is broken in that defnode requires a third
-        # parameter, but our lens doesn't expect one. Thus we have to
-        # remove it again.
-        "clear \$this",
+        "defvar this properties",
         map($augeas['properties']) |$k, $v| { "set \$this/$k '$v'" },
       ]),
+      onlyif => "match properties size == 1",
+    }
+    # Only add the bare properties in, if they don't exist yet.
+    augeas { "Add bare properties to '$file'":
+      name => "add_bare_properties",
+      changes => flatten([
+        "insert properties before *[1]",
+        map($augeas['properties']) |$k, $v| { "set properties/$k '$v'" }
+      ]),
+      onlyif => "match properties size == 0",
     }
   }
   
@@ -76,7 +84,7 @@ define dcache::dcfiles::layout (
     
     augeas { "Add domain '$domain' to '$file'":
       name => "augeas_create_$domain",
-      require => Augeas["bare_properties"],
+      require => Augeas["add_bare_properties"],
       changes => flatten([
         "defnode this domain[. = '$domain'] '$domain'",
         $dprops,
