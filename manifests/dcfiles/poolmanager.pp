@@ -51,7 +51,7 @@ define dcache::dcfiles::poolmanager (
         validate_hash($collection)
         create_resources('dcache::dcfiles::poolmanager::pm_link', $collection)
       }
-      'linkgroups': {
+      'lgroups': {
         validate_hash($collection)
         create_resources('dcache::dcfiles::poolmanager::pm_lgroup', $collection)
       }
