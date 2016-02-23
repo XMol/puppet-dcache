@@ -7,7 +7,7 @@ class dcache::uninstall (
   exec { "Unregister dCache from check-config":
     command => "chkconfig --del $(basename $dcache::service_exec)",
     path => '/bin',
-  } ->  
+  } ->
   file { ["$dcache::dcache_env",
           "$dcache::dcache_paths_etc",
           '/usr/share/dcache',
