@@ -12,14 +12,11 @@ define dcache::dcfiles::poolmanager (
     case "$class" {
       'units': {
         validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_units',
-                         {'The PoolManager units' => $collection})
+        create_resources('dcache::dcfiles::poolmanager::pm_units', {'The PoolManager units' => $collection})
       }
       'ugroups': {
         validate_hash($collection)
-        $h = hash(flatten(map($collection) |$ugroup, $units| {
-               [ $ugroup, { 'units' => $units } ]
-             }))
+        $h = hash(flatten(map($collection) |$ugroup, $units| { [ $ugroup, { 'units' => $units } ] }))
         create_resources('dcache::dcfiles::poolmanager::pm_ugroup', $h)
       }
       'pools': {
@@ -29,12 +26,13 @@ define dcache::dcfiles::poolmanager (
         # hash (with that string as its only key), so we can iterate
         # with create_resources.
         validate_array($collection)
-        $h = hash(flatten(map($collection) |$c| {
-               if is_hash($c) { 
-                 [ keys($c)[0], { 'attr' => values($c)[0] } ]
-               } elsif is_string($c) { [ $c, { 'attr' => [] } ] }
-               else { fail("Illegal pool object ('$c')!") }
-             }))
+        $h =
+          hash(flatten(map($collection) |$c| {
+            if is_hash($c) { 
+              [ keys($c)[0], { 'attr' => values($c)[0] } ]
+            } elsif is_string($c) { [ $c, { 'attr' => [] } ] }
+            else { fail("Illegal pool object ('$c')!") }
+          }))
         create_resources('dcache::dcfiles::poolmanager::pm_pool', $h)
       }
       'pgroups': {
@@ -42,21 +40,20 @@ define dcache::dcfiles::poolmanager (
         # $collection is already a hash with all pgroups as keys and the
         # list of member pools as an array. Though for iteration with
         # create_resources we need a slightly different format.
-        $h = hash(flatten(map($collection) |$pgroup, $pools| {
-               if is_array($pools) { [ $pgroup, { 'pools' => $pools } ] }
-               else { fail("Pool group '$pgroup' does not map to an array!") }
-             }))
+        $h =
+          hash(flatten(map($collection) |$pgroup, $pools| {
+            if is_array($pools) { [ $pgroup, { 'pools' => $pools } ] }
+            else { fail("Pool group '$pgroup' does not map to an array!") }
+          }))
         create_resources('dcache::dcfiles::poolmanager::pm_pgroup', $h)
       }
       'links': {
         validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_link',
-                         $collection)
+        create_resources('dcache::dcfiles::poolmanager::pm_link', $collection)
       }
       'linkgroups': {
         validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_lgroup',
-                         $collection)
+        create_resources('dcache::dcfiles::poolmanager::pm_lgroup', $collection)
       }
       'rc': {
         validate_hash($collection)
