@@ -5,29 +5,29 @@ define dcache::dcfiles::layout (
   
   Augeas {
     lens => 'DCacheLayout.lns',
-    incl => "$file",
+    incl => $file,
   }
   
   if has_key($augeas, 'properties') {
     validate_hash($augeas['properties'])
     # Attempt to update the bare properties first.
-    augeas { "Update bare properties to '$file'":
-      name => "update_bare_properties",
-      before => Augeas["add_bare_properties"],
+    augeas { "Update bare properties to '${file}'":
+      name    => 'update_bare_properties',
+      before  => Augeas['add_bare_properties'],
       changes => flatten([
-        "defvar this properties",
-        map($augeas['properties']) |$k, $v| { "set \$this/$k '$v'" },
+        'defvar this properties',
+        map($augeas['properties']) |$k, $v| { "set \$this/${k} '${v}'" },
       ]),
-      onlyif => "match properties size == 1",
+      onlyif  => 'match properties size == 1',
     }
     # Only add the bare properties in, if they don't exist yet.
-    augeas { "Add bare properties to '$file'":
-      name => "add_bare_properties",
+    augeas { "Add bare properties to '${file}'":
+      name    => 'add_bare_properties',
       changes => flatten([
-        "insert properties before *[1]",
-        map($augeas['properties']) |$k, $v| { "set properties/$k '$v'" }
+        'insert properties before *[1]',
+        map($augeas['properties']) |$k, $v| { "set properties/${k} '${v}'" }
       ]),
-      onlyif => "match properties size == 0",
+      onlyif  => 'match properties size == 0',
     }
   }
   
@@ -40,9 +40,9 @@ define dcache::dcfiles::layout (
     
     if has_key($dhash, 'properties') {
       $dprops = [
-        "defnode props \$this/properties ''",
-        "clear \$props",
-        map($dhash['properties']) |$k, $v| { "set \$props/$k '$v'" },
+        'defnode props \$this/properties ""',
+        'clear \$props',
+        map($dhash['properties']) |$k, $v| { "set \$props/${k} '${v}'" },
       ]
     } else {
       $dprops = []
@@ -68,25 +68,25 @@ define dcache::dcfiles::layout (
             # values, we cannot differentiate them properly anymore besides
             # their order of appearance.
             [
-              "defnode service \$this/service[${$i+1}] '$domain/$sk'",
-              "defnode props \$service/properties ''",
-              "clear \$props",
-              map($sv) |$k, $v| { "set \$props/$k '$v'" },
+              "defnode service \$this/service[${$i+1}] '${domain}/${sk}'",
+              'defnode props \$service/properties ""',
+              'clear \$props',
+              map($sv) |$k, $v| { "set \$props/${k} '${v}'" },
             ]
           }
         } else {
-          "set \$this/service[. = '$domain/$service'] '$domain/$service'"
+          "set \$this/service[. = '${domain}/${service}'] '${domain}/${service}'"
         }
       })
     } else {
-      fail("Having domains ($domain) without any services is illegal!")
+      fail("Having domains (${domain}) without any services is illegal!")
     }
     
-    augeas { "Add domain '$domain' to '$file'":
-      name => "augeas_create_$domain",
-      require => Augeas["add_bare_properties"],
+    augeas { "Add domain '${domain}' to '${file}'":
+      name    => "augeas_create_${domain}",
+      require => Augeas['add_bare_properties'],
       changes => flatten([
-        "defnode this domain[. = '$domain'] '$domain'",
+        "defnode this domain[. = '${domain}'] '${domain}'",
         $dprops,
         $dservices,
       ]),

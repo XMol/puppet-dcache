@@ -11,20 +11,20 @@ define dcache::dcfile (
   }
   
   File {
-    path => "$file",
-    owner => "$dcache::user",
-    group => "$dcache::group",
+    path  => $file,
+    owner => $dcache::user,
+    group => $dcache::group,
   }
   
   if !empty($content) {
-    file { "Set content of '$file'":
-      content => "$content",
+    file { "Set content of '${file}'":
+      content => $content,
     }
   } elsif !empty($source) {
-    file { "Source content of '$file'":
-      source => "$source",
+    file { "Source content of '${file}'":
+      source => $source,
     }
   } elsif !empty($augeas) {
-    create_resources("dcache::dcfiles::$resource", { $title => { file => $file, augeas => $augeas, } })
+    create_resources("dcache::dcfiles::${resource}", { $title => { file => $file, augeas => $augeas, } })
   }
 }
