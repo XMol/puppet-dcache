@@ -15,5 +15,5 @@ define dcache::dcfiles::authzdb (
   augeas { "Set version of authzdb in '${file}'":
     changes => "set version ${augeas['version']}",
   }
-  create_resources('dcache::dcfiles::authzb_rule', delete($augeas, 'version'))
+  create_resources('dcache::dcfiles::authzdb_rule', delete($augeas, 'version'))
 }
