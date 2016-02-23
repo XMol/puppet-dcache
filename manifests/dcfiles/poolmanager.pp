@@ -28,7 +28,7 @@ define dcache::dcfiles::poolmanager (
         validate_array($collection)
         $h =
           hash(flatten(map($collection) |$c| {
-            if is_hash($c) { 
+            if is_hash($c) {
               [ keys($c)[0], { 'attr' => values($c)[0] } ]
             } elsif is_string($c) { [ $c, { 'attr' => [] } ] }
             else { fail("Illegal pool object ('$c')!") }
