@@ -14,11 +14,11 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
   }
   
   $allowances = {
-    online => $online,
-    nearline => $nearline,
-    replica => $replica,
+    online    => $online,
+    nearline  => $nearline,
+    replica   => $replica,
     custodial => $custodial,
-    output => $output,
+    output    => $output,
   }
   augeas { "Set allowances of link group '${title}' in '${setup}'":
     require => Augeas["augeas_create_${title}"],
@@ -30,8 +30,8 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
     ]),
   }
 
-  validate_array($members)
-  if !emmpty($members) {
+  validate_hash($members)
+  if !empty($members) {
     create_resources('dcache::dcfiles::poolmanager::pm_link', $members)
     augeas { "Add members to link group '${title}' in '${setup}'":
       require => Augeas["augeas_create_${title}"],
