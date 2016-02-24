@@ -40,8 +40,8 @@ define dcache::dcfiles::layout (
     
     if has_key($dhash, 'properties') {
       $dprops = [
-        'defnode props \$this/properties ""',
-        'clear \$props',
+        'defnode props $this/properties ""',
+        'clear $props',
         map($dhash['properties']) |$k, $v| { "set \$props/${k} '${v}'" },
       ]
     } else {
@@ -69,8 +69,8 @@ define dcache::dcfiles::layout (
             # their order of appearance.
             [
               "defnode service \$this/service[${$i+1}] '${domain}/${sk}'",
-              'defnode props \$service/properties ""',
-              'clear \$props',
+              'defnode props $service/properties ""',
+              'clear $props',
               map($sv) |$k, $v| { "set \$props/${k} '${v}'" },
             ]
           }
