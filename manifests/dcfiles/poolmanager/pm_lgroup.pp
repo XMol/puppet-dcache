@@ -36,12 +36,10 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
     augeas { "Add members to link group '${title}' in '${setup}'":
       require => Augeas["augeas_create_${title}"],
       changes => flatten([
-        map($members) |$link| {
-          with(keys($link)[0]) |$link_name| {[
-          "defnode this psu_addto_linkGroup[. = '${title}' and ./1 = '${link_name}'] '${title}'",
-          "set \$this/1 '${link_name}'",
-          ]}
-        },
+        map($members) |$link, $link_details| {[
+          "defnode this psu_addto_linkGroup[. = '${title}' and ./1 = '${link}'] '${title}'",
+          "set \$this/1 '${link}'",
+        ]},
       ]),
     }
   }
