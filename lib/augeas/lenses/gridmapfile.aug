@@ -28,8 +28,7 @@ module GridMapFile =
     let dn = dquote_spaces (label "dn") in
     (* Fully Qualified Attribute Name *)
     let fqan = dquote_spaces (label "fqan") in
-    let login = [ label "login" . store Rx.word ] in
-    [ label "mapping" . dn . sp . (fqan . sp)? . login . eol ]
+    [ label "mapping" . dn . sp . (fqan . sp)? . store Rx.word . eol ]
 
   let lns = ( empty | comment | mapping )*
   
