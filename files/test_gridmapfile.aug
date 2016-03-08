@@ -22,42 +22,36 @@ let conf =
 
 test GridMapFile.lns get conf =
 { "#comment" = "Most common VOMS matching rule." }
-{ "mapping"
+{ "mapping" = "vo001"
   { "dn" = "*" }
   { "fqan" = "/vo" }
-  { "login" = "vo001" }
 }
-{ "mapping"
+{ "mapping" = "voadmin"
   { "dn" = "*" }
   { "fqan" = "/vo/Role:admin" }
-  { "login" = "voadmin" }
 }
 { }
 { "#comment" = "Matching specific DNs." }
-{ "mapping"
+{ "mapping" = "robot"
   { "dn" = "/C=DE/OU=KIT/CN=HAL9000 (Robot)" }
-  { "login" = "robot" }
 }
 { }
 { "#comment" = "Overruling" }
-{ "mapping"
+{ "mapping" = "jonny"
   { "dn" = "/C=DE/OU=KIT/CN=John Doe" }
   { "fqan" = "\"\"" }
-  { "login" = "jonny" }
 }
-{ "mapping"
+{ "mapping" = "john"
   { "dn" = "/C=DE/OU=KIT/CN=John Doe" }
   { "fqan" = "/org/Role:manager" }
-  { "login" = "john" }
 }
-{ "mapping"
+{ "mapping" = "boss"
   { "dn" = "/C=DE/OU=KIT/CN=John Doe" }
   { "fqan" = "/org/Role:top tear investor" }
-  { "login" = "boss" }
 }
 
 test GridMapFile.lns put conf after
-    set "mapping[login = \"robot\"]/login" "hal" =
+    set "mapping[. = \"robot\"]" "hal" =
 "# Most common VOMS matching rule.
 * /vo vo001
 * /vo/Role:admin voadmin
