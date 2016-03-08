@@ -50,12 +50,12 @@ class dcache::config (
       augeas => $dcache::authzdb_augeas,
       resource => 'authzdb',
     },
-    'gridmap-file' => {
+    'grid-mapfile' => {
       file => $dcache::gridmap,
       content => $dcache::gridmap_content,
       source => $dcache::gridmap_source,
       augeas => $dcache::gridmap_augeas,
-      resource => 'gridmap',
+      resource => 'gridmapfile',
     },
     'dcache.kpwd' => {
       file => $dcache::kpwd,
@@ -64,12 +64,12 @@ class dcache::config (
       augeas => $dcache::kpwd_augeas,
       resource => 'kpwd',
     },
-    'vorolemap' => {
+    'grid-vorolemap' => {
       file => $dcache::vorolemap,
       content => $dcache::vorolemap_content,
       source => $dcache::vorolemap_source,
       augeas => $dcache::vorolemap_augeas,
-      resource => 'vorolemap',
+      resource => 'gridmapfile',
     },
     'tape-info.xml' => {
       file => $dcache::tapeinfo,
