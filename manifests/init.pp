@@ -50,7 +50,7 @@ class dcache (
   $gridmap = $dcache::params::gridmap,
   $gridmap_content = '',
   $gridmap_source = '',
-  $gridmap_augeas = {},
+  $gridmap_augeas = [],
   
   $kpwd = $dcache::params::kpwd,
   $kpwd_content = '',
@@ -60,7 +60,7 @@ class dcache (
   $vorolemap = $dcache::params::vorolemap,
   $vorolemap_content = '',
   $vorolemap_source = '',
-  $vorolemap_augeas = {},
+  $vorolemap_augeas = [],
   
   $tapeinfo = $dcache::params::tapeinfo,
   $tapeinfo_content = '',
