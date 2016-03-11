@@ -10,7 +10,7 @@ define dcache::dcfiles::linkgroupauth (
   
   each($augeas) |$lgroup, $entries| {
     validate_array($entries)
-    augeas { "Manage '${lgroup}' in '${file}'": 
+    augeas { "Manage '${lgroup}' in '${file}'":
       changes => flatten(
         "defnode this LinkGroup[. = '${lgroup}'] '${lgroup}'",
         map($entries) |$entry| {
