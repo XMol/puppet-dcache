@@ -2,7 +2,11 @@ define dcache::dcfiles::gridmapfile (
   $file,
   $augeas,
 ) {
-  validate_array($augeas)
+  if !has_key($augeas, 'mappings') {
+    fail('The gridmap/vorolemap Augeas information has to have a key "mappings"!')
+  }
+
+  validate_array($augeas['mappings'])
   
   Augeas {
     lens => 'GridMapFile.lns', # Coming with this module.
@@ -10,7 +14,7 @@ define dcache::dcfiles::gridmapfile (
   }
   
   augeas { "Manage '${file}'":
-    changes => flatten(map($augeas) |$mapping| {
+    changes => flatten(map($augeas['mappings']) |$mapping| {
       if has_key($mapping, 'fqan') {[
         "defnode this mapping[dn = '${mapping[dn]}' and fqan = '${mapping[fqan]}'] '${mapping[login]}'",
         "set \$this/dn '${mapping[dn]}'",
