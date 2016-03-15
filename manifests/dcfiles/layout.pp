@@ -27,7 +27,13 @@ define dcache::dcfiles::layout (
         'insert properties before *[1]',
         map($augeas['properties']) |$k, $v| { "set properties/${k} '${v}'" }
       ]),
-      onlyif  => 'match properties size == 0',
+      onlyif  => 'match * size != 0',
+    }
+    # Insert fails, if the file is empty or doesn't exist yet..
+    augeas { "Begin '${file}' with bare properties":
+      name    => 'start_with_bare_properties',
+      changes => map($augeas['properties']) |$k, $v| { "set properties/${k} '${v}'" },
+      onlyif  => 'match * size == 0',
     }
   }
   
@@ -84,7 +90,7 @@ define dcache::dcfiles::layout (
     
     augeas { "Add domain '${domain}' to '${file}'":
       name    => "augeas_create_${domain}",
-      require => Augeas['add_bare_properties'],
+      require => Augeas['start_with_bare_properties', 'add_bare_properties', 'update_bare_properties'],
       changes => flatten([
         "defnode this domain[. = '${domain}'] '${domain}'",
         $dprops,
