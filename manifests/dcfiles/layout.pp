@@ -10,30 +10,14 @@ define dcache::dcfiles::layout (
   
   if has_key($augeas, 'properties') {
     validate_hash($augeas['properties'])
-    # Attempt to update the bare properties first.
+    # This will create a illformatted file, in case there are already domains
+    # defined and no bare properties. Puppet cannot check whether there is
+    # a 'properties' node at first place in the file.
     augeas { "Update bare properties to '${file}'":
       name    => 'update_bare_properties',
-      before  => Augeas['add_bare_properties'],
-      changes => flatten([
-        'defvar this properties',
-        map($augeas['properties']) |$k, $v| { "set \$this/${k} '${v}'" },
-      ]),
-      onlyif  => 'match properties size == 1',
-    }
-    # Only add the bare properties in, if they don't exist yet.
-    augeas { "Add bare properties to '${file}'":
-      name    => 'add_bare_properties',
-      changes => flatten([
-        'insert properties before *[1]',
-        map($augeas['properties']) |$k, $v| { "set properties/${k} '${v}'" }
-      ]),
-      onlyif  => 'match * size != 0',
-    }
-    # Insert fails, if the file is empty or doesn't exist yet..
-    augeas { "Begin '${file}' with bare properties":
-      name    => 'start_with_bare_properties',
-      changes => map($augeas['properties']) |$k, $v| { "set properties/${k} '${v}'" },
-      onlyif  => 'match * size == 0',
+      changes => map($augeas['properties']) |$k, $v| {
+        "set properties/${k} '${v}'"
+      },
     }
   }
   
@@ -45,11 +29,9 @@ define dcache::dcfiles::layout (
     # is declared.
     
     if has_key($dhash, 'properties') {
-      $dprops = [
-        'defnode props $this/properties ""',
-        'clear $props',
-        map($dhash['properties']) |$k, $v| { "set \$props/${k} '${v}'" },
-      ]
+      $dprops = map($dhash['properties']) |$k, $v| {
+        "set \$this/properties/${k} '${v}'"
+      }
     } else {
       $dprops = []
     }
@@ -60,37 +42,26 @@ define dcache::dcfiles::layout (
       # (e.g. no more than one pool per domain).
       validate_array($dhash['services'])
       # This is very ugly, but Puppet doesn't allow variables to be assigned
-      # more often than exactly once, which invludes that neither arrays
+      # more often than exactly once, which includes that neither arrays
       # nor hashes can be updated.
-      $dservices = flatten(map($dhash['services']) |$i, $service| {
+      $dservices = map($dhash['services']) |$service| {
         # $service now either is a string or a hash. In the latter case,
         # some more properties are supplied.
         if is_hash($service) {
-          # We're iterating over exactly one element here just because we
-          # need to store the key.
-          map($service) |$sk, $sv| {
-            validate_hash($sv)
-            # Since the "service" tree nodes in Augeas may have the very same
-            # values, we cannot differentiate them properly anymore besides
-            # their order of appearance.
-            [
-              "defnode service \$this/service[${$i+1}] '${domain}/${sk}'",
-              'defnode props $service/properties ""',
-              'clear $props',
-              map($sv) |$k, $v| { "set \$props/${k} '${v}'" },
-            ]
-          }
+          map($service) |$sname, $sprops| {[
+            "defnode service \$this/service[. = '${domain}/${sname}'] '${domain}/${sname}'",
+            map($sprops) |$pk, $pv| { "set \$service/properties/${pk} '${pv}'" },
+          ]}
         } else {
           "set \$this/service[. = '${domain}/${service}'] '${domain}/${service}'"
         }
-      })
+      }
     } else {
       fail("Having domains (${domain}) without any services is illegal!")
     }
     
     augeas { "Add domain '${domain}' to '${file}'":
-      name    => "augeas_create_${domain}",
-      require => Augeas['start_with_bare_properties', 'add_bare_properties', 'update_bare_properties'],
+      require => Augeas['update_bare_properties'],
       changes => flatten([
         "defnode this domain[. = '${domain}'] '${domain}'",
         $dprops,
