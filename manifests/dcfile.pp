@@ -23,7 +23,9 @@ define dcache::dcfile (
       content => $content,
     }
   } elsif !empty($template) {
-    epp("dcache/${resource}.epp", { 'template' => $template })
+    file { "Apply '${resource}' template for '${file}'":
+      content => epp("dcache/${resource}.epp", { 'template' => $template })
+    }
   } elsif !empty($augeas) {
     create_resources("dcache::dcfiles::${resource}", { $title => { file => $file, augeas => $augeas, } })
   }
