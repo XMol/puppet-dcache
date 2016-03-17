@@ -1,3 +1,4 @@
+<% | Hash $template | -%>
 # Managed by Puppet.
 # Modifications to this file will be reverted with the next
 # Puppet synchronization run!
@@ -11,7 +12,8 @@
 
 <% each(filter($template) |$k, $v| {$k != 'properties'}) |$domain, $dhash| { -%>
   <%- validate_hash($dhash) -%>
-  <% if has_key($dhash, 'properties') { -%>
+[<%= $domain %>]
+  <%- if has_key($dhash, 'properties') { -%>
     <%- validate_hash($dhash['properties']) -%>
     <%- each($dhash['properties']) |$k, $v| { -%>
   <%= $k %> = <%= $v %>
