@@ -29,7 +29,6 @@ define dcache::dcfiles::kpwd (
   
   if has_key($augeas, 'logins') {
     validate_hash($augeas['logins'])
-    validate_array($augeas['logins']['dns'])
     create_resources('dcache::dcfiles::kpwd_login', $augeas['logins'])
   }
   

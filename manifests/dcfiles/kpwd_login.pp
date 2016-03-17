@@ -1,6 +1,7 @@
 define dcache::dcfiles::kpwd_login (
   $access, $uid, $gid, $home, $root, $fsroot='/', $dns,
 ) {
+  validate_array($dns)
   augeas { "Add kpwd login record for ${title}":
     changes => flatten([
       "defnode this login[. = '${title}'] '${title}'",
