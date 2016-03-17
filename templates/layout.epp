@@ -1,0 +1,37 @@
+# Managed by Puppet.
+# Modifications to this file will be reverted with the next
+# Puppet synchronization run!
+
+<% if has_key($template, 'properties') { -%>
+  <%- validate_hash($template['properties']) -%>
+  <%- each($template['properties']) |$k, $v| { -%>
+<%= $k %> = <%= $v %>
+  <%- } -%>
+<% } -%>
+
+<% each(filter($template) |$k, $v| {$k != 'properties'}) |$domain, $dhash| { -%>
+  <%- validate_hash($dhash) -%>
+  <% if has_key($dhash, 'properties') { -%>
+    <%- validate_hash($dhash['properties']) -%>
+    <%- each($dhash['properties']) |$k, $v| { -%>
+  <%= $k %> = <%= $v %>
+    <%- } -%>
+  <% } -%>
+  <%- if !has_key($dhash, 'services') { -%>
+    <%- fail("Domain '$domain' hosts no services!") -%>
+  <%- } else { -%>
+    <%- validate_array($dhash['services']) -%>
+    <%- each($dhash[services]) |$service| { -%>
+      <%- if is_hash($service) { -%>
+        <%- each($service) |$sname, $sprops| { -%>
+[<%= $domain %>/<%= $sname %>]
+          <%- each($sprops) |$pk, $pv| { -%>
+  <%= $pk %> = <%= $pv %>
+          <%- } -%>
+        <%- } -%>
+      <%- } else { -%>
+[<%= $domain %>/<%= $sname %>]
+      <%- } -%>
+    <%- } -%>
+  <%- } -%>
+<%- } %>
