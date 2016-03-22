@@ -1,7 +1,7 @@
 define dcache::dcfiles::poolmanager::pm_link (
   $ugroups,
   $prefs = {},
-  $members = {},
+  $pgroups = {},
 ) {
   $setup = $dcache::poolmanager
 
@@ -32,15 +32,15 @@ define dcache::dcfiles::poolmanager::pm_link (
     }
   }
   
-  validate_hash($members)
-  if !empty($members) {
+  validate_hash($pgroups)
+  if !empty($pgroups) {
     $h =
-      hash(flatten(map($members) |$pgroup, $pools| {
+      hash(flatten(map($pgroups) |$pgroup, $pools| {
         if is_array($pools) { [ $pgroup, { 'pools' => $pools } ] }
         else { fail("Pool group '${pgroup}' does not map to an array!") }
       }))
     create_resources('dcache::dcfiles::poolmanager::pm_pgroup', $h)
-    map($members) |$pgroup, $pools| {
+    map($pgroups) |$pgroup, $pools| {
       augeas { "Add member '${member}' to link '${title}' in '${setup}'":
         require => Augeas["augeas_create_${title}"],
         changes => [
