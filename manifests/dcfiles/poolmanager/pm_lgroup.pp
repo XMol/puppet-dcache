@@ -4,7 +4,7 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
   $replica = false,
   $custodial = false,
   $output = false,
-  $members = {},
+  $links = {},
 ) {
   $setup = $dcache::poolmanager
   
@@ -31,12 +31,12 @@ define dcache::dcfiles::poolmanager::pm_lgroup (
   }
 
   validate_hash($members)
-  if !empty($members) {
-    create_resources('dcache::dcfiles::poolmanager::pm_link', $members)
+  if !empty($links) {
+    create_resources('dcache::dcfiles::poolmanager::pm_link', $links)
     augeas { "Add members to link group '${title}' in '${setup}'":
       require => Augeas["augeas_create_${title}"],
       changes => flatten([
-        map($members) |$link, $link_details| {[
+        map($links) |$link, $link_details| {[
           "defnode this psu_addto_linkGroup[. = '${title}' and ./1 = '${link}'] '${title}'",
           "set \$this/1 '${link}'",
         ]},
