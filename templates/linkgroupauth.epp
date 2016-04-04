@@ -1,0 +1,11 @@
+<% | Hash $template |-%>
+# Managed by Puppet.
+# Any modifications will be lost with the next Pupet synchronization run!
+
+<% each($template) |$group, $logins| { -%>
+linkGroup <%= $group %>
+  <%- validate_array($logins) -%>
+  <%- each($logins) |$login| { -%>
+  <%= $login %>
+  <%- } -%>
+<% } %>

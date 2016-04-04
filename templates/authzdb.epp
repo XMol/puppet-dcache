@@ -1,0 +1,17 @@
+<% | Hash $template | -%>
+
+# Managed by Puppet.
+
+# Any modifications will be lost with the next Puppet synchronization run!
+
+version = <% if has_key($template['version']) { %><%= $template['version'] %><% } else { %>2.1<% } %>
+
+<% each(delete($template, 'version')) |$login, $creds| { -%>
+authorize <%= $login -%>
+ <% $creds['access'] -%>
+ <% $creds['uid'] -%>
+ <% $creds['gid'] -%>
+ <% $creds['home'] -%>
+ <% $creds['root'] -%>
+ <% if has_key($creds, 'extra') { -%><%= $creds['extra'] %><% } else { %>/<% } -%>
+<% } -%>

@@ -1,0 +1,42 @@
+<% | Hash $template | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+version = <% if has_key($template['version']) { %><%= $template['version'] %><% } else { %>2.1<% } %>
+
+# The direct mapping rules.
+<% if has_key($template, 'mappings') { -%>
+  <%- each($template['mappings']) |$dn, $login| { -%>
+mapping "<%= $dn %>" <%= $login %>
+  <%- } -%>
+<% } -%>
+
+# the following are the user auth records
+<% if has_key($template, 'logins') { -%>
+  <%- each($template['logins']) |$login, $creds| { -%>
+login <%= $login -%>
+ <%= $creds['access'] -%>
+ <%= $creds['uid'] -%>
+ <%= $creds['gid'] -%>
+ <%= $creds['home'] -%> 
+ <%= $creds['root'] -%>
+ <% if has_key($creds, 'extra') { %><%= $creds['extra'] %><% } else { %>/<% } %>
+    <%- each($template['dns']) |$dn| { -%>
+  <%= $dn %>
+    <%- } -%>
+  <%- } -%>
+<% } -%>
+
+# the following are the user password records
+<% if has_key($template, 'passwds') { -%>
+  <%- each($template['passwds']) |$login, $creds| { -%>
+passwd <%= $login -%>
+ <%= $creds['pwdhash'] -%>
+ <%= $creds['access'] -%>
+ <%= $creds['uid'] -%>
+ <%= $creds['gid'] -%>
+ <%= $creds['home'] -%> 
+ <%= $creds['root'] -%>
+ <% if has_key($creds, 'extra') { %><%= $creds['extra'] %><% } else { %>/<% } %>
+  <%- } -%>
+<% } -%>
