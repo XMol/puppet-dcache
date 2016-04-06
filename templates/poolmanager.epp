@@ -18,7 +18,7 @@ rc <% if $key != 'oncall' { %>set <% } %><%= $key %> <%= $val %>
 <% if has_key($template, 'pm') { -%>
 # Settings for the Partition Manager.
   <%- each($template['pm']) |$part, $specs| { -%>
-pm create <% if has_key($specs, 'type') %>-type=<%= $specs['type'] %> <% } %><%= $part %>
+pm create <% if has_key($specs, 'type') { %>-type=<%= $specs['type'] %> <% } %><%= $part %>
 pm set <%= $part -%>
     <%- each(delete($specs, 'type')) |$key, $val| { -%>
  -<%= $key %>=<%= $val -%>
@@ -35,8 +35,9 @@ psu create unit -<%= $uclass %> <%= $unit %>
 <% } -%>
 
 # The unit groups...
-<% each(sort(keys($pm['ugroups']))) |$ugroup, $units| { -%>
-  <%- each(sort($units) |$unit| { -%>
+<% each(sort(keys($pm['ugroups']))) |$ugroup| { -%>
+psu create ugroup <%= $ugroup %>
+  <%- each(sort($pm['ugroups'][$ugroup])) |$unit| { -%>
 psu addto ugroup <%= $ugroup %> <%= $unit %>
   <%- } -%>
 <% } -%>
@@ -67,7 +68,7 @@ psu set link
   <%- } %>
   <%- each(sort($lspecs['pgroups'])) |$pgroup|{ -%>
 psu add link <%= $link %> <%= $pgroup %>
-  <%- } -%
+  <%- } -%>
 <% } %>
 
 <% if !empty($pm['lgroups']) {-%>
