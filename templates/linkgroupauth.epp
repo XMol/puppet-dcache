@@ -8,4 +8,5 @@ linkGroup <%= $group %>
   <%- each($logins) |$login| { -%>
   <%= $login %>
   <%- } -%>
+
 <% } %>
