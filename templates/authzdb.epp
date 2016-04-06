@@ -13,5 +13,5 @@ authorize <%= $login -%>
  <%= join($creds['gids'], ',') -%>
  <%= $creds['home'] -%>
  <%= $creds['root'] -%>
- <%- if has_key($creds, 'extra') { -%><%= $creds['extra'] %><% } else { %>/<% } %>
+ <%- if has_key($creds, 'extra') { -%> <%= $creds['extra'] %><% } else { %> /<% } %>
 <% } %>
