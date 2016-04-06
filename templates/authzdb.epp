@@ -10,8 +10,8 @@ version = <% if has_key($template, 'version') { %><%= $template['version'] %><% 
 authorize <%= $login -%>
  <%= $creds['access'] -%>
  <%= $creds['uid'] -%>
- <%= $creds['gid'] -%>
+ <%= join($creds['gids'], ',') -%>
  <%= $creds['home'] -%>
  <%= $creds['root'] -%>
- <% if has_key($creds, 'extra') { -%><%= $creds['extra'] %><% } else { %>/<% } -%>
+ <%- if has_key($creds, 'extra') { -%><%= $creds['extra'] %><% } else { %>/<% } %>
 <% } %>
