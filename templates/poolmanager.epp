@@ -4,13 +4,13 @@
 
 <% if has_key($template, 'cm') { -%>
 # Settings for the Cost Module.
-  <%- each($pm['cm']) |$key, $val| { -%>
+  <%- each($template['cm']) |$key, $val| { -%>
 cm set <%= $key %> <%= $val %>
   <%- } %>
 <% } -%>
 <% if has_key($template, 'rc') { -%>
 # Settings for the ReCall module.
-  <%- each($pm['rc']) |$key, $val| { -%>
+  <%- each($template['rc']) |$key, $val| { -%>
     <%# The setting for 'oncall' is different from all others... -%>
 rc <% if $key != 'oncall' { %>set <% } %><%= $key %> <%= $val %>
   <%- } %>
