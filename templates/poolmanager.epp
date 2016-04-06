@@ -26,7 +26,7 @@ pm set <%= $part -%>
   <%- } %>
 <% } -%>
 <%# Call for a custom function, that extracts PoolManager entities from the $template argument. -%>
-<% $pm = scope.function_process_pm_hash([$template,]) -%>
+<% $pm = process_pm_hash($template) -%>
 <% each($pm['units']) |$uclass, $ulist| { -%>
 # The basic units...
   <%- each(sort($ulist)) |$unit| { -%>
