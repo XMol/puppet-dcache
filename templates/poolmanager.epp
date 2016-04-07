@@ -29,10 +29,12 @@ pm set <%= $part -%>
 <%# Call for a custom function, that extracts PoolManager entities from the $template argument. -%>
 <% $pm = process_pm_hash($template) -%>
 # The basic units...
-<% each($pm['units']) |$uclass, $ulist| { -%>
+<% each(sort(keys($pm['units']))) |$uclass| { -%>
+  <%- $ulist = $pm['units'][$uclass] -%>
   <%- each(sort($ulist)) |$unit| { -%>
 psu create unit -<%= $uclass %> <%= $unit %>
   <%- } -%>
+
 <% } -%>
 
 # The unit groups...
@@ -41,6 +43,7 @@ psu create ugroup <%= $ugroup %>
   <%- each(sort($pm['ugroups'][$ugroup])) |$unit| { -%>
 psu addto ugroup <%= $ugroup %> <%= $unit %>
   <%- } -%>
+
 <% } -%>
 
 # The pools to be known...
@@ -62,7 +65,7 @@ psu create link <%= $link -%>
   <%- each(sort($lspecs['ugroups'])) |$ugroup| { -%>
  <%= $ugroup -%>
   <%- } %>
-  <% if !empty($lspecs['prefs']) { -%>
+  <%- if !empty($lspecs['prefs']) { -%>
 psu set link <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
  -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
     <%- } -%>
