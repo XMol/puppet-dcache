@@ -6,7 +6,8 @@
 
 version = <% if has_key($template, 'version') { %><%= $template['version'] %><% } else { %>2.1<% } %>
 
-<% each(delete($template, 'version')) |$login, $creds| { -%>
+<% each(sort(keys(delete($template, 'version')))) |$login| { -%>
+  <%- $creds = $template[$login] -%>
 authorize <%= $login -%>
  <%= $creds['access'] -%>
  <%= $creds['uid'] -%>

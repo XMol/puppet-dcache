@@ -6,14 +6,15 @@ version = <% if has_key($template, 'version') { %><%= $template['version'] %><% 
 
 # The direct mapping rules.
 <% if has_key($template, 'mappings') { -%>
-  <%- each($template['mappings']) |$dn, $login| { -%>
-mapping "<%= $dn %>" <%= $login %>
+  <%- each(sort(keys($template['mappings']))) |$dn| { -%>
+mapping "<%= $dn %>" <%= $template['mappings'][$dn] %>
   <%- } -%>
 <% } -%>
 
 # the following are the user auth records
 <% if has_key($template, 'logins') { -%>
-  <%- each($template['logins']) |$login, $creds| { -%>
+  <%- each(sort(keys($template['logins']))) |$login| { -%>
+    <%- $creds = $template['logins'][$login] -%>
 login <%= $login -%>
  <%= $creds['access'] -%>
  <%= $creds['uid'] -%>
@@ -29,7 +30,8 @@ login <%= $login -%>
 
 # the following are the user password records
 <% if has_key($template, 'passwds') { -%>
-  <%- each($template['passwds']) |$login, $creds| { -%>
+  <%- each(sort(keys($template['passwds']))) |$login| { -%>
+    <%- $creds = $template['passwds'][$login] -%>
 passwd <%= $login -%>
  <%= $creds['pwdhash'] -%>
  <%= $creds['access'] -%>
