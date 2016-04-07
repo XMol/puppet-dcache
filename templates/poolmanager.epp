@@ -4,24 +4,25 @@
 
 <% if has_key($template, 'cm') { -%>
 # Settings for the Cost Module.
-  <%- each($template['cm']) |$key, $val| { -%>
-cm set <%= $key %> <%= $val %>
+  <%- each(sort(keys($template['cm']))) |$key| { -%>
+cm set <%= $key %> <%= $template['cm'][$key] %>
   <%- } %>
 <% } -%>
 <% if has_key($template, 'rc') { -%>
 # Settings for the ReCall module.
-  <%- each($template['rc']) |$key, $val| { -%>
+  <%- each(sort(keys($template['rc']))) |$key| { -%>
     <%# The setting for 'oncall' is different from all others... -%>
-rc <% if $key != 'oncall' { %>set <% } %><%= $key %> <%= $val %>
+rc <% if $key != 'oncall' { %>set <% } %><%= $key %> <%= $template['rc'][$key] %>
   <%- } %>
 <% } -%>
 <% if has_key($template, 'pm') { -%>
 # Settings for the Partition Manager.
-  <%- each($template['pm']) |$part, $specs| { -%>
+  <%- each(sort(keys($template['pm']))) |$part| { -%>
+    <%- $specs = $template['pm'][$part] -%>
 pm create <% if has_key($specs, 'type') { %>-type=<%= $specs['type'] %> <% } %><%= $part %>
 pm set <%= $part -%>
-    <%- each(delete($specs, 'type')) |$key, $val| { -%>
- -<%= $key %>=<%= $val -%>
+    <%- each(sort(keys(delete($specs, 'type')))) |$key| { -%>
+ -<%= $key %>=<%= $specs[$key] -%>
     <%- } %>
   <%- } %>
 <% } -%>
@@ -48,22 +49,23 @@ psu create pool <%= $pool %>
 <% } -%>
 
 # The pool groups...
-<% each(sort($pm['pgroups'])) |$pgroup, $pools| { -%>
-  <%- each(sort($pools)) |$pool| { -%>
+<% each(sort(keys($pm['pgroups']))) |$pgroup| { -%>
+  <%- each(sort($pm['pgroups'][$pgroup])) |$pool| { -%>
 psu addto pgroup <%= $pgroup %> <%= $pool %>
   <%- } -%>
 <% } %>
 
 # The links...
-<% each(sort($pm['links'])) |$link, $lspecs|{ -%>
+<% each(sort(keys($pm['links']))) |$link|{ -%>
 psu create link <%= $link -%>
+  <%- $lspecs = $pm['links'][$link] -%>
   <%- each(sort($lspecs['ugroups'])) |$ugroup| { -%>
  <%= $ugroup -%>
   <%- } %>
   <% if !empty($lspecs['prefs']) { -%>
 psu set link
-    <%- each(sort($lspecs['prefs'])) |$pref, $val| { -%>
- -<%= $pref %>pref=<%= $val -%>
+    <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
+ -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
     <%- } -%>
   <%- } %>
   <%- each(sort($lspecs['pgroups'])) |$pgroup|{ -%>
@@ -74,10 +76,11 @@ psu add link <%= $link %> <%= $pgroup %>
 <% if !empty($pm['lgroups']) {-%>
 # The link groups...
 <% } -%>
-<% each(sort($pm['lgroups'])) |$lgroup, $lgspecs|{ -%>
+<% each(sort(keys($pm['lgroups']))) |$lgroup|{ -%>
 psu create linkGroup <%= $lgroup %>
-  <%- each(sort($lgspecs['allowances'])) |$key, $val|{-%>
-psu set linkGroup <%= $key %>Allowed <%= $lgroup %> <%= $val %>
+  <%- $lgspecs = $pm['lgroups'][$lgroup] -%>
+  <%- each(sort(keys($lgspecs['allowances']))) |$key|{-%>
+psu set linkGroup <%= $key %>Allowed <%= $lgroup %> <%= $lgspecs['allowances'][$key] %>
   <%- } -%>
   <%- each(sort($lgspecs['links'])) |$link| { -%>
 psu addto linkGroup <%= $lgroup %> <%= $link %>
