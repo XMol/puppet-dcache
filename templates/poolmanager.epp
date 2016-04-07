@@ -6,15 +6,17 @@
 # Settings for the Cost Module.
   <%- each(sort(keys($template['cm']))) |$key| { -%>
 cm set <%= $key %> <%= $template['cm'][$key] %>
-  <%- } %>
+  <%- } -%>
 <% } -%>
+
 <% if has_key($template, 'rc') { -%>
 # Settings for the ReCall module.
   <%- each(sort(keys($template['rc']))) |$key| { -%>
     <%# The setting for 'oncall' is different from all others... -%>
 rc <% if $key != 'oncall' { %>set <% } %><%= $key %> <%= $template['rc'][$key] %>
-  <%- } %>
+  <%- } -%>
 <% } -%>
+
 <% if has_key($template, 'pm') { -%>
 # Settings for the Partition Manager.
   <%- each(sort(keys($template['pm']))) |$part| { -%>
@@ -23,18 +25,22 @@ pm create <% if has_key($specs, 'type') { %>-type=<%= $specs['type'] %> <% } %><
 pm set <%= $part -%>
     <%- each(sort(keys(delete($specs, 'type')))) |$key| { -%>
  -<%= $key %>=<%= $specs[$key] -%>
-    <%- } %>
-  <%- } %>
+    <%- } -%>
+  <%- } -%>
+
 <% } -%>
+
 <%# Call for a custom function, that extracts PoolManager entities from the $template argument. -%>
 <% $pm = process_pm_hash($template) -%>
 # The basic units...
 <% each(sort(keys($pm['units']))) |$uclass| { -%>
   <%- $ulist = $pm['units'][$uclass] -%>
-  <%- each(sort($ulist)) |$unit| { -%>
+  <%- if !empty($ulist) { -%>
+    <%- each(sort($ulist)) |$unit| { -%>
 psu create unit -<%= $uclass %> <%= $unit %>
-  <%- } -%>
+    <%- } -%>
 
+  <%- } -%>
 <% } -%>
 
 # The unit groups...
@@ -51,12 +57,15 @@ psu addto ugroup <%= $ugroup %> <%= $unit %>
 psu create pool <%= $pool %>
 <% } -%>
 
+
 # The pool groups...
 <% each(sort(keys($pm['pgroups']))) |$pgroup| { -%>
   <%- each(sort($pm['pgroups'][$pgroup])) |$pool| { -%>
 psu addto pgroup <%= $pgroup %> <%= $pool %>
   <%- } -%>
-<% } %>
+
+<% } -%>
+
 
 # The links...
 <% each(sort(keys($pm['links']))) |$link|{ -%>
@@ -64,12 +73,15 @@ psu create link <%= $link -%>
   <%- $lspecs = $pm['links'][$link] -%>
   <%- each(sort($lspecs['ugroups'])) |$ugroup| { -%>
  <%= $ugroup -%>
-  <%- } %>
+  <%- } -%>
+
   <%- if !empty($lspecs['prefs']) { -%>
-psu set link <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
+psu set link <%# Remove line break -%>
+  <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
  -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
     <%- } -%>
-  <%- } %>
+  <%- } -%>
+
   <%- each(sort($lspecs['pgroups'])) |$pgroup|{ -%>
 psu add link <%= $link %> <%= $pgroup %>
   <%- } -%>
