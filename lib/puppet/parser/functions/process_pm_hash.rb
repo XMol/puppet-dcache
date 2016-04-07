@@ -108,7 +108,7 @@ module Puppet::Parser::Functions
       lgroups[lgroup] = my_lgroup
     end
 
-    args.each do |pm_class, members|
+    args[0].each do |pm_class, members|
       case pm_class
       when 'units'
         new_units(members)
@@ -135,12 +135,12 @@ module Puppet::Parser::Functions
     end
     
     return {
-      :units   => units,
-      :ugroups => ugroups,
-      :pools   => pools,
-      :pgroups => pgroups,
-      :links   => links,
-      :lgroups => lgroups, 
+      'units'   => units,
+      'ugroups' => ugroups,
+      'pools'   => pools,
+      'pgroups' => pgroups,
+      'links'   => links,
+      'lgroups' => lgroups, 
     }
   end
 end
