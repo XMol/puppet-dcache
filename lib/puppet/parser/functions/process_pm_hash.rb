@@ -27,14 +27,12 @@ module Puppet::Parser::Functions
     # For each new unit group add all units to the respective list of its
     # kind. Keep a map of ugroup name to all its units in the ugroups hash.
     Kernel.send(:define_method, :new_ugroup) do |ugroup, uhash|
-      puts "Assign ugroups[#{ugroup}] = #{uhash.values.flatten}"
       ugroups[ugroup] = uhash.values.flatten
       new_units(uhash)
     end
 
     # For each new pool group, add all pools to the list of all pools.
     Kernel.send(:define_method, :new_pgroup) do |pgroup, plist|
-      puts "Assign pgroups[#{pgroup}] = #{plist}"
       pgroups[pgroup] = plist
       pools += plist
       pools.uniq!
@@ -50,9 +48,9 @@ module Puppet::Parser::Functions
     #     Only the link itself needs to now whether preferences were set.
     Kernel.send(:define_method, :new_link) do |link, lhash|
       my_link = {
-        :ugroups => [],
-        :pgroups => [],
-        :prefs   => {
+        'ugroups' => [],
+        'pgroups' => [],
+        'prefs'   => {
           'read'  => 0,
           'write' => 0,
           'cache' => 0,
@@ -63,48 +61,46 @@ module Puppet::Parser::Functions
       if lhash.key?('ugroups')
         lhash['ugroups'].each do |ugroup, uhash|
           new_ugroup(ugroup, uhash)
-          my_link[:ugroups] << ugroup
+          my_link['ugroups'] << ugroup
         end
-        my_link[:ugroups].uniq!
+        my_link['ugroups'].uniq!
       end
     
       if lhash.key?('pgroups')
         lhash['pgroups'].each do |pgroup, plist|
           new_pgroup(pgroup, plist)
-          my_link[:pgroups] << pgroup
+          my_link['pgroups'] << pgroup
         end
-        my_link[:pgroups].uniq!
+        my_link['pgroups'].uniq!
       end
       
-      my_link[:prefs].merge!(lhash.fetch('prefs', {}))
+      my_link['prefs'].merge!(lhash.fetch('prefs', {}))
       
-      puts "Assign links[#{link}] = #{my_link}"
       links[link] = my_link
     end
 
     Kernel.send(:define_method, :new_lgroup) do |lgroup, lghash|
       my_lgroup = {
-        :allowances => {
+        'allowances' => {
           'online'    => false,
           'nearline'  => false,
           'replica'   => false,
           'custodial' => false,
           'output'    => false,
         },
-        :links => Array.new(),
+        'links' => Array.new(),
       }
       
-      my_lgroup[:allowances].merge!(lghash.fetch('allowances', {}))
+      my_lgroup['allowances'].merge!(lghash.fetch('allowances', {}))
       
       if lghash.key?('links')
         lghash['links'].each do |link, lhash|
           new_link(link, lhash)
-          my_lgroup[:links] << link
+          my_lgroup['links'] << link
         end
-        my_lgroup[:links].uniq!
+        my_lgroup['links'].uniq!
       end
       
-      puts "Assign lgroups[#{lgroup}] = #{my_lgroup}"
       lgroups[lgroup] = my_lgroup
     end
 
