@@ -28,8 +28,8 @@ pm set <%= $part -%>
 <% } -%>
 <%# Call for a custom function, that extracts PoolManager entities from the $template argument. -%>
 <% $pm = process_pm_hash($template) -%>
-<% each($pm['units']) |$uclass, $ulist| { -%>
 # The basic units...
+<% each($pm['units']) |$uclass, $ulist| { -%>
   <%- each(sort($ulist)) |$unit| { -%>
 psu create unit -<%= $uclass %> <%= $unit %>
   <%- } -%>
@@ -63,14 +63,14 @@ psu create link <%= $link -%>
  <%= $ugroup -%>
   <%- } %>
   <% if !empty($lspecs['prefs']) { -%>
-psu set link
-    <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
+psu set link <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
  -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
     <%- } -%>
   <%- } %>
   <%- each(sort($lspecs['pgroups'])) |$pgroup|{ -%>
 psu add link <%= $link %> <%= $pgroup %>
   <%- } -%>
+
 <% } %>
 
 <% if !empty($pm['lgroups']) {-%>
@@ -79,10 +79,11 @@ psu add link <%= $link %> <%= $pgroup %>
 <% each(sort(keys($pm['lgroups']))) |$lgroup|{ -%>
 psu create linkGroup <%= $lgroup %>
   <%- $lgspecs = $pm['lgroups'][$lgroup] -%>
-  <%- each(sort(keys($lgspecs['allowances']))) |$key|{-%>
+  <%- each(sort(keys($lgspecs['allowances']))) |$key| { -%>
 psu set linkGroup <%= $key %>Allowed <%= $lgroup %> <%= $lgspecs['allowances'][$key] %>
   <%- } -%>
   <%- each(sort($lgspecs['links'])) |$link| { -%>
 psu addto linkGroup <%= $lgroup %> <%= $link %>
   <%- } -%>
+
 <% } %>
