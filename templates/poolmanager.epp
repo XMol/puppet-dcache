@@ -12,8 +12,8 @@ cm set <%= $key %> <%= $template['cm'][$key] %>
 <% if has_key($template, 'rc') { -%>
 # Settings for the ReCall module.
   <%- each(sort(keys($template['rc']))) |$key| { -%>
-    <%# The setting for 'oncall' is different from all others... -%>
-rc <% if $key != 'oncall' { %>set <% } %><%= $key %> <%= $template['rc'][$key] %>
+    <%# The syntax for setting 'onerror' is different from all others... -%>
+rc <% if $key != 'onerror' { %>set <% } %><%= $key %> <%= $template['rc'][$key] %>
   <%- } -%>
 <% } -%>
 
