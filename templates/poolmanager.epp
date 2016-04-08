@@ -60,6 +60,7 @@ psu create pool <%= $pool %>
 
 # The pool groups...
 <% each(sort(keys($pm['pgroups']))) |$pgroup| { -%>
+psu create pgroup <%= $pgroup %>
   <%- each(sort($pm['pgroups'][$pgroup])) |$pool| { -%>
 psu addto pgroup <%= $pgroup %> <%= $pool %>
   <%- } -%>
