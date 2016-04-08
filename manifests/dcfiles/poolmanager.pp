@@ -17,22 +17,24 @@ define dcache::dcfiles::poolmanager (
     }
   }
   
-  each(try_get_value($augeas, 'pm', [])) |$pm, $settings| {
-    validate_hash($settings)
-    augeas { "Manage partition '${pm}' in '${file}'":
-      name    => "augeas_create_${pm}",
-      changes => flatten([
-        "set pm_create[. = '${pm}'] '${pm}'",
-        "defnode this pm_set[. = '${pm}'] '${pm}'",
-        map(delete($settings, 'type')) |$key, $value| {
-          "set \$this/${key} '${value}'"
+  if has_key($augeas, 'pm') {
+    each($augeas['pm']) |$pm, $settings| {
+      validate_hash($settings)
+      augeas { "Manage partition '${pm}' in '${file}'":
+        name    => "augeas_create_${pm}",
+        changes => flatten([
+          "set pm_create[. = '${pm}'] '${pm}'",
+          "defnode this pm_set[. = '${pm}'] '${pm}'",
+          map(delete($settings, 'type')) |$key, $value| {
+            "set \$this/${key} '${value}'"
+          }
+        ]),
+      }
+      if has_key($settings, 'type') {
+        augeas { "Set type of partition '${pm}' in '${file}'":
+          require => Augeas["augeas_create_${pm}"],
+          changes => "set pm_create[. = '${pm}']/type ${settings['type']}",
         }
-      ]),
-    }
-    if has_key($settings, 'type') {
-      augeas { "Set type of partition '${pm}' in '${file}'":
-        require => Augeas["augeas_create_${pm}"],
-        changes => "set pm_create[. = '${pm}']/type ${settings['type']}",
       }
     }
   }
