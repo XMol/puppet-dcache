@@ -42,24 +42,20 @@ module PoolManager =
   
   (* Request Container statements *)
   let rc_set_onerror =
-    [ label "rc_set_onerror" . del /rc[ \t]+onerror/ "rc onerror" . sp .
-      store /suspend|fail/ . eol ]
-  
-  let rc_set (s:string) (v:regexp) =
-    [ label ("rc_set_".s) . del (/rc[ \t]+set[ \t]+/.s) ("rc set ".s) . sp .
-      store v . eol ]
-  
-  let rc_set_max (s:string) (r:regexp) =
-    [ label "rc_set_max" .
-      del /rc[ \t]+set[ \t]+max[ \t]+/ "rc set max " .
-      [ key s . sp . store r . eol ]
+    [ label "rc_set" . del /rc[ \t]+/ "rc " . 
+      [ key "onerror" . sp . store /suspend|fail/ ] . eol
     ]
   
+  let rc_set (s:string) (v:regexp) =
+    [ label "rc_set" . del /rc[ \t]+set[ \t]+/ "rc set " .
+      [ key s . sp . store v ] . eol
+    ]
+      
   let rc = (
     rc_set_onerror |
-    rc_set_max "restore" /[0-9]+|unlimited/ |
-    rc_set_max "retries" /[0-9]+/ |
-    rc_set_max "threads" /[0-9]+/ |
+    rc_set "max restore" /[0-9]+|unlimited/ |
+    rc_set "max retries" /[0-9]+/ |
+    rc_set "max threads" /[0-9]+/ |
     rc_set "poolpingtimer" /[0-9]+/ |
     rc_set "retry" /[0-9]+/ |
     rc_set "sameHostCopy" /never|besteffort|notchecked/ |

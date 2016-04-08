@@ -12,7 +12,7 @@ define dcache::dcfiles::poolmanager (
     validate_hash($augeas['rc'])
     augeas { "Manage recall module settings in '${file}'":
       changes => map($augeas['rc']) |$key, $value| {
-        "set rc_set_${key} ${value}"
+        "set rc_set/'${key}' ${value}"
       },
     }
   }
