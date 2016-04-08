@@ -1,0 +1,109 @@
+<% | Hash $template | -%>
+# Managed by Puppet.
+# Any modifications will be lost with the next Puppet synchronization run!
+
+<% if has_key($template, 'cm') { -%>
+# Settings for the Cost Module.
+  <%- each(sort(keys($template['cm']))) |$key| { -%>
+cm set <%= $key %> <%= $template['cm'][$key] %>
+  <%- } -%>
+<% } -%>
+
+<% if has_key($template, 'rc') { -%>
+# Settings for the ReCall module.
+  <%- each(sort(keys($template['rc']))) |$key| { -%>
+    <%# The syntax for setting 'onerror' is different from all others... -%>
+rc <% if $key != 'onerror' { %>set <% } %><%= $key %> <%= $template['rc'][$key] %>
+  <%- } -%>
+<% } -%>
+
+<% if has_key($template, 'pm') { -%>
+# Settings for the Partition Manager.
+  <%- each(sort(keys($template['pm']))) |$part| { -%>
+    <%- $specs = $template['pm'][$part] -%>
+pm create <% if has_key($specs, 'type') { %>-type=<%= $specs['type'] %> <% } %><%= $part %>
+pm set <%= $part -%>
+    <%- each(sort(keys(delete($specs, 'type')))) |$key| { -%>
+ -<%= $key %>=<%= $specs[$key] -%>
+    <%- } -%>
+  <%- } -%>
+
+<% } -%>
+
+<%# Call for a custom function, that extracts PoolManager entities from the $template argument. -%>
+<% $pm = process_pm_hash($template) -%>
+# The basic units...
+<% each(sort(keys($pm['units']))) |$uclass| { -%>
+  <%- $ulist = $pm['units'][$uclass] -%>
+  <%- if !empty($ulist) { -%>
+    <%- each(sort($ulist)) |$unit| { -%>
+psu create unit -<%= $uclass %> <%= $unit %>
+    <%- } -%>
+
+  <%- } -%>
+<% } -%>
+
+# The unit groups...
+<% each(sort(keys($pm['ugroups']))) |$ugroup| { -%>
+psu create ugroup <%= $ugroup %>
+  <%- each(sort($pm['ugroups'][$ugroup])) |$unit| { -%>
+psu addto ugroup <%= $ugroup %> <%= $unit %>
+  <%- } -%>
+
+<% } -%>
+
+# The pools to be known...
+<% each(sort($pm['pools'])) |$pool| { -%>
+psu create pool <%= $pool %>
+<% } -%>
+
+
+# The pool groups...
+<% each(sort(keys($pm['pgroups']))) |$pgroup| { -%>
+psu create pgroup <%= $pgroup %>
+  <%- each(sort($pm['pgroups'][$pgroup])) |$pool| { -%>
+psu addto pgroup <%= $pgroup %> <%= $pool %>
+  <%- } -%>
+
+<% } -%>
+
+
+# The links...
+<% each(sort(keys($pm['links']))) |$link|{ -%>
+psu create link <%= $link -%>
+  <%- $lspecs = $pm['links'][$link] -%>
+  <%- each(sort($lspecs['ugroups'])) |$ugroup| { -%>
+ <%= $ugroup -%>
+  <%- } -%>
+
+  <%- if !empty($lspecs['prefs']) { -%>
+psu set link <%= $link -%>
+  <%# Treat the 'section' preferrence setting separately. -%>
+    <%- each(sort(keys(delete($lspecs['prefs'], 'section')))) |$pref| { -%>
+ -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
+    <%- } -%>
+    <%- if has_key($lspecs['prefs'], 'section') { -%>
+ -section=<%= $lspecs['prefs']['section'] %>
+    <%- } -%>
+  <%- } -%>
+
+  <%- each(sort($lspecs['pgroups'])) |$pgroup|{ -%>
+psu add link <%= $link %> <%= $pgroup %>
+  <%- } -%>
+
+<% } %>
+
+<% if !empty($pm['lgroups']) {-%>
+# The link groups...
+<% } -%>
+<% each(sort(keys($pm['lgroups']))) |$lgroup|{ -%>
+psu create linkGroup <%= $lgroup %>
+  <%- $lgspecs = $pm['lgroups'][$lgroup] -%>
+  <%- each(sort(keys($lgspecs['allowances']))) |$key| { -%>
+psu set linkGroup <%= $key %>Allowed <%= $lgroup %> <%= $lgspecs['allowances'][$key] %>
+  <%- } -%>
+  <%- each(sort($lgspecs['links'])) |$link| { -%>
+psu addto linkGroup <%= $lgroup %> <%= $link %>
+  <%- } -%>
+
+<% } %>

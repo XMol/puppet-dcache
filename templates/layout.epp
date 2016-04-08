@@ -10,7 +10,8 @@
   <%- } -%>
 <% } -%>
 
-<% each(filter($template) |$k, $v| {$k != 'properties'}) |$domain, $dhash| { -%>
+<% each(sort(delete(keys($template), 'properties'))) |$domain| { -%>
+  <%- $dhash = $template[$domain] -%>
   <%- validate_hash($dhash) -%>
 [<%= $domain %>]
   <%- if has_key($dhash, 'properties') { -%>

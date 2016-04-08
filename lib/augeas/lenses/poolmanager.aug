@@ -50,15 +50,18 @@ module PoolManager =
       store v . eol ]
   
   let rc_set_max (s:string) (r:regexp) =
-    [ label ("rc_set_max_".s) .
-      del (/rc[ \t]+set[ \t]+max[ \t]+/.s) ("rc set max ".s) . sp .
-      store r . eol ]
+    [ label "rc_set_max" .
+      del /rc[ \t]+set[ \t]+max[ \t]+/ "rc set max " .
+      [ key s . sp . store r . eol ]
+    ]
   
   let rc = (
     rc_set_onerror |
     rc_set_max "restore" /[0-9]+|unlimited/ |
-    rc_set_max "retries" /[0-9]+/ | rc_set_max "threads" /[0-9]+/ |
-    rc_set "poolpingtimer" /[0-9]+/ | rc_set "retry" /[0-9]+/ |
+    rc_set_max "retries" /[0-9]+/ |
+    rc_set_max "threads" /[0-9]+/ |
+    rc_set "poolpingtimer" /[0-9]+/ |
+    rc_set "retry" /[0-9]+/ |
     rc_set "sameHostCopy" /never|besteffort|notchecked/ |
     rc_set "sameHostRetry" /never|besteffort|notchecked/
   )

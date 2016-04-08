@@ -1,0 +1,7 @@
+<% | Hash $template | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+<% each($template['mappings']) |$mapping| { -%>
+"<%= $mapping['dn'] -%>" <% if has_key($mapping, 'fqan') { %>"<%= $mapping['fqan'] %>" <% } -%><%= $mapping['login'] %>
+<% } -%>

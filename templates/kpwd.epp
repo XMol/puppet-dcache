@@ -1,0 +1,44 @@
+<% | Hash $template | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+version = <% if has_key($template, 'version') { %><%= $template['version'] %><% } else { %>2.1<% } %>
+
+# The direct mapping rules.
+<% if has_key($template, 'mappings') { -%>
+  <%- each(sort(keys($template['mappings']))) |$dn| { -%>
+mapping "<%= $dn %>" <%= $template['mappings'][$dn] %>
+  <%- } -%>
+<% } -%>
+
+# the following are the user auth records
+<% if has_key($template, 'logins') { -%>
+  <%- each(sort(keys($template['logins']))) |$login| { -%>
+    <%- $creds = $template['logins'][$login] -%>
+login <%= $login -%>
+ <%= $creds['access'] -%>
+ <%= $creds['uid'] -%>
+ <%= $creds['gid'] -%>
+ <%= $creds['home'] -%> 
+ <%= $creds['root'] -%>
+ <% if has_key($creds, 'extra') { %><%= $creds['extra'] %><% } else { %>/<% } %>
+    <%- each($creds['dns']) |$dn| { -%>
+  <%= $dn %>
+    <%- } -%>
+  <%- } -%>
+<% } -%>
+
+# the following are the user password records
+<% if has_key($template, 'passwds') { -%>
+  <%- each(sort(keys($template['passwds']))) |$login| { -%>
+    <%- $creds = $template['passwds'][$login] -%>
+passwd <%= $login -%>
+ <%= $creds['pwdhash'] -%>
+ <%= $creds['access'] -%>
+ <%= $creds['uid'] -%>
+ <%= $creds['gid'] -%>
+ <%= $creds['home'] -%> 
+ <%= $creds['root'] -%>
+ <% if has_key($creds, 'extra') { %><%= $creds['extra'] %><% } else { %>/<% } %>
+  <%- } -%>
+<% } -%>
