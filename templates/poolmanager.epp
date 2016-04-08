@@ -76,9 +76,13 @@ psu create link <%= $link -%>
   <%- } -%>
 
   <%- if !empty($lspecs['prefs']) { -%>
-psu set link <%# Remove line break -%>
-  <%- each(sort(keys($lspecs['prefs']))) |$pref| { -%>
+psu set link <%= $link -%>
+  <%# Treat the 'section' preferrence setting separately. -%>
+    <%- each(sort(keys(delete($lspecs['prefs'], 'section')))) |$pref| { -%>
  -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
+    <%- } -%>
+    <%- if has_key($lspecs['prefs'], 'section') { -%>
+ -section=<%= $lspecs['prefs']['section'] %>
     <%- } -%>
   <%- } -%>
 
