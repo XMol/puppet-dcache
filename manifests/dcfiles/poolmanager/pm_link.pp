@@ -25,7 +25,7 @@ define dcache::dcfiles::poolmanager::pm_link (
   }
   
   augeas { "Add member '${member}' to link '${title}' in '${setup}'":
-    changes => flatten(map($pgroups) |$pgroup, $pools| {[
+    changes => flatten(map($pgroups) |$pgroup| {[
       "defnode this psu_addto_link[. = '${title}' and ./1 = '${pgroup}'] '${title}'",
       "set \$this/1 '${pgroup}'",
     ]}),
