@@ -8,93 +8,69 @@ define dcache::dcfiles::poolmanager (
     incl => $file,
   }
   
-  each($augeas) |$class, $collection| {
-    case $class {
-      'units': {
-        validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_units', {'The PoolManager units' => $collection})
-      }
-      'ugroups': {
-        validate_hash($collection)
-        $h = hash(flatten(map($collection) |$ugroup, $units| { [ $ugroup, { 'units' => $units } ] }))
-        create_resources('dcache::dcfiles::poolmanager::pm_ugroup', $h)
-      }
-      'pools': {
-        # $collection here should be a list of strings and hashes.
-        # A string represents the pool's name, whereas a hash contains
-        # some further data for the pool. Replace all strings with a
-        # hash (with that string as its only key), so we can iterate
-        # with create_resources.
-        validate_array($collection)
-        $h =
-          hash(flatten(map($collection) |$c| {
-            if is_hash($c) {
-              [ keys($c)[0], { 'attr' => values($c)[0] } ]
-            } elsif is_string($c) { [ $c, { 'attr' => [] } ] }
-            else { fail("Illegal pool object ('${c}')!") }
-          }))
-        create_resources('dcache::dcfiles::poolmanager::pm_pool', $h)
-      }
-      'pgroups': {
-        validate_hash($collection)
-        # $collection is already a hash with all pgroups as keys and the
-        # list of member pools as an array. Though for iteration with
-        # create_resources we need a slightly different format.
-        $h =
-          hash(flatten(map($collection) |$pgroup, $pools| {
-            if is_array($pools) { [ $pgroup, { 'pools' => $pools } ] }
-            else { fail("Pool group '${pgroup}' does not map to an array!") }
-          }))
-        create_resources('dcache::dcfiles::poolmanager::pm_pgroup', $h)
-      }
-      'links': {
-        validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_link', $collection)
-      }
-      'lgroups': {
-        validate_hash($collection)
-        create_resources('dcache::dcfiles::poolmanager::pm_lgroup', $collection)
-      }
-      'rc': {
-        validate_hash($collection)
-        augeas { "Manage recalls module settings in '${file}'":
-          changes => map($collection) |$key, $value| {
-            "set rc_set_${key} ${value}"
-          },
+  if has_key($augeas, 'rc') {
+    validate_hash($augeas['rc'])
+    augeas { "Manage recall module settings in '${file}'":
+      changes => map($augeas['rc']) |$key, $value| {
+        "set rc_set_${key} ${value}"
+      },
+    }
+  }
+  
+  each(try_get_value($augeas, 'pm', [])) |$pm, $settings| {
+    validate_hash($settings)
+    augeas { "Manage partition '${pm}' in '${file}'":
+      name    => "augeas_create_${pm}",
+      changes => flatten([
+        "set pm_create[. = '${pm}'] '${pm}'",
+        "defnode this pm_set[. = '${pm}'] '${pm}'",
+        map(delete($settings, 'type')) |$key, $value| {
+          "set \$this/${key} '${value}'"
         }
-      }
-      'pm': {
-        each($collection) |$pm, $settings| {
-          validate_hash($settings)
-          augeas { "Manage partition '${pm}' in '${file}'":
-            name    => "augeas_create_${pm}",
-            changes => flatten([
-              "set pm_create[. = '${pm}'] '${pm}'",
-              "defnode this pm_set[. = '${pm}'] '${pm}'",
-              map(filter($settings) |$k, $v| { $k != 'type' }) |$key, $value| {
-                "set \$this/${key} '${value}'"
-              }
-            ]),
-          }
-          if has_key($settings, 'type') {
-            augeas { "Set type of partition '${pm}' in '${file}'":
-              require => Augeas["augeas_create_${pm}"],
-              changes => "set pm_create[. = '${pm}']/type ${settings['type']}",
-            }
-          }
-        }
-      }
-      'cm': {
-        validate_hash($collection)
-        augeas { "Manage cost module settings in '${file}'":
-          changes => map($collection) |$key, $value| {
-            "set cm_${key} ${value}"
-          },
-        }
-      }
-      default: {
-        fail("Unmatched PoolManager class ('${class}')!")
+      ]),
+    }
+    if has_key($settings, 'type') {
+      augeas { "Set type of partition '${pm}' in '${file}'":
+        require => Augeas["augeas_create_${pm}"],
+        changes => "set pm_create[. = '${pm}']/type ${settings['type']}",
       }
     }
   }
+  
+  if has_key($augeas, 'cm') {
+    validate_hash($augeas['cm'])
+    augeas { "Manage cost module settings in '${file}'":
+      changes => map($augeas['cm']) |$key, $value| {
+        "set cm_${key} ${value}"
+      },
+    }
+  }
+  
+  # Rework the $augeas into a easily digestable hash that groups all the
+  # different PoolManager objects in lists.
+  $pm = process_pm_hash($augeas)
+  
+  # Declare the resources virtually first.
+  create_resources('@dcache::dcfiles::poolmanager::pm_units', {'The PoolManager units' => $pm['units']})
+  each($pm['ugroups']) |$ugroup, $units| {
+    @dcache::dcfiles::poolmanager::pm_ugroup { $ugroup: units => $units, }
+  }
+  @dcache::dcfiles::poolmanager::pm_pool { $pm['pools']: }
+  each($pm['pgroups']) |$pgroup, $pools| {
+    @dcache::dcfiles::poolmanager::pm_pgroup { $pgroup: pools => $pools, }
+  }
+  create_resources('@dcache::dcfiles::poolmanager::pm_link', $pm['links'])
+  create_resources('@dcache::dcfiles::poolmanager::pm_lgroup', $pm['lgroups'])
+  
+  # Then realize them in the right order.
+  Dcache::Dcfiles::Poolmanager::Pm_units <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |>
+  Dcache::Dcfiles::Poolmanager::Pm_pool <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |>
+  Dcache::Dcfiles::Poolmanager::Pm_ugroup <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
+  Dcache::Dcfiles::Poolmanager::Pm_pgroup <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_link <| |>
+  Dcache::Dcfiles::Poolmanager::Pm_link <| |> ->
+    Dcache::Dcfiles::Poolmanager::Pm_lgroup <| |>
 }
