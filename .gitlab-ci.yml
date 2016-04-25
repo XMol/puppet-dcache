@@ -8,6 +8,6 @@ gridka:
 doc:
     type: build
     script:
-        - mkdocs_builder.py puppet -b $CI_BUILD_REF_NAME
+        - mkdocs_builder.py puppet -b $CI_BUILD_REF_NAME -r $CI_BUILD_REPO
     tags:
         - doc
