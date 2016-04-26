@@ -38,7 +38,6 @@ class dcache::config (
       file     => $dcache::authorized_keys,
       source   => $dcache::authorized_keys_source,
       content  => $dcache::authorized_keys_content,
-      template => $dcache::authorized_keys_template,
       augeas   => $dcache::authorized_keys_augeas,
       resource => 'authkeys',
     },

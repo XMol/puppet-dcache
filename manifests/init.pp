@@ -38,7 +38,6 @@ class dcache (
   $authorized_keys = $dcache::params::authorized_keys,
   $authorized_keys_source = '',
   $authorized_keys_content = '',
-  $authorized_keys_template = {},
   $authorized_keys_augeas = {},
   
   $gplazma = $dcache::params::gplazma,
