@@ -2,7 +2,7 @@
 # Managed by Puppet.
 # Any modifications will be gone with the next Puppet synchronization!
 
-version = <% if has_key($template, 'version') { %><%= $template['version'] %><% } else { %>2.1<% } %>
+version = <%= try_get_value($template, 'version', '2.1') %>
 
 # The direct mapping rules.
 <% if has_key($template, 'mappings') { -%>
