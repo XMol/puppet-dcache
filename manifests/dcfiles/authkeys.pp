@@ -12,8 +12,8 @@ define dcache::dcfiles::authkeys (
   
   augeas { 'Manage dCache\'s admin authorized keys':
     changes => flatten(map($augeas) |$comment, $details| {[
-      "defnode this key[. = '${details[key]}' and type = '${details[type]}' and comment = ${comment}] '${details[key]}'",
-      "set \$this/type '${details[type]}'",
+      "defnode this key[. = '${details[key]}' and type = '${details['type']}' and comment = '${comment}'] '${details[key]}'",
+      "set \$this/type '${details['type']}'",
       "set \$this/comment '${comment}'",
     ]}),
   }
