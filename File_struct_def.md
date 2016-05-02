@@ -325,8 +325,12 @@ dcache::linkgroupauth_template:
     - /christian/roman/Role=bishop
 ```
 
-## `tape-info.xml`
-Not supported through Augeas!
-
-## `info-provider.xml`
-Not supported through Augeas!
+## `tape-info.xml` and `info-provider.xml`
+This module does not over support to manage either of these two files by
+template or Augeas. Though one may set the content of either file in YAML,
+it is strongly discouraged. It is best to source the file from some other
+location.
+```yaml
+dcache::tapeinfo_source: file://dcache_config/tape-info.xml
+dcache::infoprovider_source: file://dcache_config/info-provider.xml
+```
