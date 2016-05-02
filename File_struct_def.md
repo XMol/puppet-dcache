@@ -281,7 +281,7 @@ dcache::vorolemap_augeas:
       fqan: /christian/roman/Role=bishop
       login: bishops
     - dn: /C=DE/O=GermanGrid/CN=Jesus Christ
-      fqan: # List the fqan key, even if no value is assigned.
+      fqan: "" # List the fqan key with the empty string for no real value.
       login: jesus
 ```
 
