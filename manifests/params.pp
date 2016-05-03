@@ -5,7 +5,10 @@
 class dcache::params {
   $paths_etc = '/etc/dcache'
   $paths_admin = "${paths_etc}/admin"
+  $paths_billing = '/var/lib/dcache/billing'
   $paths_config = '/var/lib/dcache/config'
+  $paths_lib = '/var/lib/dcache'
+  $paths_log = '/var/log/dcache'
   $paths_gridsecurity = '/etc/grid-security'
   $env = '/etc/dcache.env'
   $setup = "${paths_etc}/dcache.conf"
