@@ -12,7 +12,7 @@ class dcache::install (
       refreshonly => true,
       subscribe   => Package['dcache'],
       path        => '/bin',
-      command     => "chown -R ${dcache::user}:${dcache::group} ${dcache::params::paths_lib} ${dcache::params::paths_log}"
+      command     => "chown -R ${dcache::user}:${dcache::group} ${dcache::params::paths_admin} ${dcache::params::paths_lib} ${dcache::params::paths_log}"
     }
   }
 }
