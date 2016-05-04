@@ -4,7 +4,7 @@
 
 <% each(sort(keys($template))) |$group| { -%>
   <%- $logins = $template[$group] -%>
-linkGroup <%= $group %>
+LinkGroup <%= $group %>
   <%- validate_array($logins) -%>
   <%- each($logins) |$login| { -%>
   <%= $login %>
