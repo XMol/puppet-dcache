@@ -1,0 +1,9 @@
+<% | Hash $template | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+<% each(sort(keys($template))) |$dir| { -%>
+$dir<% each(sort(keys($template[$dir]))) |$client| { -%>
+ $client(<%= join(sort($template[$dir][$client]), ',') %>)
+  <%- } -%>
+<% } %>
