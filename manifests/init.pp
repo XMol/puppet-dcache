@@ -84,6 +84,11 @@ class dcache (
   $linkgroupauth_template = {},
   $linkgroupauth_augeas = {},
 
+  $exports = $dcache::params::exports,
+  $exports_source = '',
+  $exports_content = '',
+  $exports_template = {},
+  $exports_augeas = {},
 ) inherits dcache::params {
   
   class { 'dcache::install': } ->
