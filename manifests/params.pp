@@ -25,4 +25,5 @@ class dcache::params {
   $tapeinfo = "${paths_etc}/tape-info.xml"
   $infoprovider = "${paths_etc}/info-provider.xml"
   $linkgroupauth = "${paths_etc}/LinkGroupAuthorization.conf"
+  $exports = '/etc/exports'
 }
