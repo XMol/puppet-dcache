@@ -96,6 +96,14 @@ class dcache::config (
       augeas   => $dcache::linkgroupauth_augeas,
       resource => 'linkgroupauth',
     },
+    'exports' => {
+      file     => $dcache::exports,
+      source   => $dcache::exports_source,
+      content  => $dcache::exports_content,
+      template => $dcache::exports_template,
+      augeas   => $dcache::exports_augeas,
+      resource => 'exports',
+    },
   }
   
   create_resources('dcache::dcfile', $all_files)
