@@ -4,6 +4,5 @@
 
 <% each(sort(keys($template))) |$dir| { -%>
 <%= $dir %><% each(sort(keys($template[$dir]))) |$client| { -%>
- <%= $client %>(<%= join(sort($template[$dir][$client]), ',') -%>)
-  <%- } %>
-<% } %>
+ <%= $client %>(<%= join(sort($template[$dir][$client]), ',') -%>)<% } %>
+<% } -%>
