@@ -334,3 +334,26 @@ location.
 dcache::tapeinfo_source: file://dcache_config/tape-info.xml
 dcache::infoprovider_source: file://dcache_config/info-provider.xml
 ```
+
+## `/etc/exports`
+This is the standard file for configuring any (NFS) exports for a host and
+dCache uses it for publishing its own namespace via NFS, too. The format
+of the structure is straight forward:
+* Use the directory to be exported as top level key.
+* Align any client specification with the exported directory as another key.
+* List all client options to the export as an array.
+
+```yaml
+dcache::exports_augeas:
+  /:
+    localhost:
+      - rw
+  /pnfs:
+    localhost: &rw
+      - rw
+      - no_root_squash
+    headnode: *rw
+```
+
+Managing this file through Augeas will rely on the default lens shipped
+with Augeas.
