@@ -116,6 +116,10 @@ configuration file is capable of, please refer to "The dCache Book".
     Mappings of users onto uid and gid for authorization in dCache.
   </li>
 
+  <li><code>$exports</code> = <i>'/etc/exports'</i><br />
+    Manage the export of dCache's namespace via nfs.
+  </li>
+
   <li><code>$linkgroupauth</code> = <i>'/etc/dcache/LinkGroupAuthorization.conf'</i><br />
     A dCache specific configuration file that manages which users are able
     to access certain link groups for reading and/or writing.
