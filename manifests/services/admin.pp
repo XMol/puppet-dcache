@@ -14,9 +14,8 @@ define dcache::services::admin (
     }
   )
   
-  dcache::services::generic { "${domain}/admin":
+  dcache::services::generic { 'admin':
     domain     => $domain,
-    service    => 'admin',
     properties => $properties,
   }
 }

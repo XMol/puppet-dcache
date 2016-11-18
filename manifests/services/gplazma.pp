@@ -41,9 +41,8 @@ define dcache::services::gplazma (
     content => epp('dcache/authzdb.epp', { content => $kpwd, }),
   }
   
-  dcache::services::generic { "${domain}/gplazma":
+  dcache::services::generic { 'gplazma':
     domain     => $domain,
-    service    => 'gplazma',
     properties => $properties,
   }
 }

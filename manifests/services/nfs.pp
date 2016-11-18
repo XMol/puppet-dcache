@@ -20,9 +20,8 @@ define dcache::services::nfs (
     ]}),
   }
   
-  dcache::services::generic { "${domain}/nfs":
+  dcache::services::generic { 'nfs':
     domain     => $domain,
-    service    => 'nfs',
     properties => $properties,
   }
 }

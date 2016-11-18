@@ -12,9 +12,8 @@ define dcache::services::poolmanager (
     content => epp('dcache/poolmanager.epp', { content => $poolmanager, })
   }
   
-  dcache::services::generic { "${domain}/poolmanager":
+  dcache::services::generic { 'poolmanager':
     domain     => $domain,
-    service    => 'poolmanager',
     properties => $properties,
   }
 }

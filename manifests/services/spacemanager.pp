@@ -12,9 +12,8 @@ define dcache::services::spacemanager (
     content => epp('dcache/linkgroupauth.epp', { content => $linkgroupauth, }),
   }
   
-  dcache::services::generic { "${domain}/spacemanager":
+  dcache::services::generic { 'spacemanager':
     domain     => $domain,
-    service    => 'spacemanager',
     properties => $properties,
   }
 }
