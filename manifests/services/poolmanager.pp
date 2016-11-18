@@ -1,6 +1,5 @@
 define dcache::services::poolmanager (
   $domain,
-  $layout = $dcache::layout,
   $properties = {},
   $poolmanager = $dcache::poolmanager,
 ) {
