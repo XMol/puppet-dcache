@@ -4,7 +4,7 @@
 # be managed.
 define dcache::services::generic (
   $domain,
-  $service,
+  $service = $title,
   $layout_path = $dcache::layout_path,
   $properties = {},
 ) {
