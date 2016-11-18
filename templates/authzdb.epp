@@ -1,4 +1,4 @@
-<% | Hash $template | -%>
+<% | Hash $content | -%>
 
 # Managed by Puppet.
 
