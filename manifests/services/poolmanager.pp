@@ -1,7 +1,7 @@
 define dcache::services::poolmanager (
   $domain,
   $properties = {},
-  $poolmanager = $dcache::poolmanager,
+  $poolmanager_path = $dcache::poolmanager_path,
 ) {
   require dcache
   
