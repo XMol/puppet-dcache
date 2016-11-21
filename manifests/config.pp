@@ -31,9 +31,11 @@ class dcache::config (
     group          => $group,
     warn           => true,
     ensure_newline => true,
-  } -> concat::fragment { 'dCache layout header':
+  }
+  
+  concat::fragment { 'dCache layout header':
     target  => $layout_path,
-    order   => 5,
+    order   => 05,
     content => epp('dcache/simple.epp', { content => $layout_globals, }),
   }
 }
