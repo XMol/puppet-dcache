@@ -15,9 +15,8 @@ define dcache::services::generic (
   <%= $k %> = <%= $properties[$k] %>
 <% } %>'
   
-  @concat::fragment { "${domain}/${service}":
+  concat::fragment { "${domain}/${service}":
     content => inline_epp($service_template),
     target  => $layout_path,
-    tag     => $domain,
   }
 }
