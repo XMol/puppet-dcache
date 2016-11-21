@@ -29,8 +29,6 @@ class dcache::config (
   concat { $layout_path:
     owner          => $user,
     group          => $group,
-    warn           => true,
-    ensure_newline => true,
   }
   
   concat::fragment { 'dCache layout header':
