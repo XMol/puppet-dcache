@@ -1,7 +1,5 @@
 <% | Hash $content | -%>
-
 # Managed by Puppet.
-
 # Any modifications will be lost with the next Puppet synchronization run!
 
 version = <%= try_get_value($content, 'version', '2.1') %>
