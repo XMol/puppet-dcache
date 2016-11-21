@@ -27,10 +27,10 @@ class dcache::config (
   }
 
   concat { $layout_path:
-    owner           => $user,
-    group           => $group,
-    warn            => true,
-    enforce_newline => true,
+    owner          => $user,
+    group          => $group,
+    warn           => true,
+    ensure_newline => true,
   } -> concat::fragment { 'dCache layout header':
     content => epp('dcache/simple.epp', { content => $layout_globals, }),
   } -> Concat::Fragment <| tag == 'dcache::domain' |>
