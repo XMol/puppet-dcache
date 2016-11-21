@@ -25,20 +25,28 @@ define dcache::services::gplazma (
     content => $gplazma,
   }
   
-  file { $authzdb_path:
-    content => epp('dcache/authzdb.epp', { content => $authzdb, }),
+  if $authzdb != {} {
+    file { $authzdb_path:
+      content => epp('dcache/authzdb.epp', { content => $authzdb, }),
+    }
   }
   
-  file { $gridmap_path:
-    content => epp('dcache/gridmapfile.epp', { content => $gridmap, }),
+  if $gridmap != {} {
+    file { $gridmap_path:
+      content => epp('dcache/gridmapfile.epp', { content => $gridmap, }),
+    }
   }
   
-  file { $vorolemap_path:
-    content => epp('dcache/gridmapfile.epp', { content => $vorolemap, }),
+  if $vorolemap != {} {
+    file { $vorolemap_path:
+      content => epp('dcache/gridmapfile.epp', { content => $vorolemap, }),
+    }
   }
   
-  file { $kpwd_path:
-    content => epp('dcache/authzdb.epp', { content => $kpwd, }),
+  if $kpwd != {} {
+    file { $kpwd_path:
+      content => epp('dcache/authzdb.epp', { content => $kpwd, }),
+    }
   }
   
   dcache::services::generic { 'gplazma':
