@@ -7,8 +7,8 @@ define dcache::services::spacemanager (
   require dcache
   
   file { $linkgroupauth_path:
-    owner => $dcache::user,
-    group => $dcache::group,
+    owner   => $dcache::user,
+    group   => $dcache::group,
     content => epp('dcache/linkgroupauth.epp', { content => $linkgroupauth, }),
   }
   

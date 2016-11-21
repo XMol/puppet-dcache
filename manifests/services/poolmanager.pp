@@ -9,7 +9,7 @@ define dcache::services::poolmanager (
   file { $poolmanager_path:
     owner   => $dcache::user,
     group   => $dcache::group,
-    content => epp('dcache/poolmanager.epp', { content => $poolmanager, })
+    content => epp('dcache/poolmanager.epp', { content => $poolmanager, }),
   }
   
   dcache::services::generic { 'poolmanager':

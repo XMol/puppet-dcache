@@ -1,4 +1,4 @@
-class dcache (  
+class dcache (
   # Need to know which dCache version ought to be installed. Though we rely on
   # external administration to make the packages available.
   $version,
