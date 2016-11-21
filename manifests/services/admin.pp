@@ -8,7 +8,8 @@ define dcache::services::admin (
   
   create_resources('ssh_authorized_key',
     $authorized_keys,
-    { target => $dcache::authorized_keys_path,
+    {
+      target => $dcache::authorized_keys_path,
       user   => $dcache::user,
     }
   )

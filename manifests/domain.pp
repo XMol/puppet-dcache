@@ -2,7 +2,8 @@ define dcache::domain (
   $properties = {},
 ) {
   
-  $domain_template = '[<%= $title %>]
+  $domain_template = '
+[<%= $title %>]
 <% each(sort(keys($properties))) |$k| { -%>
   <%= $k %> = <%= $properties[$k] %>
 <% } %>'
