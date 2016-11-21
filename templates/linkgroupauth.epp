@@ -2,7 +2,7 @@
 # Managed by Puppet.
 # Any modifications will be lost with the next Pupet synchronization run!
 
-<% each(sort(keys($template))) |$group| { -%>
+<% each(sort(keys($content))) |$group| { -%>
   <%- $logins = $template[$group] -%>
 LinkGroup <%= $group %>
   <%- validate_array($logins) -%>

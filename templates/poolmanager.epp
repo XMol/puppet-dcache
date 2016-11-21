@@ -2,25 +2,25 @@
 # Managed by Puppet.
 # Any modifications will be lost with the next Puppet synchronization run!
 
-<% if has_key($template, 'cm') { -%>
+<% if has_key($content, 'cm') { -%>
 # Settings for the Cost Module.
-  <%- each(sort(keys($template['cm']))) |$key| { -%>
-cm set <%= $key %> <%= $template['cm'][$key] %>
+  <%- each(sort(keys($content['cm']))) |$key| { -%>
+cm set <%= $key %> <%= $content['cm'][$key] %>
   <%- } -%>
 <% } -%>
 
-<% if has_key($template, 'rc') { -%>
+<% if has_key($content, 'rc') { -%>
 # Settings for the ReCall module.
-  <%- each(sort(keys($template['rc']))) |$key| { -%>
+  <%- each(sort(keys($content['rc']))) |$key| { -%>
     <%# The syntax for setting 'onerror' is different from all others... -%>
-rc <% if $key != 'onerror' { %>set <% } %><%= $key %> <%= $template['rc'][$key] %>
+rc <% if $key != 'onerror' { %>set <% } %><%= $key %> <%= $content['rc'][$key] %>
   <%- } -%>
 <% } -%>
 
-<% if has_key($template, 'pm') { -%>
+<% if has_key($content, 'pm') { -%>
 # Settings for the Partition Manager.
-  <%- each(sort(keys($template['pm']))) |$part| { -%>
-    <%- $specs = $template['pm'][$part] -%>
+  <%- each(sort(keys($content['pm']))) |$part| { -%>
+    <%- $specs = $content['pm'][$part] -%>
 pm create <% if has_key($specs, 'type') { %>-type=<%= $specs['type'] %> <% } %><%= $part %>
 pm set <%= $part -%>
     <%- each(sort(keys(delete($specs, 'type')))) |$key| { -%>
@@ -30,8 +30,8 @@ pm set <%= $part -%>
 
 <% } -%>
 
-<%# Call for a custom function, that extracts PoolManager entities from the $template argument. -%>
-<% $pm = process_pm_hash($template) -%>
+<%# Call for a custom function, that extracts PoolManager entities from the $content argument. -%>
+<% $pm = process_pm_hash($content) -%>
 # The basic units...
 <% each(sort(keys($pm['units']))) |$uclass| { -%>
   <%- $ulist = $pm['units'][$uclass] -%>
