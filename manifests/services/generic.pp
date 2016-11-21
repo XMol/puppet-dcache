@@ -11,7 +11,7 @@ define dcache::services::generic (
   require dcache
   
   $service_template = '[<%= $domain %>/<%= $service %>]
-<% each(keys(sort($properties))) |$k| { -%>
+<% each(sort(keys($properties))) |$k| { -%>
   <%= $k %> = <%= $properties[$k] %>
 <% } %>'
   
