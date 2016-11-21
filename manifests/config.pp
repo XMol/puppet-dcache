@@ -33,6 +33,7 @@ class dcache::config (
     ensure_newline => true,
   } -> concat::fragment { 'dCache layout header':
     target  => $layout_path,
+    order   => 5,
     content => epp('dcache/simple.epp', { content => $layout_globals, }),
-  } -> Concat::Fragment <| tag == 'dcache::domain' |>
+  }
 }
