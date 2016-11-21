@@ -10,9 +10,9 @@ define dcache::services::generic (
 ) {
   require dcache
   
-  $service_template = '[<%= $domain %>/<% $service %>]
+  $service_template = '[<%= $domain %>/<%= $service %>]
 <% each(keys(sort($properties))) |$k| { -%>
-  <% $k %> = <% $properties[$k] %>
+  <%= $k %> = <%= $properties[$k] %>
 <% } %>'
   
   @concat::fragment { "${domain}/${service}":
