@@ -45,7 +45,7 @@ define dcache::services::gplazma (
   
   if $kpwd != {} {
     file { $kpwd_path:
-      content => epp('dcache/authzdb.epp', { content => $kpwd, }),
+      content => epp('dcache/kpwd.epp', { content => $kpwd, }),
     }
   }
   
