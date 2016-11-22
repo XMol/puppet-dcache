@@ -1,20 +1,20 @@
-<% | Hash $template | -%>
+<% | Hash $content | -%>
 # Managed by Puppet.
 # Any modifications will be gone with the next Puppet synchronization!
 
-version <%= try_get_value($template, 'version', '2.1') %>
+version <%= try_get_value($content, 'version', '2.1') %>
 
 # The direct mapping rules.
-<% if has_key($template, 'mappings') { -%>
-  <%- each(sort(keys($template['mappings']))) |$dn| { -%>
-mapping "<%= $dn %>" <%= $template['mappings'][$dn] %>
+<% if has_key($content, 'mappings') { -%>
+  <%- each(sort(keys($content['mappings']))) |$dn| { -%>
+mapping "<%= $dn %>" <%= $content['mappings'][$dn] %>
   <%- } -%>
 <% } -%>
 
 # the following are the user auth records
-<% if has_key($template, 'logins') { -%>
-  <%- each(sort(keys($template['logins']))) |$login| { -%>
-    <%- $creds = $template['logins'][$login] -%>
+<% if has_key($content, 'logins') { -%>
+  <%- each(sort(keys($content['logins']))) |$login| { -%>
+    <%- $creds = $content['logins'][$login] -%>
 login <%= $login -%>
  <%= $creds['access'] -%>
  <%= $creds['uid'] -%>
@@ -29,9 +29,9 @@ login <%= $login -%>
 <% } -%>
 
 # the following are the user password records
-<% if has_key($template, 'passwds') { -%>
-  <%- each(sort(keys($template['passwds']))) |$login| { -%>
-    <%- $creds = $template['passwds'][$login] -%>
+<% if has_key($content, 'passwds') { -%>
+  <%- each(sort(keys($content['passwds']))) |$login| { -%>
+    <%- $creds = $content['passwds'][$login] -%>
 passwd <%= $login -%>
  <%= $creds['pwdhash'] -%>
  <%= $creds['access'] -%>

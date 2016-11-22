@@ -1,7 +1,7 @@
-<% | Hash $template | -%>
+<% | Hash $content | -%>
 # Managed by Puppet.
 # Any modifications will be gone with the next Puppet synchronization!
 
-<% each(sort(keys($template))) |$k| { -%>
-<%= $k %> = <%= $template[$k] %>
-<% } -%>
+<% each(sort(keys($content))) |$k| { -%>
+<%= $k %> = <%= $content[$k] %>
+<% } %>

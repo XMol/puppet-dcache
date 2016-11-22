@@ -1,14 +1,12 @@
-<% | Hash $template | -%>
-
+<% | Hash $content | -%>
 # Managed by Puppet.
-
 # Any modifications will be lost with the next Puppet synchronization run!
 
-version = <%= try_get_value($template, 'version', '2.1') %>
+version = <%= try_get_value($content, 'version', '2.1') %>
 
-<% each(sort(keys($template))) |$login| { -%>
-  <%- if !($login == 'version') {-%>
-    <%- $creds = $template[$login] -%>
+<% each(sort(keys($content))) |$login| { -%>
+  <%- if $login != 'version' {-%>
+    <%- $creds = $content[$login] -%>
 authorize <%= $login -%>
  <%= $creds['access'] -%>
  <%= $creds['uid'] -%>

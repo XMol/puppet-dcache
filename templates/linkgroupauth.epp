@@ -1,9 +1,9 @@
-<% | Hash $template |-%>
+<% | Hash $content |-%>
 # Managed by Puppet.
 # Any modifications will be lost with the next Pupet synchronization run!
 
-<% each(sort(keys($template))) |$group| { -%>
-  <%- $logins = $template[$group] -%>
+<% each(sort(keys($content))) |$group| { -%>
+  <%- $logins = $content[$group] -%>
 LinkGroup <%= $group %>
   <%- validate_array($logins) -%>
   <%- each($logins) |$login| { -%>
