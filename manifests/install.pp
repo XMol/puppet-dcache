@@ -5,6 +5,9 @@ class dcache::install (
     name   => "dcache-${version}",
   }
   
+  ensure_resource('group', $dcache::group)
+  ensure_resource('user', $dcache::user, { 'group' => $dcache::group, })
+  
   # After installation, we need to potentially change the owner of
   # several directories, where dCache processes need write access.
   if $dcache::user != 'dcache' {
