@@ -2,12 +2,11 @@ define dcache::services::nfs (
   $domain,
   $exports,
   $properties = {},
-  $exports_path = $dcache::exports_path,
 ) {
   require dcache
   
-  augeas { $exports_path:
-    incl    => $exports_path,
+  augeas { $dcache::exports_path:
+    incl    => $dcache::exports_path,
     lens    => 'Exports.lns',
     changes => flatten(map($exports) |$dir, $clients| {[
       "defnode dir dir[. = '${dir}'] '${dir}'",

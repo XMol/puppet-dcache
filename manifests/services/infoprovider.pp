@@ -6,8 +6,6 @@
 define dcache::services::infoprovider (
   $infoprovider = '',
   $tapeinfo = '',
-  $tapeinfo_path = $dcache::tapeinfo_path,
-  $infoprovider_path = $dcache::infoprovider_path,
 ) {
   require dcache
   
@@ -17,13 +15,13 @@ define dcache::services::infoprovider (
   }
   
   if $tapeinfo != '' {
-    file { $tapeinfo_path:
+    file { $dcache::tapeinfo_path:
       source => $tapeinfo,
     }
   }
   
   if $infoprovider != '' {
-    file { $infoprovider_path:
+    file { $dcache::infoprovider_path:
       source => $infoprovider,
     }
   }

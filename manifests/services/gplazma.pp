@@ -6,11 +6,6 @@ define dcache::services::gplazma (
   $kpwd = {},
   $vorolemap = {},
   $properties = {},
-  $gplazma_path = $dcache::gplazma_path,
-  $authzdb_path = $dcache::authzdb_path,
-  $gridmap_path = $dcache::gridmap_path,
-  $kpwd_path = $dcache::kpwd_path,
-  $vorolemap_path = $dcache::vorolemap_path,
 ) {
   require dcache
   
@@ -21,30 +16,30 @@ define dcache::services::gplazma (
   
   # The gplazma.conf is tricky to be managed by Augeas or template and
   # defining it in YAML style doesn't save effort anyway.
-  file { $gplazma_path:
+  file { $dcache::gplazma_path:
     content => $gplazma,
   }
   
   if $authzdb != {} {
-    file { $authzdb_path:
+    file { $dcache::authzdb_path:
       content => epp('dcache/authzdb.epp', { content => $authzdb, }),
     }
   }
   
   if $gridmap != {} {
-    file { $gridmap_path:
+    file { $dcache::gridmap_path:
       content => epp('dcache/gridmapfile.epp', { content => $gridmap, }),
     }
   }
   
   if $vorolemap != {} {
-    file { $vorolemap_path:
+    file { $dcache::vorolemap_path:
       content => epp('dcache/gridmapfile.epp', { content => $vorolemap, }),
     }
   }
   
   if $kpwd != {} {
-    file { $kpwd_path:
+    file { $dcache::kpwd_path:
       content => epp('dcache/kpwd.epp', { content => $kpwd, }),
     }
   }

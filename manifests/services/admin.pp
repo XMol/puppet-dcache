@@ -2,7 +2,6 @@ define dcache::services::admin (
   $domain,
   $authorized_keys,
   $properties = {},
-  $authorized_keys_path = $dcache::authorized_keys_path,
 ) {
   require dcache
   
