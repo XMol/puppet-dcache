@@ -6,7 +6,6 @@
 class dcache::config (
   $user = $dcache::user,
   $group = $dcache::group,
-  $env_path = $dcache::env_path,
   $env = $dcache::env,
   $setup_path = $dcache::setup_path,
   $setup = $dcache::setup,
@@ -19,7 +18,7 @@ class dcache::config (
     group => $group,
   }
   
-  file { $env_path:
+  file { $dcache::params::paths_env:
     content => epp('dcache/simple.epp', { content => $env, }),
   }
 
@@ -28,8 +27,8 @@ class dcache::config (
   }
 
   concat { $layout_path:
-    owner          => $user,
-    group          => $group,
+    owner => $user,
+    group => $group,
   }
   
   concat::fragment { 'dCache layout header':

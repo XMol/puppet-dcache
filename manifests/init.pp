@@ -7,7 +7,6 @@ class dcache (
   
   # A file sourced by dCache on initializiation, so arbitrary environment
   # variables can be set, specifically JAVA and JAVA_HOME.
-  $env_path = $dcache::params::paths_env,
   $env = {},
   # dCache's central dcache.conf file.
   $setup_path = $dcache::params::paths_setup,
