@@ -13,6 +13,7 @@ class dcache::config (
   $layout_path = $dcache::layout_path,
   $layout_globals = $dcache::layout_globals,
 ) {
+  require dcache
   File {
     owner => $user,
     group => $group,
