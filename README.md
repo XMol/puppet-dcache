@@ -6,143 +6,91 @@ Install dCache using this module.
 dCache is a Java program and thus requires Java to be installed. This module
 though neither installs it, nor does it raise any dependency on installed
 Java packages or declared Puppet resources.
+
 ### Database
 Some dCache services require a RDBMS backend, traditionally a PostgreSQL
 instance. Installing Postgres is _not_ part of this module. Instead,
 there is a well developed public Puppet module supported by Puppetlabs
 for managing PostgreSQL installations: [puppetlabs-postgresql](https://github.com/puppetlabs/puppetlabs-postgresql).
 
-
 ## Parameters
-The only mandatory parameter is `version`, which must indicate the (full)
-dVache version (e.g. '2.13.43').
-
-`user` and `group` may be set respectively to change the user and group
-for running dCache's processes. Note that these accounts will _not_ be created
-by this module! Instead, the dCache packages will create a 'dcache' user
-and group, which will be used by default.
-
-This module provides a large number of additional parameters, though virtually
-only a fraction of them are actually used. In general, there are five
-parameters for each dCache configuration file: one that contains the (fully
-qualified) path and up to four others, each indicating a different means for
-managing the targetted file.
-* `*_source`  
-Source the configuration file from somewhere. This must be url that is
-valid for the Puppet `file` resource type, which probably requires that
-the source is accessible from the Puppet master in some way.
-* `*_content`  
-With this parameter the explicit content of a configuration file can be
-set.
-* `*_template` or `*_augeas`  
-These parameters will evaluate a hash structure, specific to each configuration
-file (see File_stuct_def.md), and manage the target either with a template or
-by employing Augeas (which must be installed, since this module doesn't require
-it at any point). The crucial difference is, that with templates the target's
-content is strictly enforced, whereas with Augeas modifications and additions
-can be done by system administrators (as long as they don't conflict with the
-parameter, naturally). As a side effect, the templates generally generate files
-that are cleaner and easier to comprehend.
-
-These parameter sets are evaluated in the same order the are listed before
-and only the first non-empty value is applied. That means, that a target
-will _always_ and _only_ be sourced, when the `*_source` parameter is set, even
-though other parameters might have been supplied, too. Likewise have
-`*_content` parameters higher priority over `*_template`, which in turn
-beat `*_augeas`. This order reflects the difficulties and risks inherent
-to the respective management tool, too. Ie. sourcing a configuration file
-is the most straight forward solution with the least amount of risk, but it
-also provides the least flexibility. Augeas on the other hand will ensure
-certain settings in the configuration files, while it also allows
-administrators to add further customizations, e.g. temporary situations
-like downtimes or simply to experiment.
-
-Lastly, note that whenever the path of a configuration file is altered
-with one of these parameters, only Puppet will notice it. The matching
-dCache property must also be changed explicitly through either the central
-configuration of the layout file!
-
-### Manageable configuration files
-These are the dCache configuration files currently manageable using this module
-and their respective default paths. Details on how objects must be structed
-when using `*_template` or `*_augeas` parameters are provided in
-File_struct_def.md. For more documentation on what each respective
-configuration file is capable of, please refer to "The dCache Book".
+This module is service oriented using defined types for domains and dCache
+services. Hence, the module itself only exposes parameters to change global
+settings like paths to configuration files and the content for the dcache.env
+and dcache.conf files as well as a section to be included in any layout file.
 <ul>
-  <li><code>$env</code> = <i>'/etc/dcache.env'</i><br />
-    Using this file, environment variables (like `JAVA_HOME` and `JAVA`) can be
-    set for dCache processes.
+  <li><b><code>version</code></b><br />
+    The only mandatory parameter, which must indicate the (full) desired
+    dCache version (e.g. '2.13.43').
   </li>
-
-  <li><code>$setup</code> = <i>'/etc/dcache/dcache.conf'</i><br />
-    The central dCache configuration file.
+  <li><code>user = <i>dcache</i></code>, <code>group = <i>dcache</i></code><br />
+    <code>user</code>, <code>group</code> may be set respectively to change
+    the user and group for running dCache's processes. Note that the dcache
+    rpm will create a  'dcache' user and group account anyway. Though this
+    module will set the ownership of all files and directories for dCache
+    in post.
   </li>
-
-  <li><code>$layout</code> = <i>'/etc/dcache/layouts/${::hostname}.conf'</i><br />
-    The layout file for a node.
+  <li><code>env = <i>{}</i></code><br />
+    Using this parameter, environment variables (like `JAVA_HOME` and `JAVA`)
+    can be set for dCache processes.
   </li>
-
-  <li><code>$poolmanager</code> = <i>'/var/lib/dcache/config/poolmanager.conf'</i><br />
-    Provide persistent configuration to dCache's PoolManager service
-    using this file.
+  <li><code>setup = <i>{}</i></code><br />
+    Similar to `$env`, a hash of properties will be written into dCache's
+    central configuration file (dcache.conf).
   </li>
-
-  <li><code>$authorized_keys</code> = <i>'/etc/dcache/admin/authorized_keys2'</i><br />
-    Key management file for access to the administration interface using
-    ssh.<br />
-    The <code>*_template</code> variant is <b>not</b> supported!
+  <li><code>layout_globals = <i>{}</i></code><br />
+    Here one may specify properties that are to be included in all layout
+    files throughout the dCache setup.
   </li>
-
-  <li><code>$gplazma</code> = <i>'/etc/dcache/gplazma.conf'</i><br />
-    Configure the plugins for dCache's gPlazma service.<br />
-    <b>Only</b> supported through <code>$gplazma_source</code> and
-    <code>$gplazma_content</code>!
+  <li><code>poolmanager_path = <i>/var/lib/dcache/config/poolmanager.conf</i></code><br />
+    The fully qualified path to the configuration file of the poolmanager service.
   </li>
-
-  <li><code>$kpwd</code> = <i>'/etc/dcache/dcache.kpwd'</i><br />
-    A dCache specific file for managing user accounts. It provides several
-    methods for user recognition and mapping.
+  <li><code>authorized_keys_path = <i>/etc/dcache/admin/authorized_keys</i></code><br />
+    The fully qualified path to the authorized_keys file used by the admin service.
   </li>
-
-  <li><code>$gridmap</code> = <i>'/etc/grid-security/grid-mapfile'</i><br />
-    Mappings of user DN's onto user names.
+  <li><code>gplazma_path = <i>/etc/dcache/gplazma.conf</i></code><br />
+    The fully qualified path to the configuration file of the gplazma service.
   </li>
-
-  <li><code>$vorolemap</code> = <i>'/etc/grid-security/grid-vorolemap'</i><br />
-    Mappings of user DNs and/or VOMS FQANs onto user names.
+  <li><code>authzdb_path = <i>/etc/grid-security/authzdb</i></code><br />
+    The fully qualified path to the authzdb file, used by gplazma.
   </li>
-
-  <li><code>$authzdb</code> = <i>'/etc/grid-security/storage_authzdb'</i><br />
-    Mappings of users onto uid and gid for authorization in dCache.
+  <li><code>gridmap_path = <i>/etc/grid-security/grid-mapfile</i></code><br />
+    The fully qualified path to the gridmap file, used by gplazma.
   </li>
-
-  <li><code>$exports</code> = <i>'/etc/exports'</i><br />
-    Manage the export of dCache's namespace via nfs.
+  <li><code>vorolemap_path = <i>/etc/grid-security/grid-vorolemap</i></code><br />
+    The fully qualified path to the vorolemap file, used by gplazma.
   </li>
-
-  <li><code>$linkgroupauth</code> = <i>'/etc/dcache/LinkGroupAuthorization.conf'</i><br />
-    A dCache specific configuration file that manages which users are able
-    to access certain link groups for reading and/or writing.
+  <li><code>kpwd_path = <i>/etc/dcache/dcache.kpwd</i></code><br />
+    The fully qualified path to the kpwd file, used by gplazma.
   </li>
-
-  <li><code>$tapeinfo</code> = <i>'/etc/dcache/tape-info.xml'</i><br />
-    A supplementary xml file providing information of the tape backend
-    to dCache for publishing in the GLUE information system.<br />
-    <b>Only</b> supported through <code>$tapeinfo_source</code> and
-    <code>$tapeinfo_template</code>!
+  <li><code>tapeinfo_path = <i>/etc/dcache/tape-info.xml</i></code><br />
+    The fully qualified path to the tape-info.xml file, used by the info service.
   </li>
-
-  <li><code>$infoprovider</code> = <i>'/etc/dcache/info-provider.xml'</i><br />
-    A schematic for dCache about which site-specific information will
-    be published through GLUE. Service details are gathered from dCache
-    automatically out-of-the-box in most aspects.<br />
-    <b>Only</b> supported through <code>$infoprovider_source</code> and
-    <code>$infoprovider_template</code>!
+  <li><code>infoprovider_path = <i>/etc/dcache/info-provider.xml</i></code><br />
+    The fully qualified path to the info-provider.xml file, used by the info service.
+  </li>
+  <li><code>exports_path = <i>/etc/exports</i></code><br />
+    The fully qualified path to the exports file, used by the nfs service.
+  </li>
+  <li><code>linkgroupauth_path = <i>/etc/dcache/LinkGroupAuthorization.conf</i></code><br />
+    The fully qualified path to the configuration file of the linkgroupauth_path service.
   </li>
 </ul>
+Note that, if you deviate from the default paths here, you will have to
+include the appropriate property in the dcache.conf or layout file, too, to
+make dCache aware of it - this module does not take care of that!
+
+## Resource types
+This module provides the `domain` and `services::generic`
+resource types to manage the layout of the dCache services. For a couple of
+services there are specialized resource types, which allow administrators to
+manage related configuration files at the same time.
+
+Because explaining the available resource types and how to utilize them
+would expand this document by a lot, it was [seperated](resource_types.md).
 
 ## Examples
-Examples can be found in File_struct_def.md for configuration files.
+Examples can be found in [File_struct_def](File_struct_def.md) for configuration files.
 
 Since this module is designed with an
 [ENC](https://www.google.de/#q=puppet%20external%20node%20classifier)
