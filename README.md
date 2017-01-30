@@ -25,10 +25,12 @@ and dcache.conf files as well as a section to be included in any layout file.
   </li>
   <li><code>user = <i>dcache</i></code>, <code>group = <i>dcache</i></code><br />
     <code>user</code>, <code>group</code> may be set respectively to change
-    the user and group for running dCache's processes. Note that the dcache
-    rpm will create a  'dcache' user and group account anyway. Though this
-    module will set the ownership of all files and directories for dCache
-    in post.
+    the user and group for running dCache's processes. Note that the dCache
+    rpm will create a 'dcache' user and group account in any case.
+    This class will not create the user or group in case they don't exist yet
+    on the system. The reason for this is, that Puppet cannot manage the same
+    resource in different places in parallel and we don't want to interfere
+    for other user management facilities.
   </li>
   <li><code>env = <i>{}</i></code><br />
     Using this parameter, environment variables (like `JAVA_HOME` and `JAVA`)
