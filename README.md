@@ -30,7 +30,7 @@ and dcache.conf files as well as a section to be included in any layout file.
     This class will not create the user or group in case they don't exist yet
     on the system. The reason for this is, that Puppet cannot manage the same
     resource in different places in parallel and we don't want to interfere
-    for other user management facilities.
+    with other user management facilities.
   </li>
   <li><code>env = <i>{}</i></code><br />
     Using this parameter, environment variables (like `JAVA_HOME` and `JAVA`)
@@ -91,8 +91,15 @@ manage related configuration files at the same time.
 Because explaining the available resource types and how to utilize them
 would expand this document by a lot, it was [seperated](resource_types.md).
 
+## dCache as a service
+This module does not define dCache as a service. The main reason is, that
+a running state is not precisely defined, when the service is split over
+independent processes, ie. domains. Maybe in the future we will define
+the individual domains as a service on operating system level (code
+contribution is welcome).
+
 ## Examples
-Examples can be found in [File_struct_def](File_struct_def.md) for configuration files.
+Examples can be found in [file_struct_def](file_struct_def.md) for configuration files.
 
 Since this module is designed with an
 [ENC](https://www.google.de/#q=puppet%20external%20node%20classifier)
