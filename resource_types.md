@@ -80,6 +80,18 @@ is no default value stated with them.
   </li>
   
   <li>
+    <b>dcache::services::pool</b><br />
+    <i>
+      poolname = "$title"<br />
+      size<br />
+      domain = "${title}Domain"
+    </i>
+    <p>
+      This is syntactic sugar to define a pool more easily.
+    </p>
+  </li>
+    
+  <li>
     <b>dcache::services::poolmanager</b><br />
     <i>poolmanager</i>
     <p>
