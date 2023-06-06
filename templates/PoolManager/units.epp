@@ -1,0 +1,12 @@
+<% | Hash $units | -%>
+# The basic units...
+<%- each(sort(keys($units))) |$uclass| { -%>
+  <%- $ulist = $units[$uclass] -%>
+  <%- unless empty($ulist) { -%>
+    <%- each(sort($ulist)) |$unit| { -%>
+psu create unit -<%= $uclass %> <%= $unit %>
+    <%- } -%>
+
+  <%- } -%>
+<%- } -%>
+

@@ -1,0 +1,26 @@
+<% | Hash $links | -%>
+# The links...
+<% each(sort(keys($links))) |$link|{ -%>
+psu create link <%= $link -%>
+  <%- $lspecs = $links[$link] -%>
+  <%- each(sort($lspecs['ugroups'])) |$ugroup| { -%>
+  <%= $ugroup -%>
+  <%- } -%>
+
+  <%- unless empty($lspecs['prefs']) { -%>
+psu set link <%= $link -%>
+  <%# Treat the 'section' preferrence setting separately. -%>
+    <%- each(sort(keys($lspecs['prefs'] - 'section'))) |$pref| { -%>
+  -<%= $pref %>pref=<%= $lspecs['prefs'][$pref] -%>
+    <%- } -%>
+    <%- then($lspecs['prefs']['section']) |$section| { -%>
+  -section=<%= $section %>
+    <%- } -%>
+  <%- } -%>
+
+  <%- each(sort($lspecs['pgroups'])) |$pgroup|{ -%>
+psu add link <%= $link %> <%= $pgroup %>
+  <%- } -%>
+
+<% } %>
+

@@ -1,0 +1,33 @@
+lookup_options:
+  dcache::setup:
+    merge: hash
+  dcache::layout:
+    merge: deep
+
+dcache::paths:
+  etc: /etc/dcache
+  grid-security: /etc/grid-security
+  lib: /var/lib/dcache
+
+dcache::setup:
+  admin.paths.authorized-keys: "%{lookup('dcache::paths.etc')}/admin/authorized_keys2"
+  dcache.layout.dir: "%{lookup('dcache::paths.etc')}/layouts"
+  dcache.log.dir: /var/log/dcache
+  dcache.paths.admin: "%{lookup('dcache::paths.etc')}/admin"
+  dcache.paths.etc: "%{lookup('dcache::paths.etc')}"
+  dcache.paths.grid-security: "%{lookup('dcache::paths.grid-security')}"
+  dcache.paths.httpd: "%{lookup('dcache::paths.lib')}/httpd"
+  dcache.paths.lib: "%{lookup('dcache::paths.lib')}"
+  dcache.paths.setup: "%{lookup('dcache::paths.etc')}/dcache.conf"
+  gplazma.configuration.file: "%{lookup('dcache::paths.etc')}/gplazma.conf"
+  gplazma.authzdb.file: "%{lookup('dcache::paths.grid-security')}/storage-authzdb"
+  gplazma.banfile.path: "%{lookup('dcache::paths.etc')}/ban.conf"
+  gplazma.gridmap.file: "%{lookup('dcache::paths.grid-security')}/grid-mapfile"
+  gplazma.kpwd.file: "%{lookup('dcache::paths.etc')}/dcache.kpwd"
+  gplazma.multimap.file: "%{lookup('dcache::paths.etc')}/multi-mapfile"
+  gplazma.vorolemap.file: "%{lookup('dcache::paths.grid-security')}/grid-vorolemap"
+  poolmanager.setup.file: "%{lookup('dcache::paths.lib')}/config/poolmanager.conf"
+  info-provider.configuration.site-specific.location: "%{lookup('dcache::paths.etc')}/info-provider.xml"
+  info-provider.paths.tape-info: /usr/share/dcache/xml/tape-info-empty.xml
+  nfs.export.file: /etc/exports
+  spacemanager.authz.link-group-file-name: "%{lookup('dcache::paths.etc')}/LinkGroupAuthorization.conf"

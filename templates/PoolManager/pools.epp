@@ -1,0 +1,6 @@
+<% | Array $pools | -%>
+# All pools
+<% each(sort($pools)) |$pool| { -%>
+psu create pool <%= $pool %>
+<% } -%>
+

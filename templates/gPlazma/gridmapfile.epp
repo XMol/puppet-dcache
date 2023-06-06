@@ -1,0 +1,18 @@
+<% | Dcache::Gplazma::Gridmap $content | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+<%# Find out whether we're writing a basic gridmap file or a vorrolemap file -%>
+<% if any($content) |$mapping| { 'fqan' in $mapping } { -%>
+  <%- each($content) |$mapping| { -%>
+    <%- if 'fqan' in $mapping { -%>
+"<%= $mapping['dn'] -%>" "<%= $mapping['fqan'] %>" <%= $mapping['login'] %>
+    <%- } else { -%>
+"<%= $mapping['dn'] -%>" "" <%= $mapping['login'] %>
+    <%- } -%>
+  <%- } -%>
+<% } else { -%>
+  <%- each($content) |$mapping| { -%>
+"<%= $mapping['dn'] -%>" <%= $mapping['login'] %>
+  <%- } -%>
+<% } -%>

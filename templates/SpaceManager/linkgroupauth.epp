@@ -1,0 +1,11 @@
+<% | Hash[String[1], Array[String[1]]] $content |-%>
+# Managed by Puppet.
+# Any modifications will be lost with the next Puppet synchronization run!
+
+<% each($content) |$group, $logins| { -%>
+LinkGroup <%= $group %>
+  <%- each($logins) |$login| { -%>
+  <%= $login %>
+  <%- } -%>
+
+<% } %>

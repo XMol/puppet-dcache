@@ -1,0 +1,15 @@
+<% | Dcache::Gplazma::Authzdb $content | -%>
+# Managed by Puppet.
+# Any modifications will be lost with the next Puppet synchronization run!
+
+version <%= lest($content['version']) || { '2.1' } %>
+
+<% each($content - 'version') |$login, $creds| { -%>
+authorize <%= $login -%>
+ <%= $creds['access'] -%>
+ <%= $creds['uid'] -%>
+ <%= join($creds['gids'], ',') -%>
+ <%= $creds['home'] -%>
+ <%= $creds['root'] -%>
+ <%= lest($creds['extra']) || { '/' } %>
+<% } %>
