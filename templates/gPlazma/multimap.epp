@@ -1,0 +1,7 @@
+<% | Dcache::Gplazma::Multimap $content | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+<% each($content) |$mapping_principle, $addendum| { -%>
+<%= $mapping_principle %>    <%= $addendum.join(' ') %>
+<% } -%>

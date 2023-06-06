@@ -1,22 +1,27 @@
-# Define a generic dCache service, that does nothing special,
-# just add a line to the layouts file and possibly add
-# some properties. Ie. no dedicated configuration file need to
-# be managed.
+# @summary Define a generic dCache service in the layout file.
+#
+# @api private
+#
+# @param domain
+#   The domain this service is hosted by.
+# @param properties
+#   The properties of this service instance.
+# @param service
+#   Which service needs to be configured.
+#
 define dcache::services::generic (
-  $domain,
-  $service = $title,
-  $layout_path = $dcache::layout_path,
-  $properties = {},
+  String[1] $domain,
+  String[1] $service = $title,
+  Dcache::Layout::Properties $properties = {},
 ) {
-  require dcache
-  
-  $service_template = '[<%= $domain %>/<%= $service %>]
-<% each(sort(keys($properties))) |$k| { -%>
-  <%= $k %> = <%= $properties[$k] %>
-<% } %>'
-  
+  require dcache::install
+
   concat::fragment { "${domain}/${service}":
-    content => inline_epp($service_template),
-    target  => $layout_path,
+    content => inline_epp(@(EOT)),
+      [<%= $domain %>/<%= $service %>]
+      <% each($properties) |$k, $v| { -%>
+        <%= $k %> = <%= $v %>
+      <% } -%>
+      | EOT
   }
 }

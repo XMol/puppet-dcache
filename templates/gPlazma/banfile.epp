@@ -1,0 +1,21 @@
+<% | Dcache::Gplazma::Banfile $content | -%>
+# MANAGED BY PUPPET
+
+# Following aliases are built into dCache gPlazma and
+#   can be used freely even without these definitions.
+alias dn=org.globus.gsi.gssapi.jaas.GlobusPrincipal
+alias kerberos=javax.security.auth.kerberos.KerberosPrincipal
+alias fqan=org.dcache.auth.FQANPrincipal
+alias name=org.dcache.auth.LoginNamePrincipal
+
+<% if 'aliases' in $content { -%>
+# Custom aliases
+<%   $content['aliases'].each |$alias, $principal| { -%>
+alias <%= $alias %>=<%= $principal %>
+<%   } -%>
+
+<% } -%>
+<% $content['bans'].each |$ban| { -%>
+<%  [$principal, $value] = Array($ban)[0] -%>
+ban <%= $principal %>:<%= $value %>
+<% } -%>

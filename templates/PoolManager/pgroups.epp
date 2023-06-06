@@ -1,0 +1,10 @@
+<% | Hash $pgroups | -%>
+# The pool groups...
+<% each(sort(keys($pgroups))) |$pgroup| { -%>
+psu create pgroup <%= $pgroup %>
+  <%- each(sort($pgroups[$pgroup])) |$pool| { -%>
+psu addto pgroup <%= $pgroup %> <%= $pool %>
+  <%- } -%>
+
+<% } -%>
+

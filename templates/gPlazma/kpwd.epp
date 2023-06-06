@@ -1,0 +1,29 @@
+<% | Dcache::Gplazma::Kpwd $content | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+version <%= $content['version'] %>
+
+<% then($content['mappings']) |$mappings| { -%>
+# The direct mapping rules.
+  <%- each($mappings) |$dn, $role| { -%>
+mapping "<%= $dn %>" <%= $role %>
+  <%- } -%>
+
+<% } -%>
+<% then($content['logins']) |$logins| { -%>
+# the following are the user auth records
+  <%- each($logins) |$login, $creds| { -%>
+login <%= "${login} ${creds['access']} ${creds['uid']} ${creds['gid']} ${creds['home']} ${creds['root']}" %><%= lest($creds['extra']) || { ' /' } %>
+    <%- each($creds['dns']) |$dn| { -%>
+  <%= $dn %>
+    <%- } -%>
+
+  <%- } -%>
+<% } -%>
+<% then($content['passwds']) |$passwds| { -%>
+# the following are the user password records
+  <%- each($passwds) |$login, $creds| { -%>
+passwd <%= "${login} ${creds['pwdhash']} ${creds['access']} ${creds['uid']} ${creds['gid']} ${creds['home']} ${creds['root']}" %><%= lest($creds['extra']) || { ' /' } %>
+  <%- } -%>
+<% } -%>

@@ -1,39 +1,33 @@
-# This class will manage the dcache.env file and dcache.conf.
-# Other configuration files are managed by the respective
-# service resource types. The layout file will get its
-# global settings here, but domains and services are coming
-# from the resource types.
-class dcache::config (
-  $user = $dcache::user,
-  $group = $dcache::group,
-  $env = $dcache::env,
-  $setup_path = $dcache::setup_path,
-  $setup = $dcache::setup,
-  $layout_path = $dcache::layout_path,
-  $layout_globals = $dcache::layout_globals,
-) {
-  require dcache
-  File {
-    owner => $user,
-    group => $group,
-  }
-  
-  file { $dcache::params::paths_env:
-    content => epp('dcache/simple.epp', { content => $env, }),
-  }
+# @summary Manage the `dcache.env` and `dcache.conf` files.
+#
+# @api private
+#
+# @note
+#   Other configuration files are managed by the respective service resource types.
+#
+class dcache::config () {
+  require dcache::install
 
-  file { $setup_path:
-    content => epp('dcache/simple.epp', { content => $setup, }),
-  }
+  file {
+    '/etc/dcache.env':
+      content => inline_epp(@(EOT)),
+        # Managed by Puppet.
+        # Any modifications will be gone with the next Puppet synchronization!
 
-  concat { $layout_path:
-    owner => $user,
-    group => $group,
-  }
-  
-  concat::fragment { 'dCache layout header':
-    target  => $layout_path,
-    order   => '05',
-    content => epp('dcache/simple.epp', { content => $layout_globals, }),
+        <% each($dcache::env) |$k, $v| { -%>
+        <%= $k %> = <%= $v %>
+        <% } %>
+        | EOT
+    ;
+    lookup('dcache::setup."dcache.paths.setup"', Stdlib::Unixpath):
+      content => inline_epp(@(EOT)),
+        # Managed by Puppet.
+        # Any modifications will be gone with the next Puppet synchronization!
+
+        <% each($dcache::setup) |$k, $v| { -%>
+        <%= $k %> = <%= $v %>
+        <% } %>
+        | EOT
+    ;
   }
 }

@@ -1,0 +1,10 @@
+<% | Hash $ugroups | -%>
+# The unit groups...
+<% each(sort(keys($ugroups))) |$ugroup| { -%>
+psu create ugroup <%= $ugroup %>
+  <%- each(sort($ugroups[$ugroup])) |$unit| { -%>
+psu addto ugroup <%= $ugroup %> <%= $unit %>
+  <%- } -%>
+
+<% } -%>
+

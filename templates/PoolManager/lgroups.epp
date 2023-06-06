@@ -1,0 +1,14 @@
+<% | Hash $lgroups | -%>
+# The link groups...
+<% each(sort(keys($lgroups))) |$lgroup| { -%>
+psu create linkGroup <%= $lgroup %>
+  <%- $lgspecs = $lgroups[$lgroup] -%>
+  <%- each(sort(keys($lgspecs['allowances']))) |$key| { -%>
+psu set linkGroup <%= $key %>Allowed <%= $lgroup %> <%= $lgspecs['allowances'][$key] %>
+  <%- } -%>
+  <%- each(sort($lgspecs['links'])) |$link| { -%>
+psu addto linkGroup <%= $lgroup %> <%= $link %>
+  <%- } -%>
+
+<% } %>
+
