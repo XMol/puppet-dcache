@@ -4,33 +4,33 @@ Puppet::Functions.create_function(:'dcache::hash_to_psu') do
 
   local_types do
     type 'Units = Struct[{
-      Optional[store]    => Array[String[1]],
-      Optional[net]      => Array[String[1]],
-      Optional[protocol] => Array[String[1]],
-      Optional[dcache]   => Array[String[1]],
+      Optional[store]    => Array[String],
+      Optional[net]      => Array[String],
+      Optional[protocol] => Array[String],
+      Optional[dcache]   => Array[String],
     }]'
     # Lists of pools may be nested arbitrarily deep within other lists
-    type 'Pgroup = Array'
+    type 'Pgroup = Array[Variant[String, Pgroup]]'
     type 'InputLink = Struct[{
-      Optional[ugroups]   => Hash[String[1], Units],
-      Optional[pgroups]   => Hash[String[1], Pgroup],
+      Optional[ugroups]   => Hash[String, Units],
+      Optional[pgroups]   => Hash[String, Pgroup],
       Optional[prefs]     => Struct[{
         Optional[read]    => Integer[0],
         Optional[write]   => Integer[0],
         Optional[cache]   => Integer[0],
         Optional[p2p]     => Integer,
-        Optional[section] => String[1],
+        Optional[section] => String,
       }]
     }]'
     type 'OutputLink = Struct[{
-      Optional[ugroups]   => Array[String[1]],
-      Optional[pgroups]   => Array[String[1]],
+      Optional[ugroups]   => Array[String],
+      Optional[pgroups]   => Array[String],
       Optional[prefs]     => Struct[{
         Optional[read]    => Integer[0],
         Optional[write]   => Integer[0],
         Optional[cache]   => Integer[0],
         Optional[p2p]     => Integer,
-        Optional[section] => String[1],
+        Optional[section] => String,
       }]
     }]'
     type 'InputLgroup = Struct[{
@@ -41,7 +41,7 @@ Puppet::Functions.create_function(:'dcache::hash_to_psu') do
         Optional[custodial] => Boolean,
         Optional[output]    => Boolean,
       }],
-      Optional[links]      => Hash[String[1], InputLink],
+      Optional[links]      => Hash[String, InputLink],
     }]'
     type 'OutputLgroup = Struct[{
       Optional[allowances] => Struct[{
@@ -51,7 +51,7 @@ Puppet::Functions.create_function(:'dcache::hash_to_psu') do
         Optional[custodial] => Boolean,
         Optional[output]    => Boolean,
       }],
-      Optional[links]      => Array[String[1]],
+      Optional[links]      => Array[String],
     }]'
   end
 
@@ -62,19 +62,19 @@ Puppet::Functions.create_function(:'dcache::hash_to_psu') do
   dispatch :main do
     param 'Struct[{
       Optional[units]   => Units,
-      Optional[ugroups] => Hash[String[1], Units],
-      Optional[pools]   => Array[String[1]],
-      Optional[pgroups] => Hash[String[1], Pgroup],
-      Optional[links]   => Hash[String[1], InputLink],
-      Optional[lgroups] => Hash[String[1], InputLgroup],
+      Optional[ugroups] => Hash[String, Units],
+      Optional[pools]   => Array[String],
+      Optional[pgroups] => Hash[String, Pgroup],
+      Optional[links]   => Hash[String, InputLink],
+      Optional[lgroups] => Hash[String, InputLgroup],
     }]', :content
     return_type 'Struct[{
       units   => Units,
-      ugroups => Hash[String[1], Array[String[1]]],
-      pools   => Array[String[1]],
-      pgroups => Hash[String[1], Array[String[1]]],
-      links   => Hash[String[1], OutputLink],
-      lgroups => Hash[String[1], OutputLgroup],
+      ugroups => Hash[String, Array[String]],
+      pools   => Array[String],
+      pgroups => Hash[String, Array[String]],
+      links   => Hash[String, OutputLink],
+      lgroups => Hash[String, OutputLgroup],
     }]'
   end
 
@@ -108,7 +108,7 @@ Puppet::Functions.create_function(:'dcache::hash_to_psu') do
     # For each new pool group, add all pools to the list of all pools.
     new_pgroup = ->(pgroup, plist) {
       all_pgroups[pgroup] = plist
-      all_pools += plist
+      all_pools += plist.flatten.delete_if { |p| p.start_with?('@') }
     }
 
     # links are broken down into three subparts:

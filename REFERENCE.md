@@ -73,7 +73,7 @@ order to not interfere with other user management facilities.
 
 ##### Hiera example of a crippled setup for simplicity's sake
 
-```yaml
+```puppet
 classes:
   - dcache
 dcache::setup:
@@ -173,43 +173,44 @@ The complete layout of dCache domains and services (of the current node).
 
 ### <a name="dcachehash_to_psu"></a>`dcache::hash_to_psu`
 
+Type: Ruby 4.x API
+
 Transform the psu input data into fully qualified information about all
 entities relevant to the Pool Selection Unit.
 
-#### Type
+#### `dcache::hash_to_psu(Struct[{
+      Optional[units]   => Units,
+      Optional[ugroups] => Hash[String, Units],
+      Optional[pools]   => Array[String],
+      Optional[pgroups] => Hash[String, Pgroup],
+      Optional[links]   => Hash[String, InputLink],
+      Optional[lgroups] => Hash[String, InputLgroup],
+    }] $content)`
 
-Ruby 4.x API
+Transform the psu input data into fully qualified information about all
+entities relevant to the Pool Selection Unit.
 
-#### Parameters
+Returns: `Struct[{
+      units   => Units,
+      ugroups => Hash[String, Array[String]],
+      pools   => Array[String],
+      pgroups => Hash[String, Array[String]],
+      links   => Hash[String, OutputLink],
+      lgroups => Hash[String, OutputLgroup],
+    }]` Transformed, extensive and fully qualified data for PoolManager.
 
 ##### `content`
 
-```puppet
-Struct[{
+Data type: `Struct[{
       Optional[units]   => Units,
-      Optional[ugroups] => Hash[String[1], Units],
-      Optional[pools]   => Array[String[1]],
-      Optional[pgroups] => Hash[String[1], Pgroup],
-      Optional[links]   => Hash[String[1], InputLink],
-      Optional[lgroups] => Hash[String[1], InputLgroup],
-}]
-```
+      Optional[ugroups] => Hash[String, Units],
+      Optional[pools]   => Array[String],
+      Optional[pgroups] => Hash[String, Pgroup],
+      Optional[links]   => Hash[String, InputLink],
+      Optional[lgroups] => Hash[String, InputLgroup],
+    }]`
 
-#### Returns
-
-Transformed, extensive and fully qualified data for PoolManager.
-
-```puppet
-Struct[{
-      units   => Units,
-      ugroups => Hash[String[1], Array[String[1]]],
-      pools   => Array[String[1]],
-      pgroups => Hash[String[1], Array[String[1]]],
-      links   => Hash[String[1], OutputLink],
-      lgroups => Hash[String[1], OutputLgroup],
-}]
-```
-
+The streamlined input data.
 
 ## Data types
 
@@ -275,7 +276,7 @@ The banfile may contain aliases and bans as simple mappings.
 
 ##### Hiera style
 
-```yaml
+```puppet
 dcache::layout:
   gplazmaDomain:
     gplazma:
@@ -369,7 +370,10 @@ Validate the content of the multi-mapfile of gPlazma.
 Alias of
 
 ```puppet
-Hash[Pattern[/\A(dn|email|entitlement|fqan|gid|group|kerberos|oidc|oidcgrp|op|uid|username):/], Array[Pattern[/\A(dn|email|entitlement|fqan|gid|group|kerberos|oidc|oidcgrp|op|uid|username):/]]]
+Hash[Pattern[/\A(dn|email|entitlement|fqan|gid|group|kerberos|oidc|oidcgrp|op|uid|username):/], Hash[
+    Enum['dn','email','entitlement','fqan','gid','group','kerberos','oidc','oidcgrp','op','uid','username'],
+    Variant[Integer, String]
+  ]]
 ```
 
 ### <a name="dcachelayout"></a>`Dcache::Layout`

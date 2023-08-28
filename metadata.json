@@ -1,0 +1,33 @@
+{
+  "name": "puppet-dcache",
+  "version": "8.0.0",
+  "author": "Xavier Mol",
+  "summary": "Manage dCache application",
+  "license": "GNU GPLv3",
+  "source": "https://github.com/XMol/puppet-dcache",
+  "project_page": "https://github.com/XMol/puppet-dcache",
+  "issues_url": "https://github.com/XMol/puppet-dcache/issues",
+  "dependencies": [
+    { "name": "puppetlabs/concat" }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": ["7", "8"]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": ["7", "8"]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": ["7"]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.0.0"
+    }
+  ]
+}
