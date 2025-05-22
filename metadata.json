@@ -8,16 +8,19 @@
   "project_page": "https://github.com/XMol/puppet-dcache",
   "issues_url": "https://github.com/XMol/puppet-dcache/issues",
   "dependencies": [
-    { "name": "puppetlabs/concat" }
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 7.0.0"
+    }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["7", "8"]
+      "operatingsystemrelease": ["7", "8", "9"]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": ["7", "8"]
+      "operatingsystemrelease": ["7", "8", "9"]
     },
     {
       "operatingsystem": "Scientific",
