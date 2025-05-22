@@ -8,10 +8,13 @@ All of the following resource types accept the `properties` parameter &ndash;
 a hash of key-value-pairs &ndash; that will be kept in the layout files with
 their respective entities. Also, all of them *require* the `domain` parameter
 to be set. Though this is done automatically when defining services
-though the `$dcache::layout` parameter.
+through the `$dcache::layout` parameter.
 
 Hence, only the additionally supported parameters will be listed and
 they are mandatory if there is no default value stated with them.
+
+Examples may be reprsented as Puppet or YAML code. In the latter case,
+we presume Hiera parses the YAML for Puppet.
 
 ## `dcache::services::generic`
 
@@ -49,7 +52,8 @@ utilization and the file will be managed with Augeas behind the scenes.
         'type'           => Optional[Enum[
           'ssh-dss', 'ssh-rsa',
           'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384', 'ecdsa-sha2-nistp521',
-          'ssh-ed25519', 'dsa', 'ed25519', 'rsa',
+          'ssh-ed25519', 'ed25519',
+          'dsa', 'rsa',
         ]],
       }]
   ]
@@ -189,6 +193,32 @@ provided verbatim.
   ```
   Similarly to `$gridmap`, define a list of mapping rules for user DNs
   supplemented with VOMS roles onto dCache logins.
+* `$multimap = {}`
+  ```puppet
+  Hash[
+    Pattern[/\A(dn|email|entitlement|fqan|gid|group|kerberos|oidc|oidcgrp|op|uid|username):/],
+    Hash[
+      Enum[
+        'dn',
+        'email',
+        'entitlement',
+        'fqan',
+        'gid',
+        'group',
+        'kerberos',
+        'oidc',
+        'oidcgrp',
+        'op',
+        'roles',
+        'uid',
+        'username'
+      ],
+      Variant[Integer, String]
+    ]
+  ]
+  ```
+  The multimap plugin can add mapping credentials based on detected credentials.  
+  For example, if a specific `dn` is found, a certain `uid` and `gid` are defined for the login.
 
 ### Example
 
@@ -210,7 +240,7 @@ dcache::services::gplazma { 'dCacheDomain/gplazma':
   kpwd      => {
     version  => '2.1',
     mappings => {
-      '/C=DE/O=GermanGrid/CN=Jesus Christ' => 'jesus',
+      '/C=DE/O=ChristianGrid/CN=Jesus Christ' => 'jesus',
     },
     logins   => {
       jesus => {
@@ -220,7 +250,7 @@ dcache::services::gplazma { 'dCacheDomain/gplazma':
         home   => '/'
         root   => '/'
         dns    => [
-          '/C=DE/O=GermanGrid/CN=Jesus Christ',
+          '/C=DE/O=ChristianGrid/CN=Jesus Christ',
         ],
       },
     },
@@ -247,7 +277,7 @@ dcache::services::gplazma { 'dCacheDomain/gplazma':
       login => 'bishops',
     },
     {
-      dn    => '/C=DE/O=GermanGrid/CN=Jesus Christ',
+      dn    => '/C=DE/O=ChristianGrid/CN=Jesus Christ',
       # List the fqan key with the empty string for no real value.
       fqan  => '',
       login => 'jesus',
@@ -277,6 +307,13 @@ dcache::services::gplazma { 'dCacheDomain/gplazma':
       root   => '/',
     },
   },
+  multimap => {
+    'dn:/C=DE/O=ChristianGrid/CN=Jesus Christ' => {
+      username => 'jesus',
+      uid      => 22001,
+      gid      => 5850,
+    }
+  }
 }
 ```
 

@@ -1,7 +1,11 @@
 <% | Hash $pgroups | -%>
 # The pool groups...
+<%# Create all pool groups first, so there won't be an error when undefined pool groups are nested -%>
 <% each(sort(keys($pgroups))) |$pgroup| { -%>
 psu create pgroup <%= $pgroup %>
+<% } -%>
+
+<% each(sort(keys($pgroups))) |$pgroup| { -%>
   <%- each(sort($pgroups[$pgroup])) |$pool| { -%>
 psu addto pgroup <%= $pgroup %> <%= $pool %>
   <%- } -%>

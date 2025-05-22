@@ -216,6 +216,8 @@ Puppet::Functions.create_function(:'dcache::hash_to_psu') do
       pgs.flatten!
       pgs.uniq!
     end
+    # Add "all-pools" pool group explicitly
+    all_pgroups['all-pools'] = all_pools
 
     return {
       'units'   => all_units,

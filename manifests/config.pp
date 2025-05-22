@@ -15,7 +15,7 @@ class dcache::config () {
         # Any modifications will be gone with the next Puppet synchronization!
 
         <% each($dcache::env) |$k, $v| { -%>
-        <%= $k %> = <%= $v %>
+        <%= $k %>=<%= $v %>
         <% } %>
         | EOT
     ;
