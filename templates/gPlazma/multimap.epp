@@ -2,6 +2,8 @@
 # Managed by Puppet.
 # Any modifications will be gone with the next Puppet synchronization!
 
-<% each($content) |$mapping_principle, $addendum| { -%>
-<%= $mapping_principle %>    <%= $addendum.map |$k, $v| { "${k}:${v}" }.join(' ') %>
+<%# Find largest mapping principal to let all attributes start in the same column -%>
+<% $l = max($content.keys.map |$k| { length($k) }) -%>
+<% each($content) |$mapping_principal, $attributes| { -%>
+<%= sprintf("%-${l}s", $mapping_principal) %>  <%= $attributes.map |$k, $v| { bool2str(/\s/ in $v, "${k}:\"${v}\"", "${k}:${v}") }.join(' ') %>
 <% } -%>

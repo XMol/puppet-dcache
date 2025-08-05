@@ -1,6 +1,6 @@
-# @summary Validate the content of the multi-mapfile of gPlazma.
+# @summary Validate the content of a multi-mapfile for gPlazma.
 type Dcache::Gplazma::Multimap = Hash[
-  Pattern[/\A(dn|email|entitlement|fqan|gid|group|kerberos|oidc|oidcgrp|op|uid|username):/],
+  Pattern[/\A(dn|email|entitlement|fqan|gid|group|kerberos|oidc|oidcgrp|op|roles|uid|username):/],
   Hash[
     Enum[
       'dn',
@@ -17,6 +17,7 @@ type Dcache::Gplazma::Multimap = Hash[
       'uid',
       'username'
     ],
-    Variant[Integer, String]
-  ]
+    Variant[Integer, String],
+    1
+  ],
 ]

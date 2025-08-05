@@ -13,8 +13,8 @@
 #
 define dcache::services::pool (
   Integer[1] $size,
-  String[1] $poolname = $title,
-  String[1] $domain = "${title}Domain",
+  String $poolname = $title,
+  String $domain = "${title}Domain",
   Dcache::Layout::Properties $properties = {},
 ) {
   require dcache::install

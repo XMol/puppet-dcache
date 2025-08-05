@@ -13,7 +13,7 @@
 #   Verbatim, because otherwise it is impossible to accept digitally signed content.
 #
 define dcache::services::frontend (
-  String[1] $domain,
+  String $domain,
   String $security_txt,
   Dcache::Layout::Properties $properties = {},
 ) {

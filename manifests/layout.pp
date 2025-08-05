@@ -10,7 +10,7 @@ class dcache::layout () {
   require dcache::install
 
   $layout_dir = lookup('dcache::setup."dcache.layout.dir"', Stdlib::Unixpath)
-  $layout_path = "${layout_dir}/${::hostname}.conf"
+  $layout_path = "${layout_dir}/${fact('networking.hostname')}.conf"
   concat { $layout_path:
     owner          => $dcache::user,
     group          => $dcache::group,

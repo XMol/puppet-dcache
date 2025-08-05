@@ -10,8 +10,8 @@
 #   Which service needs to be configured.
 #
 define dcache::services::generic (
-  String[1] $domain,
-  String[1] $service = $title,
+  String $domain,
+  String $service = $title,
   Dcache::Layout::Properties $properties = {},
 ) {
   require dcache::install

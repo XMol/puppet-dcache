@@ -1,6 +1,6 @@
 {
   "name": "puppet-dcache",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "author": "Xavier Mol",
   "summary": "Manage dCache application",
   "license": "GNU GPLv3",

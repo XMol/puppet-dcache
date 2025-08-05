@@ -16,10 +16,10 @@
 #   The entire hierarchy of the pools, units, links, etc.
 #
 define dcache::services::poolmanager (
-  String[1] $domain,
-  Hash[String[1], Scalar] $cm  = {},
-  Hash[String[1], Hash[String[1], Scalar]] $pm  = {},
-  Hash[String[1], Scalar] $rc  = {},
+  String $domain,
+  Hash[String, Scalar] $cm  = {},
+  Hash[String, Hash[String, Scalar]] $pm  = {},
+  Hash[String, Scalar] $rc  = {},
   Hash $psu = {}, # Delegate type verification to the ruby function
   Dcache::Layout::Properties $properties = {},
 ) {
