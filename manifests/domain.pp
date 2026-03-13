@@ -9,7 +9,7 @@
 #
 define dcache::domain (
   Dcache::Layout::Properties $properties = {},
-  Hash[String[1], Dcache::Layout::Service] $services = {},
+  Hash[String, Dcache::Layout::Service] $services = {},
 ) {
   require dcache::install
 

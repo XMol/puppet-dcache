@@ -24,8 +24,8 @@ dcache::setup:
   gplazma.banfile.path: "%{lookup('dcache::paths.etc')}/ban.conf"
   gplazma.gridmap.file: "%{lookup('dcache::paths.grid-security')}/grid-mapfile"
   gplazma.kpwd.file: "%{lookup('dcache::paths.etc')}/dcache.kpwd"
-  gplazma.multimap.file: "%{lookup('dcache::paths.etc')}/multi-mapfile"
   gplazma.vorolemap.file: "%{lookup('dcache::paths.grid-security')}/grid-vorolemap"
+  gplazma.omnisession.file: "%{lookup('dcache::paths.etc')}/omnisession.conf"
   poolmanager.setup.file: "%{lookup('dcache::paths.lib')}/config/poolmanager.conf"
   info-provider.configuration.site-specific.location: "%{lookup('dcache::paths.etc')}/info-provider.xml"
   info-provider.paths.tape-info: /usr/share/dcache/xml/tape-info-empty.xml

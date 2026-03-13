@@ -10,8 +10,8 @@
 #   The export rules for dCache.
 #
 define dcache::services::nfs (
-  String[1] $domain,
-  Hash[Stdlib::Absolutepath, Hash[String[1], Array[String[1]]]] $exports,
+  String $domain,
+  Hash[Stdlib::Absolutepath, Hash[String, Array[String]]] $exports,
   Dcache::Layout::Properties $properties = {},
 ) {
   require dcache::install

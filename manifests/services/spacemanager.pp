@@ -10,8 +10,8 @@
 #   The data for `LinkGroupAuthorization.conf`.
 #
 define dcache::services::spacemanager (
-  String[1] $domain,
-  Hash[String[1], Array[String[1]]] $linkgroupauth,
+  String $domain,
+  Hash[String, Array[String]] $linkgroupauth,
   Dcache::Layout::Properties $properties = {},
 ) {
   require dcache::install

@@ -66,11 +66,11 @@
 #
 class dcache (
   Dcache::Dcache_version $version,
-  Hash[String[1], Scalar] $setup,
+  Hash[String, Scalar] $setup,
   Dcache::Layout $layout,
-  Variant[String[1], Integer[0]] $user = 'dcache',
-  Variant[String[1], Integer[0]] $group = 'dcache',
-  Hash[String[1], Scalar] $env = {},
+  Variant[String, Integer[0]] $user = 'dcache',
+  Variant[String, Integer[0]] $group = 'dcache',
+  Hash[String, Scalar] $env = {},
 ) {
   File {
     owner => $user,

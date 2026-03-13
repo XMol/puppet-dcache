@@ -8,7 +8,7 @@
 #   The properties for this service instance.
 #
 define dcache::services::webdav (
-  String[1] $domain,
+  String $domain,
   Dcache::Layout::Properties $properties = {},
 ) {
   require dcache::install

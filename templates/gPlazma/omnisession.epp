@@ -1,0 +1,10 @@
+<% | Dcache::Gplazma::Omnisession $content | -%>
+# Managed by Puppet.
+# Any modifications will be gone with the next Puppet synchronization!
+
+<% each($content - 'DEFAULT') |$predicate, $attributes| { -%>
+<%= sprintf("%-10s", $predicate) %>  <%= $attributes.map |$k, $v| { bool2str($k == 'read-only', 'read-only', "${k}:${v}") }.join(' ') %>
+<% } -%>
+<% if 'DEFAULT' in $content { -%>
+DEFAULT     <%= $content['DEFAULT'].map |$k, $v| { bool2str($k == 'read-only', 'read-only', "${k}:${v}") }.join(' ') %>
+<% } -%>
